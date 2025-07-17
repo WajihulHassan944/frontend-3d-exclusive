@@ -59,6 +59,7 @@ router.push('/dashboard');
         }
       } else {
         setError(data.message || 'Login failed.');
+        toast.error(data.message);
       }
     } catch (err) {
       console.error(err);
@@ -107,6 +108,7 @@ router.push('/dashboard');
           }
         } else {
           setError(data.message || 'Google login failed.');
+          toast.error(data.message);
         }
       } catch (err) {
         console.error('Google login error:', err);
