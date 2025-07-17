@@ -43,7 +43,7 @@ export default function Status() {
   return (
     <div className="verify-container">
       <Image
-        src="https://res.cloudinary.com/daflot6fo/image/upload/v1752555158/two-Photoroom_bvwst2.png"
+        src="/logo.png"
         alt="Xclusive 3D Logo"
         width={180}
         height={90}

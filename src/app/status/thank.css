@@ -1,5 +1,4 @@
 .verify-container {
-  background: linear-gradient(to bottom, #602fff, #170354);
   min-height: 100vh;
   padding: 2.5rem 1rem;
   text-align: center;
@@ -7,7 +6,6 @@
   flex-direction: column;
   align-items: center;
   color: #fff;
-  font-family: Arial, sans-serif;
 }
 
 .logo-9 {
