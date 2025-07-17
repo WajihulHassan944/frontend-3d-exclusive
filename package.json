@@ -1,0 +1,24 @@
+{
+  "name": "three-exclusive",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@react-oauth/google": "^0.12.2",
+    "@reduxjs/toolkit": "^2.8.2",
+    "@stripe/react-stripe-js": "^3.7.0",
+    "next": "15.3.5",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-dropzone": "^14.3.8",
+    "react-geolocated": "^4.3.0",
+    "react-hot-toast": "^2.5.2",
+    "react-icons": "^5.5.0",
+    "react-redux": "^9.2.0"
+  }
+}

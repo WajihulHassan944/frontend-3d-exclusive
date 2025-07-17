@@ -1,0 +1,72 @@
+/* privacy.css */
+
+.privacy-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 30px 20px;
+  color: #ffffff;
+  line-height: 1.7;
+}
+.image-div{
+  display: flex;
+  justify-content: center;
+  margin: auto 0px;
+  margin-bottom: 10px;
+}
+.privacy-container h1 {
+  font-size: 32px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.privacy-container h2 {
+  font-size: 24px;
+  margin-top: 30px;
+}
+
+.privacy-container h3 {
+  font-size: 18px;
+  margin-top: 20px;
+}
+
+.privacy-container p {
+  margin-bottom: 15px;
+}
+
+.privacy-container ul {
+  padding-left: 20px;
+  margin-bottom: 20px;
+}
+
+.privacy-container ul li {
+  margin-bottom: 10px;
+}
+
+.privacy-container a {
+  text-decoration: underline;
+}
+.logo-8{
+  object-fit: contain;
+  width: 120px;
+}
+@media (max-width: 600px) {
+  .logo-8{
+  object-fit: contain;
+  width: 80px;
+}
+  .privacy-container {
+    padding: 20px 10px;
+  }
+
+  .privacy-container h1 {
+    font-size: 26px;
+  }
+
+  .privacy-container h2 {
+    font-size: 20px;
+  }
+
+  .privacy-container h3 {
+    font-size: 16px;
+  }
+}

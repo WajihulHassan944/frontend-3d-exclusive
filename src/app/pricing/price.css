@@ -1,0 +1,107 @@
+.pricing-container {
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2.5rem 1.5rem;
+padding-top: 1rem;
+  text-align: center;
+  color: white;
+  max-width: 700px;
+}
+
+.logo-pricing {
+  margin-bottom: 1.5rem;
+  object-fit: contain;
+}
+
+.pricing-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+}
+
+/* Pricing Box */
+.price-box {
+  border: 2px solid #f7b631;
+  border-radius: 15px;
+  padding: 1.5rem;
+  width: 100%;
+  background-color: #000253;
+  margin-bottom: 2rem;
+}
+
+.price-box-heading {
+  font-size: 1.4rem;
+  font-weight: bold;
+  margin-bottom: 1.2rem;
+}
+
+.price-table {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.price-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.1rem;
+  padding: 0.3rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.price-row:last-child {
+  border-bottom: none;
+}
+
+/* Buttons */
+.pricing-buttons {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+}
+
+.pricing-buttons button {
+  background-color: #000253;
+  color: white;
+  border: 2px solid #f7b631;
+  border-radius: 12px;
+  padding: 0.9rem 1.2rem;
+  font-size: 1.05rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.pricing-buttons button:hover {
+  background-color: #f7b631;
+  color: #000;
+}
+
+/* Responsive */
+@media (min-width: 768px) {
+ 
+
+  .pricing-title {
+    font-size: 3rem;
+  }
+
+ 
+
+  .pricing-buttons {
+    flex-direction: row;
+    justify-content: center;
+    gap: 1.5rem;
+  }
+
+  .pricing-buttons button {
+    flex: 1;
+  }
+}
+@media(max-width:768px){
+  
+.pricing-buttons {
+ flex-direction: column;
+}
+}

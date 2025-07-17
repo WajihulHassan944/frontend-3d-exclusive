@@ -1,0 +1,148 @@
+.profile-wrapper {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 0 20px;
+    color: #fff;
+}
+
+h2 {
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+
+.section-card {
+  padding: 25px;
+  margin-bottom: 30px;
+
+}
+
+.account-section {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.profile-image-container {
+  position: relative;
+  width: 100px;
+}
+
+.profile-image {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+}
+
+.edit-icon {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background: #f3f3f3;
+  border-radius: 50%;
+  padding: 4px 6px;
+  font-size: 12px;
+  cursor: pointer;
+  color: black;
+}
+
+.input-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.input-grid div {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-grid label {
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+
+.input-grid input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.password-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.password-grid input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.checkbox {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: 20px;
+  gap: 10px;
+}
+.save-button {
+  margin-top: 20px;
+  background-color: #1a73e8;
+  color: #fff;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.save-button:hover {
+  background-color: #1669c1;
+}
+.profile-icon {
+  font-size: 100px; /* Match image size */
+  color: #ffffff;       /* Or #ccc for softer tone */
+}
+.profile-preview {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-bottom: 10px;
+}
+.profile-image-container input[type="file"] {
+  margin-top: 10px;
+}
+
+
+/* Responsive */
+@media (max-width: 768px) {
+  .input-grid,
+  .password-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.spinner {
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top: 3px solid white;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  animation: spin 0.7s linear infinite;
+  display: inline-block;
+  vertical-align: middle;
+  margin-top: -2px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

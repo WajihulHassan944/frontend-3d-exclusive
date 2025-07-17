@@ -1,0 +1,168 @@
+'use client';
+
+import React, { useState } from 'react';
+import './login.css';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useDispatch } from 'react-redux';
+import { useGoogleLogin } from '@react-oauth/google';
+import { baseUrl } from '@/const';
+import { loginUser } from '@/redux/features/userSlice';
+import toast from 'react-hot-toast';
+
+const LoginForm = () => {
+  const router = useRouter();
+  const dispatch = useDispatch();
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
+
+    try {
+      const res = await fetch(`${baseUrl}/users/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ email, password })
+      });
+
+      const data = await res.json();
+
+      if (res.ok && data.success) {
+        toast.success('login successful');
+        const userDetailsRes = await fetch(`${baseUrl}/users/userdetails`, {
+          method: 'GET',
+          credentials: 'include',
+        });
+
+        const userDetailsData = await userDetailsRes.json();
+
+        if (userDetailsRes.ok && userDetailsData.success) {
+          const user = userDetailsData.user;
+           const userWithWallet = {
+    ...userDetailsData.user,
+    wallet: userDetailsData.wallet,
+     videos: userDetailsData.videos,
+  };
+
+  dispatch(loginUser(userWithWallet));
+router.push('/dashboard');
+        } else {
+          setError('Failed to fetch user details.');
+        }
+      } else {
+        setError(data.message || 'Login failed.');
+      }
+    } catch (err) {
+      console.error(err);
+      setError('Something went wrong.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const googleLogin = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      setLoading(true);
+      setError('');
+
+      try {
+        const res = await fetch(`${baseUrl}/users/google-login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ token: tokenResponse.access_token })
+        });
+
+        const data = await res.json();
+
+        if (res.ok && data.success) {
+           toast.success('login successful');
+          const userDetailsRes = await fetch(`${baseUrl}/users/userdetails`, {
+            method: 'GET',
+            credentials: 'include',
+          });
+
+          const userDetailsData = await userDetailsRes.json();
+
+          if (userDetailsRes.ok && userDetailsData.success) {
+            const user = userDetailsData.user;
+             const userWithWallet = {
+    ...userDetailsData.user,
+    wallet: userDetailsData.wallet,
+    videos: userDetailsData.videos,
+  };
+
+  dispatch(loginUser(userWithWallet));
+router.push('/dashboard');
+          } else {
+            setError('Failed to fetch user details.');
+          }
+        } else {
+          setError(data.message || 'Google login failed.');
+        }
+      } catch (err) {
+        console.error('Google login error:', err);
+        setError('Something went wrong during Google login.');
+      } finally {
+        setLoading(false);
+      }
+    },
+    onError: () => setError('Google login was cancelled or failed.')
+  });
+return (
+  <div className="login-container">
+    <Image
+      src="/logo.png"
+      alt="Xclusive 3D Logo"
+      width={160}
+      height={120}
+      className="logo-login"
+    />
+
+    <h2 className="login-title">Sign in</h2>
+
+    <button onClick={googleLogin} className="social-btn google">
+      <img src="/google.png" alt="Google" className="social-icon" />
+      Sign in with Google
+    </button>
+
+    <button className="social-btn apple">
+      <img src="/apple.png" alt="Apple" className="social-icon" style={{marginLeft:'-10px'}} />
+      Sign in with Apple
+    </button>
+
+    <form className="login-form" onSubmit={handleLogin}>
+      <input
+        type="email"
+        placeholder="Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        required
+      />
+      <input
+        type="password"
+        placeholder="Password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        required
+      />
+      <button type="submit" className="login-btn" disabled={loading}>
+        {loading ? 'Logging in...' : 'Sign in'}
+      </button>
+    </form>
+
+    {error && <p className="error-message">{error}</p>}
+  </div>
+);
+
+};
+
+export default LoginForm;

@@ -1,0 +1,60 @@
+.cookies-container {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 2rem 1.2rem;
+  color: #fff;
+  min-height: 100vh;
+}
+
+.cookies-logo {
+  display: block;
+  margin: 0 auto 1rem;
+}
+
+.cookies-title {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  font-weight: bold;
+}
+
+.cookies-content h3 {
+  font-size: 1.2rem;
+  margin-top: 1.5rem;
+  font-weight: bold;
+  color: #fff;
+}
+
+.cookies-content p {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #e0e0e0;
+  margin-top: 0.5rem;
+}
+
+.cookies-content a {
+  color: #ffa94d;
+  text-decoration: underline;
+}
+.cookies-logo{
+  width: 120px;
+  object-fit: contain;
+}
+/* ✅ Responsive */
+@media (max-width: 600px) {
+  
+.cookies-logo{
+  width: 80px;
+}
+  .cookies-title {
+    font-size: 1.6rem;
+  }
+
+  .cookies-content h3 {
+    font-size: 1.05rem;
+  }
+
+  .cookies-content p {
+    font-size: 0.95rem;
+  }
+}

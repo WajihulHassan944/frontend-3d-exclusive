@@ -1,0 +1,118 @@
+.login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 40px 20px;
+  padding-top: 30px;
+  box-sizing: border-box;
+}
+
+.logo-login {
+  margin-bottom: 30px;
+  object-fit: contain;
+}
+.login-title {
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 30px;
+   text-shadow: 
+    0 2px 4px rgba(255, 255, 255, 0.15), 
+    0 0 16px rgba(160, 0, 255, 0.25);
+}
+
+/* Social Buttons */
+.social-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 400px;
+  padding: 14px 20px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  border-radius: 10px;
+  border: none;
+  margin-bottom: 14px;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.social-btn .social-icon {
+  height: 28px;
+  width: 28px;
+  margin-right: 12px;
+  object-fit: contain;
+}
+
+.social-btn.google {
+  background-color: white;
+  color: #000;
+}
+
+.social-btn.apple {
+  background-color: #000;
+  color: #fff;
+}
+
+/* Form */
+.login-form {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.login-form input {
+  background-color: #00074a;
+  border: 2px solid #4641d3;
+  padding: 16px;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 1rem;
+}
+
+.login-form input::placeholder {
+  color: #aaa;
+}
+
+/* Submit Button */
+.login-btn {
+  background-color: #ff6c2f;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 16px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.login-btn:hover {
+  background-color: #e65a15;
+}
+
+/* Error Message */
+.error-message {
+  color: #ffb3b3;
+  margin-top: 10px;
+  font-size: 0.9rem;
+}
+/* Keep dark style when autofilled */
+.login-form input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0px 1000px #00074a inset !important;
+  -webkit-text-fill-color: #ffffff !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Prevent text turning black on focus or entry */
+.login-form input,
+.login-form input:focus,
+.login-form input:active {
+  background-color: #00074a;
+  color: #ffffff;
+  border: 2px solid #4641d3;
+  outline: none;
+}

@@ -1,0 +1,96 @@
+.contact-container {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 30px 20px;
+  padding-top: 0;
+ 
+}
+
+/* Logo styling */
+.logo-6 {
+  display: block;
+  margin: 30px auto 20px;
+  margin-bottom: 30px;
+  object-fit: contain;
+}
+
+/* Contact heading */
+.contact-title {
+  text-align: center;
+  font-size: 2.3rem;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+/* Wrapper for the form block */
+.contact-wrapper {
+  padding: 2rem 1.5rem;
+  margin-bottom: 50px;
+}
+
+/* Form layout */
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Input and textarea styles */
+.contact-form input,
+.contact-form textarea {
+  background-color: #00074a;
+  color: #ffffff;
+  border: 1px solid #1c1c8a;
+  border-radius: 10px;
+  padding: 0.8rem 1rem;
+  font-size: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+  outline: none;
+}
+
+.contact-form input::placeholder,
+.contact-form textarea::placeholder {
+  color: #bbb;
+}
+
+/* Fix autofill styles */
+.contact-form input:-webkit-autofill,
+.contact-form textarea:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0px 1000px #00074a inset !important;
+  -webkit-text-fill-color: #ffffff !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Submit button */
+.send-btn {
+  background-color: #ff742f;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 0.8rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.send-btn:hover {
+  background-color: #e4621f;
+}
+
+/* Responsive */
+@media (max-width: 500px) {
+  .contact-wrapper {
+    padding: 1.5rem 1rem;
+    margin: 1rem;
+  }
+
+  .contact-title {
+    font-size: 1.6rem;
+  }
+
+  .send-btn {
+    font-size: 1rem;
+  }
+}

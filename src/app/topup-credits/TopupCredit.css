@@ -1,0 +1,198 @@
+.topup-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 60px 20px 40px;
+  color: white;
+}
+
+.topup-logo {
+  width: 100px;
+  margin-bottom: 20px;
+}
+
+.topup-title {
+  font-size: 32px;
+  font-weight: bold;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.topup-section {
+  width: 100%;
+  max-width: 500px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 25px 30px;
+  margin-bottom: 30px;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.05);
+}
+
+.topup-section h3 {
+  margin-bottom: 15px;
+  font-size: 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.2);
+  padding-bottom: 8px;
+}
+.saved-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+  justify-items: center;
+}
+
+.topup-card {
+  background: #0e0e2f;
+  border-radius: 10px;
+  padding: 15px 20px;
+  width: 100%;
+  max-width: 300px;
+ margin-bottom: 25px;
+  color: white;
+  box-shadow: 0 0 10px rgba(255,255,255,0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.topup-card.primary {
+  width: 100%;
+  max-width: 100%;
+  background: #1a1a3c;
+  border: 2px solid #fff;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.topup-card-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.topup-card img {
+  width: 50px;
+  margin-bottom: 5px;
+}
+
+.topup-card span {
+  font-size: 14px;
+  display: block;
+}
+
+.topup-card-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.topup-card-actions button {
+  background: #333;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background 0.3s;
+}
+
+.topup-card-actions button:hover {
+  background: #555;
+}
+
+.stripe-box {
+  padding: 12px;
+  background: #1a1a3c;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+.topup-btn {
+  background: #4caf50;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s ease;
+  width: 100%;
+}
+
+.topup-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.topup-packages {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+}
+
+.credit-btn {
+  background: #ffffff22;
+  border: 1px solid white;
+  color: white;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  flex: 1;
+  text-align: center;
+  transition: background 0.3s ease;
+}
+
+.credit-btn:hover,
+.credit-btn.active {
+  background: #ffffff55;
+}
+
+.topup-input {
+  padding: 12px;
+  width: 100%;
+  border-radius: 8px;
+  border: none;
+  font-size: 16px;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.checkout-btn {
+  background: #ff4d00;
+  color: white;
+  font-size: 18px;
+  border: none;
+  padding: 14px 32px;
+  border-radius: 10px;
+  cursor: pointer;
+  width: 100%;
+  max-width: 500px;
+  transition: 0.3s ease;
+  margin-top: 10px;
+}
+
+.checkout-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
