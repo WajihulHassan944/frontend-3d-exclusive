@@ -1,4 +1,4 @@
-.login-container {
+.reset-container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -8,22 +8,22 @@
   box-sizing: border-box;
 }
 
-.logo-login {
+.reset-logo {
   margin-bottom: 30px;
   object-fit: contain;
 }
-.login-title {
+
+.reset-title {
   font-size: 2.8rem;
   font-weight: 700;
   color: white;
   margin-bottom: 30px;
-   text-shadow: 
+  text-shadow: 
     0 2px 4px rgba(255, 255, 255, 0.15), 
     0 0 16px rgba(160, 0, 255, 0.25);
 }
 
-/* Social Buttons */
-.social-btn {
+.reset-social-btn {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -39,25 +39,17 @@
   transition: opacity 0.2s ease;
 }
 
-.social-btn .social-icon {
+.reset-social-icon {
   height: 28px;
   width: 28px;
   margin-right: 12px;
   object-fit: contain;
 }
 
-.social-btn.google {
-  background-color: white;
-  color: #000;
+.reset-success{
+  color: #de9879;
 }
-
-.social-btn.apple {
-  background-color: #000;
-  color: #fff;
-}
-
-/* Form */
-.login-form {
+.reset-form {
   width: 100%;
   max-width: 400px;
   display: flex;
@@ -65,7 +57,7 @@
   gap: 14px;
 }
 
-.login-form input {
+.reset-form input {
   background-color: #00074a;
   border: 2px solid #4641d3;
   padding: 16px;
@@ -74,12 +66,11 @@
   font-size: 1rem;
 }
 
-.login-form input::placeholder {
+.reset-form input::placeholder {
   color: #aaa;
 }
 
-/* Submit Button */
-.login-btn {
+.reset-btn {
   background-color: #ff6c2f;
   color: white;
   border: none;
@@ -90,43 +81,27 @@
   cursor: pointer;
 }
 
-.login-btn:hover {
+.reset-btn:hover {
   background-color: #e65a15;
 }
 
-/* Error Message */
-.error-message {
+.reset-error {
   color: #ffb3b3;
   margin-top: 10px;
   font-size: 0.9rem;
 }
-/* Keep dark style when autofilled */
-.login-form input:-webkit-autofill {
+
+.reset-form input:-webkit-autofill {
   -webkit-box-shadow: 0 0 0px 1000px #00074a inset !important;
   -webkit-text-fill-color: #ffffff !important;
   transition: background-color 5000s ease-in-out 0s;
 }
 
-/* Prevent text turning black on focus or entry */
-.login-form input,
-.login-form input:focus,
-.login-form input:active {
+.reset-form input,
+.reset-form input:focus,
+.reset-form input:active {
   background-color: #00074a;
   color: #ffffff;
   border: 2px solid #4641d3;
   outline: none;
-}
-.forgot-pass-wrapper{
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  width: 100%;
-}
-
-.forgot-pass-wrapper .forgot-password{
-  color: #e38556;
-}
-
-.forgot-pass-wrapper .forgot-password:hover{
-  color: #d85615;
 }

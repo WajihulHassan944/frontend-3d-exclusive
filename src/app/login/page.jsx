@@ -53,7 +53,9 @@ const LoginForm = () => {
   };
 
   dispatch(loginUser(userWithWallet));
-router.push('/dashboard');
+const hasTempVideo = localStorage.getItem('tempVideo');
+router.push(hasTempVideo ? '/upload' : '/dashboard');
+
         } else {
           setError('Failed to fetch user details.');
         }
@@ -102,7 +104,9 @@ router.push('/dashboard');
   };
 
   dispatch(loginUser(userWithWallet));
-router.push('/dashboard');
+const hasTempVideo = localStorage.getItem('tempVideo');
+router.push(hasTempVideo ? '/upload' : '/dashboard');
+
           } else {
             setError('Failed to fetch user details.');
           }
@@ -159,6 +163,9 @@ return (
       <button type="submit" className="login-btn" disabled={loading}>
         {loading ? 'Logging in...' : 'Sign in'}
       </button>
+      <div className='forgot-pass-wrapper'>
+      <Link href="/forgot-password" className='forgot-password'>Forgot password</Link>
+      </div>
     </form>
 
     {error && <p className="error-message">{error}</p>}

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import './upload.css';
 import Image from 'next/image';
 import { FiUpload, FiCheck } from 'react-icons/fi';
@@ -8,6 +8,8 @@ import { baseUrl } from '@/const';
 import { useRouter } from 'next/navigation';
 import { refreshAndDispatchUser } from '@/utils/refreshUser';
 import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+
 
 const Home = () => {
   const [videoFile, setVideoFile] = useState(null);
@@ -17,74 +19,119 @@ const Home = () => {
   const [uploadStatus, setUploadStatus] = useState('');
   const inputRef = useRef(null);
 const [dragActive, setDragActive] = useState(false);
+const isLoggedIn = useSelector((state) => state.user?.isLoggedIn);
 const dispatch = useDispatch();
 
  const router = useRouter();
-  const handleFileChange = (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+ React.useEffect(() => {
+  const savedBase64 = localStorage.getItem('tempVideo');
+  if (savedBase64 && !videoFile) {
+    const byteString = atob(savedBase64.split(',')[1]);
+    const mimeString = savedBase64.split(',')[0].split(':')[1].split(';')[0];
+
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab);
+    for (let i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+    }
+
+    const blob = new Blob([ab], { type: mimeString });
+    const file = new File([blob], 'saved-temp.mp4', { type: mimeString });
+    const fileURL = URL.createObjectURL(blob);
 
     setVideoFile(file);
-    setVideoPreview(URL.createObjectURL(file));
-    setUploadStatus('');
-    setProgress(0);
-  };
+    setVideoPreview(fileURL);
+  }
+}, []);
+
+
+const handleFileChange = (e) => {
+  const file = e.target.files?.[0];
+  if (!file) return;
+
+  const fileURL = URL.createObjectURL(file);
+
+  // Save video to localStorage
+  const reader = new FileReader();
+reader.onloadend = () => {
+  localStorage.setItem('tempVideo', reader.result);
+};
+reader.readAsDataURL(file);
+
+
+  setVideoFile(file);
+  setVideoPreview(fileURL);
+  setUploadStatus('');
+  setProgress(0);
+};
 
   const triggerInput = () => inputRef.current.click();
+const checkAuth = async () => {
+  try {
+    const res = await fetch(`${baseUrl}/auth/me`, {
+      method: 'GET',
+      credentials: 'include',
+    });
+    return res.ok;
+  } catch {
+    return false;
+  }
+};
 
-  const handleUpload = async () => {
-    if (!videoFile) return;
+const handleUpload = async () => {
+  if (!videoFile) return;
 
-    setUploading(true);
-    setProgress(0);
-    setUploadStatus('');
+  const isAuthenticated = await checkAuth();
+  if (!isAuthenticated) {
+    router.push('/login');
+    return;
+  }
 
-    const formData = new FormData();
-    formData.append('file', videoFile);
+  setUploading(true);
+  setProgress(0);
+  setUploadStatus('');
 
-    // Simulate progress for UX (not accurate but smooth)
-    const simulateProgress = () => {
-      let percent = 0;
-      const interval = setInterval(() => {
-        percent += Math.random() * 10;
-        if (percent >= 95) {
-          clearInterval(interval);
-        } else {
-          setProgress(Math.min(95, Math.round(percent)));
-        }
-      }, 200);
-      return interval;
-    };
+  const formData = new FormData();
+  formData.append('file', videoFile);
 
-    const fakeProgressInterval = simulateProgress();
+  const fakeProgressInterval = simulateProgress(); // ✅ Only here!
 
-    try {
-      const res = await fetch(`${baseUrl}/b2/upload`, {
-        method: 'POST',
-        credentials: 'include', // send cookies
-        body: formData,
-      });
+  try {
+    const res = await fetch(`${baseUrl}/b2/upload`, {
+      method: 'POST',
+      credentials: 'include',
+      body: formData,
+    });
 
-      clearInterval(fakeProgressInterval);
-      setProgress(100);
-      setUploading(false);
+    clearInterval(fakeProgressInterval);
+    setProgress(100);
+    setUploading(false);
 
-      const data = await res.json();
+    const data = await res.json();
 
-     if (res.ok) {
-  setUploadStatus('✅ Upload successful!');
-  await refreshAndDispatchUser(dispatch);
-  router.push('/dashboard');
-}
- else {
-        setUploadStatus(`❌ Upload failed: ${data.error || 'Unknown error'}`);
-      }
-    } catch (err) {
-      clearInterval(fakeProgressInterval);
-      setUploading(false);
-      setUploadStatus('❌ Upload failed: Network error');
+    if (res.ok) {
+      localStorage.removeItem('tempVideo');
+      setUploadStatus('✅ Upload successful!');
+      await refreshAndDispatchUser(dispatch);
+      router.push('/dashboard');
+    } else {
+      setUploadStatus(`❌ Upload failed: ${data.error || 'Unknown error'}`);
     }
-  };
+  } catch (err) {
+    clearInterval(fakeProgressInterval);
+    setUploading(false);
+    setUploadStatus('❌ Upload failed: Network error');
+  }
+};
+
+const simulateProgress = () => {
+  let value = 0;
+  const interval = setInterval(() => {
+    value += Math.random() * 10;
+    setProgress((prev) => Math.min(Math.floor(value), 95));
+  }, 300);
+  return interval;
+};
 
   return (
     <div className="xclusive-container">
@@ -99,84 +146,100 @@ const dispatch = useDispatch();
       </div>
 
       <div className="upload-section">
-        <input
-          type="file"
-          ref={inputRef}
-          onChange={handleFileChange}
-          accept="video/*"
-          style={{ display: 'none' }}
-        />
+  {!videoFile && (
+    <>
+      <input
+        type="file"
+        ref={inputRef}
+        onChange={handleFileChange}
+        accept="video/*"
+        style={{ display: 'none' }}
+      />
 
-        {/* Mobile Button */}
-        <button className="mobile-upload-btn" onClick={triggerInput}>
-          <FiUpload style={{ marginRight: 8 }} /> Upload Video
-        </button>
+      {/* Mobile Button */}
+      <button className="mobile-upload-btn" onClick={triggerInput}>
+        <FiUpload style={{ marginRight: 8 }} /> Upload Video
+      </button>
 
-        {/* Desktop Drop Zone */}
- <label
-  className={`upload-box desktop-only ${dragActive ? 'dragging' : ''}`}
-  onDragOver={(e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setDragActive(true);
-  }}
-  onDragLeave={(e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setDragActive(false);
-  }}
-  onDrop={(e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setDragActive(false);
-    const file = e.dataTransfer.files?.[0];
-    if (file && file.type.startsWith('video/')) {
-      setVideoFile(file);
-      setVideoPreview(URL.createObjectURL(file));
-      setUploadStatus('');
-      setProgress(0);
-    } else {
-      alert('Please drop a valid video file.');
-    }
-  }}
->
+      {/* Desktop Drop Zone */}
+      <label
+        className={`upload-box desktop-only ${dragActive ? 'dragging' : ''}`}
+        onDragOver={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          setDragActive(true);
+        }}
+        onDragLeave={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          setDragActive(false);
+        }}
+       onDrop={(e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  setDragActive(false);
+  const file = e.dataTransfer.files?.[0];
+  if (file && file.type.startsWith('video/')) {
+    const fileURL = URL.createObjectURL(file);
 
-  <div className="upload-icon">
-    <FiUpload size={32} />
-  </div>
-  <p>Drag & drop your <br /><strong>video</strong></p>
-  {/* You can still click to open file selector */}
-  <input
-    type="file"
-    accept="video/*"
-    onChange={handleFileChange}
-    ref={inputRef}
-    style={{ display: 'none' }}
-  />
-</label>
+     const reader = new FileReader();
+reader.onloadend = () => {
+  localStorage.setItem('tempVideo', reader.result);
+};
+reader.readAsDataURL(file);
 
-        {videoPreview && (
-          <div className="preview-box">
-            <video src={videoPreview} controls width="100%" />
-          </div>
+
+    setVideoFile(file);
+    setVideoPreview(fileURL);
+    setUploadStatus('');
+    setProgress(0);
+  } else {
+    alert('Please drop a valid video file.');
+  }
+}}
+      >
+        <div className="upload-icon">
+          <FiUpload size={32} />
+        </div>
+        <p>Drag & drop your <br /><strong>video</strong></p>
+
+        {!videoFile && (
+          <input
+            type="file"
+            accept="video/*"
+            onChange={handleFileChange}
+            ref={inputRef}
+            style={{ display: 'none' }}
+          />
         )}
+      </label>
+    </>
+  )}
 
-        {uploading && (
-          <div className="progress-wrapper">
-            <div className="progress-bar" style={{ width: `${progress}%` }} />
-            <span className="progress-text">{progress}%</span>
-            <div className="spinner" />
-          </div>
-        )}
+  {/* Video preview after selection */}
+  {videoPreview && (
+    <div className="preview-box">
+      <video src={videoPreview} controls width="100%" />
+    </div>
+  )}
 
-        {uploadStatus && <p className="upload-status">{uploadStatus}</p>}
+  {uploading && (
+    <div className="progress-wrapper">
+      <div className="progress-bar" style={{ width: `${progress}%` }} />
+      <span className="progress-text">{progress}%</span>
+      <div className="spinner" />
+    </div>
+  )}
 
-        {videoFile && !uploading && (
-          <button className="convert-btn" onClick={handleUpload}>
-            Upload to 3D Cloud
-          </button>
-        )}
-      </div>
+  {uploadStatus && <p className="upload-status">{uploadStatus}</p>}
+
+  {videoFile && !uploading && (
+    <button className="convert-btn" onClick={handleUpload}>
+      Upload to 3D Cloud
+    </button>
+  )}
+</div>
+
 
       <div className="device-info">
         <span>Meta Quest</span>
