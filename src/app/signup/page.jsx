@@ -79,7 +79,8 @@ const SignupForm = () => {
       const text = await response.json();
       if (response.ok) {
         toast.success('User registered successfully');
-        router.push('/login');
+        localStorage.setItem('registeredEmail', email);
+        router.push('/registration-confirmed');
       } else {
         toast.error(`${text.message}`);
       }
