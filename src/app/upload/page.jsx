@@ -146,7 +146,7 @@ const simulateProgress = () => {
       </div>
 
       <div className="upload-section">
-  {!videoFile && (
+ 
     <>
       <input
         type="file"
@@ -203,7 +203,6 @@ reader.readAsDataURL(file);
         </div>
         <p>Drag & drop your <br /><strong>video</strong></p>
 
-        {!videoFile && (
           <input
             type="file"
             accept="video/*"
@@ -211,10 +210,9 @@ reader.readAsDataURL(file);
             ref={inputRef}
             style={{ display: 'none' }}
           />
-        )}
       </label>
     </>
-  )}
+
 
   {/* Video preview after selection */}
   {videoPreview && (

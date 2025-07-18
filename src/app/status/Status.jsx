@@ -1,14 +1,27 @@
 'use client';
 
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FaCheckCircle, FaTimesCircle, FaExclamationCircle } from 'react-icons/fa';
 import './thank.css';
+import toast from 'react-hot-toast';
 
 export default function Status() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const status = searchParams.get('verified'); // gets `success`, `fail`, or `already`
+
+  useEffect(() => {
+    toast('You’re being redirected to login...', { icon: '🔁' });
+
+    const timer = setTimeout(() => {
+      router.push('/login');
+    }, 2000);
+
+    return () => clearTimeout(timer); // Cleanup on unmount
+  }, []);
 
   const renderMessage = () => {
     switch (status) {
