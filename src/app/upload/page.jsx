@@ -66,23 +66,11 @@ reader.readAsDataURL(file);
 };
 
   const triggerInput = () => inputRef.current.click();
-const checkAuth = async () => {
-  try {
-    const res = await fetch(`${baseUrl}/auth/me`, {
-      method: 'GET',
-      credentials: 'include',
-    });
-    return res.ok;
-  } catch {
-    return false;
-  }
-};
 
 const handleUpload = async () => {
   if (!videoFile) return;
 
-  const isAuthenticated = await checkAuth();
-  if (!isAuthenticated) {
+  if (!isLoggedIn) {
     router.push('/login');
     return;
   }

@@ -54,7 +54,7 @@ const LoginForm = () => {
 
   dispatch(loginUser(userWithWallet));
 const hasTempVideo = localStorage.getItem('tempVideo');
-router.push(hasTempVideo ? '/upload' : '/dashboard');
+router.push(hasTempVideo ? '/upload' : '/upload');
 
         } else {
           setError('Failed to fetch user details.');
