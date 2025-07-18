@@ -61,7 +61,13 @@
 
 .forgot-error {
   color: #ffb3b3;
-  margin-top: 10px;
+  margin-top: 20px;
+  font-size: 0.9rem;
+}
+
+.forgot-success {
+  color: #ffb3b3;
+  margin-top: 20px;
   font-size: 0.9rem;
 }
 
