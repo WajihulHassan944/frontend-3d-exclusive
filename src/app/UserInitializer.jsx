@@ -26,6 +26,8 @@ const UserInitializer = () => {
               ...data.user,
               wallet: data.wallet,
                videos: data.videos,
+               cart: data.cart,
+    
             };
             dispatch(loginUser(userWithData));
           }

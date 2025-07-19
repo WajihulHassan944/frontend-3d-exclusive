@@ -49,6 +49,7 @@ const LoginForm = () => {
            const userWithWallet = {
     ...userDetailsData.user,
     wallet: userDetailsData.wallet,
+    cart: userDetailsData.cart,
      videos: userDetailsData.videos,
   };
 
@@ -100,6 +101,8 @@ router.push(hasTempVideo ? '/upload' : '/upload');
              const userWithWallet = {
     ...userDetailsData.user,
     wallet: userDetailsData.wallet,
+    cart: userDetailsData.cart,
+    
     videos: userDetailsData.videos,
   };
 

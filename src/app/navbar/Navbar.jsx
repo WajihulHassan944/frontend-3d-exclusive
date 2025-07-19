@@ -50,7 +50,7 @@ console.log(user);
             {isLoggedIn ? (
              <> <li><Link href="/dashboard">Dashboard</Link></li>
               <li><Link href="/upload">Convert to 3D</Link></li>
-               <li><Link href="/topup-credits">Topup Credits</Link></li>
+               <li><Link href="/add-billing">Add Billing</Link></li>
               
                  </>
             ) : (

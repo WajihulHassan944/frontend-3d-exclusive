@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 import { refreshAndDispatchUser } from '@/utils/refreshUser';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
+import Credits from './credits';
 
 
 const Home = () => {
@@ -216,7 +217,11 @@ reader.readAsDataURL(file);
       <div className="spinner" />
     </div>
   )}
-
+  <div className="credits">
+        <button>1080p</button>
+        <button>2.7k</button>
+        <button>4k</button>
+      </div>
   {uploadStatus && <p className="upload-status">{uploadStatus}</p>}
 
   {videoFile && !uploading && (
@@ -233,14 +238,10 @@ reader.readAsDataURL(file);
         <span>Apple Vision Pro</span>
       </div>
 
-      <div className="free-minute">🎁 Get 1 minute of free conversion</div>
+      {!isLoggedIn && <div className="free-minute">🎁 Welcome offer: 
+Get 1 minute of free conversion after registration</div>}
 
-      <div className="credits">
-        <button>Buy 10 credits € 9</button>
-        <button>Buy 50 credits € 39</button>
-        <button>Buy 100 credits € 69</button>
-      </div>
-
+    <Credits />
       <div className="why-cloud">
         <h3>Why convert to 3D in the cloud?</h3>
         <ul>

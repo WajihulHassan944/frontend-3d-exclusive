@@ -41,7 +41,9 @@
   gap: 1rem;
   justify-items: center;
 }
-
+.topperCard{
+  margin-bottom: 50px;
+}
 .topup-card {
   background: #0e0e2f;
   border-radius: 10px;
@@ -65,6 +67,7 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  
 }
 
 .topup-card-content {
@@ -109,13 +112,13 @@
 
 .stripe-box {
   padding: 12px;
-  background: #1a1a3c;
+  background: #fff;
   border-radius: 8px;
   margin-bottom: 15px;
 }
 
 .topup-btn {
-  background: #4caf50;
+  background: #ff4d00;
   color: white;
   border: none;
   padding: 12px 24px;

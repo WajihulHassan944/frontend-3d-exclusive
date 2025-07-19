@@ -59,7 +59,7 @@ export default function Dashboard() {
         <section className="card-1 credits-card">
           <h3>Credits</h3>
           <p className="count">Credits: {wallet?.balance ?? 0}</p>
-          <Link href="/topup-credits" className="topup-btn">Top Up</Link>
+          <Link href="/upload" className="topup-btn">Top Up</Link>
         </section>
 
         <section className="card-1 profile-card">
