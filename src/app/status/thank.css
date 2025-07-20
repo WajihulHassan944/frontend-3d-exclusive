@@ -30,8 +30,9 @@
 }
 
 .verify-box p {
-  font-size: 1rem;
+  font-size: 0.95rem;
   margin-bottom: 1.5rem;
+  line-height: 1.6;
 }
 
 .login-btn {

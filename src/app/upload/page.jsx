@@ -10,6 +10,9 @@ import { refreshAndDispatchUser } from '@/utils/refreshUser';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import Credits from './credits';
+import HomeCredits from './HomeCredits/HomeCredits';
+import Whycloud from './Whycloud/Whycloud';
+import Whatexpect from './Whatexpect/Whatexpect';
 
 
 const Home = () => {
@@ -124,7 +127,7 @@ const simulateProgress = () => {
 
   return (
     <div className="xclusive-container">
-      <div className="xclusive-header">
+     {isLoggedIn && ( <div className="xclusive-header">
         <Image
           src="/logo.png"
           alt="Xclusive 3D Logo"
@@ -132,9 +135,9 @@ const simulateProgress = () => {
           height={90}
           className="logo-1"
         />
-      </div>
+      </div>)}
 
-      <div className="upload-section">
+    <center>  <div className="upload-section">
  
     <>
       <input
@@ -190,7 +193,8 @@ reader.readAsDataURL(file);
         <div className="upload-icon">
           <FiUpload size={32} />
         </div>
-        <p>Drag & drop your <br /><strong>video</strong></p>
+        <h1 className='dropHeading'>Drag & drop your video</h1>
+        <p className='dropPara'>Upload your 2D video to convert to 3D</p>
 
           <input
             type="file"
@@ -224,13 +228,12 @@ reader.readAsDataURL(file);
       </div>
   {uploadStatus && <p className="upload-status">{uploadStatus}</p>}
 
-  {videoFile && !uploading && (
-    <button className="convert-btn" onClick={handleUpload}>
+    <button className="convert-btn" onClick={handleUpload} disabled={uploading}>
       Upload to 3D Cloud
     </button>
-  )}
+  
 </div>
-
+</center>
 
       <div className="device-info">
         <span>Meta Quest</span>
@@ -238,18 +241,11 @@ reader.readAsDataURL(file);
         <span>Apple Vision Pro</span>
       </div>
 
-      {!isLoggedIn && <div className="free-minute">🎁 Welcome offer: 
-Get 1 minute of free conversion after registration</div>}
-
-    <Credits />
-      <div className="why-cloud">
-        <h3>Why convert to 3D in the cloud?</h3>
-        <ul>
-          <li><FiCheck className="check-icon" style={{ color: '#5fb6b8' }} /> Experience your existing videos in a new immersive way</li>
-          <li><FiCheck className="check-icon" style={{ color: '#5fb6b8' }} /> Ready to upload to YouTube</li>
-          <li><FiCheck className="check-icon" style={{ color: '#5fb6b8' }} /> High-quality AI cloud conversion</li>
-        </ul>
-      </div>
+      {!isLoggedIn && <center><div className="free-minute">🎁 Get 1 minute of free conversion after registration</div></center>}
+{!isLoggedIn && <HomeCredits />}
+    {isLoggedIn && <center><Credits /></center>}
+    <Whycloud />
+    <Whatexpect />
     </div>
   );
 };

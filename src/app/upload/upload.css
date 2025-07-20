@@ -1,10 +1,10 @@
 /* home.css */
 .xclusive-container {
-  max-width: 500px;
   margin: 0 auto;
   padding: 30px 20px;
   color: #fff;
   text-align: center;
+  
 }
 
 .xclusive-header {
@@ -13,7 +13,9 @@
   align-items: center;
   margin-bottom: 20px;
 }
-
+.upload-section{
+  max-width: 600px;
+}
 .xclusive-header .logo {
   width: 180px;
   height: auto;
@@ -29,17 +31,17 @@
   border-radius: 12px;
   padding: 40px 20px;
   margin-bottom: 20px;
-  background-color: #06005a;
+  background-color: #0a0075;
   cursor: pointer;
   transition: border-color 0.3s ease, background-color 0.3s ease;
   text-align: center;
-  min-height: 180px;
+  min-height: 270px;
   position: relative;
 }
 
 .upload-box:hover {
   border-color: #ff8c2f;
-  background-color: #0a0075;
+  background-color: #06005a;
 }
 
 .upload-box p {
@@ -48,11 +50,25 @@
   color: #ffffffcc;
   line-height: 1.5;
 }
+@keyframes bounceUpDown {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px); /* Adjust height as needed */
+  }
+}
 
 .upload-icon {
-  font-size: 36px;
-  margin-bottom: 12px;
+  font-size: 40px;
+  margin-bottom: 20px;
+  background-color: #fa89381a;
+  padding: 5px 13px;
+  border-radius: 10px;
   color: #ff8c2f;
+  border: 1px solid #fa893833;
+
+  animation: bounceUpDown 1.8s ease-in-out infinite;
 }
 
 .upload-box input[type="file"] {
@@ -74,9 +90,14 @@
 }
 
 .free-minute {
-  margin-bottom: 20px;
-  font-weight: bold;
-  color: #ff8c2f;
+  margin: 30px 0;
+  font-weight: 500;
+  color: #fa8938;
+  background: #fa893833;
+  padding: 15px 20px;
+  border-radius: 30px;
+  border:1px solid #fa89384d;
+  width: fit-content;
 }
 
 .convert-btn {
@@ -90,12 +111,12 @@
   margin-bottom: 20px;
   width: 100%;
 }
-
 .credits {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 10px;
+  max-width: 600px;
   margin-bottom: 25px;
 }
 
@@ -109,6 +130,34 @@
   cursor: pointer;
   flex: 1 1 30%;
   min-width: 120px;
+  position: relative;
+  font-weight: 600;
+}
+
+.credits button.loading {
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
+.spinner-buy {
+  border: 3px solid rgba(255, 255, 255, 0.2);
+  border-top: 3px solid #fff;
+  border-left: 3px solid #ff8c2f;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  margin: auto;
+  animation: spin 0.6s linear infinite;
+ 
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .why-cloud {
@@ -229,4 +278,10 @@
 .logo-1{
   object-fit: contain;
   margin-bottom: 20px;
+}
+.dropHeading{
+  font-weight: 600;
+  font-size: 1.5rem;
+  line-height: 2rem;
+  margin-bottom: 15px;
 }

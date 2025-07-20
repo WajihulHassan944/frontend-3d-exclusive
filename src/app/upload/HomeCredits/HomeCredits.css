@@ -1,0 +1,90 @@
+.credits-container {
+  color: white;
+  text-align: center;
+}
+
+.credit-usage {
+  background: rgba(0,0,0,0.25);
+  padding: 30px;
+  border-radius: 16px;
+  max-width: 500px;
+  margin: 0 auto 60px;
+}
+
+.credit-usage h2 {
+  font-size: 20px;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.usage-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.usage-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.credit-count {
+  color: #ff7a1f;
+}
+
+.credit-cards {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+
+.credit-card {
+background: rgba(0,0,0,0.25);
+  
+  border: 1px solid #242442;
+  border-radius: 16px;
+  padding: 40px 20px;
+  width: 260px;
+  position: relative;
+  transition: all 0.3s ease;
+}
+.credit-card:nth-of-type(2){
+    background: rgba(0,0,0,0.6);
+  
+}
+.credit-card h3 {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.price {
+  color: #ff7a1f;
+  font-size: 28px;
+  font-weight: 700;
+  margin:15px 0;
+}
+
+.per-credit {
+  font-size: 14px;
+  color: #ccc;
+}
+
+.popular {
+  border: 2px solid #ff7a1f;
+}
+
+.popular-badge {
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #ff7a1f;
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 20px;
+}

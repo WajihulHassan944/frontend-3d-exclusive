@@ -16,7 +16,6 @@ export default function Navbar() {
   const user = useSelector((state) => state.user);
   const isLoggedIn = useSelector((state) => state.user.isAuthenticated);
   const logout = useLogout();
-console.log(user);
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : '';
   }, [open]);
@@ -35,8 +34,7 @@ console.log(user);
   return (
     <header className="nav-wrapper">
       <nav className="nav">
-        <div className="logo-div">
-          <Link href="/" className="logo">
+         <Link href="/" className="logo">
             <div className="logo-box">
               <img
                 src="/logo.png"
@@ -44,8 +42,11 @@ console.log(user);
                 className="brand-logo"
               />
             </div>
+            <p>XCLUSIVE 3D</p>
           </Link>
 
+        <div className="logo-div">
+         
           <ul className="nav-links">
             {isLoggedIn ? (
              <> <li><Link href="/dashboard">Dashboard</Link></li>

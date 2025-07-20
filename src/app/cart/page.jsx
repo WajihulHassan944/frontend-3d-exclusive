@@ -14,6 +14,7 @@ export default function ShoppingCart() {
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const router = useRouter();
+const [checkoutLoading, setCheckoutLoading] = useState(false);
 
   const [credits, setCredits] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -91,7 +92,7 @@ export default function ShoppingCart() {
         toast.success('Top-up successful!');
         await clearCart();
         await refreshAndDispatchUser(dispatch);
-        router.push('/upload');
+        router.push('/thankyou-for-purchase');
       } else {
         toast.error(data.message || 'Top-up failed');
       }
@@ -100,25 +101,26 @@ export default function ShoppingCart() {
       toast.error('Top-up failed');
     }
   };
+const handleCheckout = async () => {
+  const primaryCard = user?.wallet?.cards?.find(card => card.isPrimary);
 
-  const handleCheckout = () => {
-    const primaryCard = user?.wallet?.cards?.find(card => card.isPrimary);
-
-    if (primaryCard) {
-      const total = credits.reduce((sum, credit) => sum + credit.amount, 0);
-      if (total > 0) {
-        handleTopUp(total);
-      } else {
-        toast.error('Your cart is empty.');
-      }
+  if (primaryCard) {
+    const total = credits.reduce((sum, credit) => sum + credit.amount, 0);
+    if (total > 0) {
+      setCheckoutLoading(true);
+      await handleTopUp(total);
+      setCheckoutLoading(false);
     } else {
-      toast.error('Please add billing first');
-      router.push('/add-billing');
+      toast.error('Your cart is empty.');
     }
-  };
+  } else {
+    toast.error('Please add billing first');
+    router.push('/add-billing');
+  }
+};
 
   return (
-    <div className="cart-container">
+    <div className="cart-container-page">
       <Image
         src="/logo.png"
         alt="Xclusive 3D Logo"
@@ -151,9 +153,18 @@ export default function ShoppingCart() {
       )}
 
       {!loading && credits.length > 0 && (
-        <button className="checkout-btn" onClick={handleCheckout}>
-          Checkout
-        </button>
+       <button
+  className="checkout-btn"
+  onClick={handleCheckout}
+  disabled={checkoutLoading}
+>
+  {checkoutLoading ? (
+    <div className="spinner-cart" />
+  ) : (
+    'Checkout'
+  )}
+</button>
+
       )}
     </div>
   );

@@ -9,9 +9,8 @@ const HeroSection = () => {
     <section className="hero-section">
 
       <div className="hero-content">
-       <img src="/logo.png" className='banner-logo' alt="exclusive-3d" />
-        <h1>Experience 3D Like Never Before</h1>
-        <p>Convert your videos to stunning 3D automatically</p>
+        <h1>Start now with your <span className='animatedh1'>immersive 3D</span> experience</h1>
+        <p>Transform your 2D videos into stunning 3D content for Meta Quest and Apple Vision Pro</p>
         <Link href="/signup">
           <button className="get-started-btn">Get Started</button>
         </Link>

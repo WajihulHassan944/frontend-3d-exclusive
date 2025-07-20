@@ -4,7 +4,11 @@
   top: 0;
   z-index: 50;
 
+  background: linear-gradient(rgba(0,0,0,0.09), rgba(0,0,0,0.09)); /* background/10 equivalent */
+
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* border-white/10 */
 }
+
 
 .nav {
   margin: 0 auto;
@@ -14,9 +18,17 @@
   justify-content: space-between;
 }
 .logo-div { display: flex; align-items: center; gap: 20px;}
-.logo      {  width: 90px; height: fit-content;margin-right: 30px; padding: 5px;
-  object-fit: contain;}
-
+.logo      {  height: fit-content;margin-right: 30px; padding: 5px;
+  object-fit: contain; display: flex; align-items: center; gap: 10px;}
+.logo p{
+  color: #fff;
+  font-weight: 600;
+  font-size: 16px;
+  letter-spacing: 1px;
+}
+.logo img{
+  width: 50px;
+}
 .nav-links {
   display: none;          /* hidden on mobile */
   list-style: none;
