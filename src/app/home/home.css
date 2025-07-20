@@ -1,5 +1,5 @@
 .hero-section {
-  height: 65vh;
+  height: 55vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -42,7 +42,7 @@
   object-fit: contain;
 }
 .hero-content h1 {
-         font-size: 4.5rem;
+         font-size: 4rem;
         line-height: 1;
   font-weight: 700;
   margin-bottom: 1.5rem;
@@ -67,7 +67,7 @@
 }
 
 .hero-content p {
-  font-size: 1.5rem;
+  font-size: 1.3rem;
         line-height: 2rem;
   max-width: 780px;
   margin-bottom: 30px;
@@ -95,13 +95,18 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  
+  .hero-section {
+  height: 70vh;
+  }
+
 .hero-content .banner-logo{
   width: 140px;
   margin-bottom: 50px;
 }
   .hero-content h1 {
-    font-size: 32px;
+    font-size: 48px;
+    line-height: 1.3;
+    margin-top: 20px;
   }
 
   .hero-content p {

@@ -148,10 +148,6 @@ const simulateProgress = () => {
         style={{ display: 'none' }}
       />
 
-      {/* Mobile Button */}
-      <button className="mobile-upload-btn" onClick={triggerInput}>
-        <FiUpload style={{ marginRight: 8 }} /> Upload Video
-      </button>
 
       {/* Desktop Drop Zone */}
       <label

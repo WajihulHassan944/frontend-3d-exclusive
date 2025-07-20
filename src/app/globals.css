@@ -51,3 +51,11 @@ a {
     color-scheme: dark;
   }
 }
+
+@media(max-width:768px){
+  
+  body{
+background: linear-gradient(135deg, #0700d3 0%, #0700d3 100%);
+
+  }
+}

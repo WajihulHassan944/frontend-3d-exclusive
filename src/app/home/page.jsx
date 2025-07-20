@@ -11,10 +11,7 @@ const HeroSection = () => {
       <div className="hero-content">
         <h1>Start now with your <span className='animatedh1'>immersive 3D</span> experience</h1>
         <p>Transform your 2D videos into stunning 3D content for Meta Quest and Apple Vision Pro</p>
-        <Link href="/signup">
-          <button className="get-started-btn">Get Started</button>
-        </Link>
-      </div>
+        </div>
     </section>
   );
 };
