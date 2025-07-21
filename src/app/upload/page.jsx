@@ -70,8 +70,7 @@ reader.readAsDataURL(file);
 };
 
   const triggerInput = () => inputRef.current.click();
-
-const handleUpload = async () => {
+const handleUpload = () => {
   if (!videoFile) return;
 
   if (!isLoggedIn) {
@@ -86,56 +85,52 @@ const handleUpload = async () => {
   const formData = new FormData();
   formData.append('file', videoFile);
 
-  const fakeProgressInterval = simulateProgress(); // ✅ Only here!
+  const xhr = new XMLHttpRequest();
+  xhr.open('POST', `${baseUrl}/b2/upload`, true);
+  xhr.withCredentials = true;
 
-  try {
-    const res = await fetch(`${baseUrl}/b2/upload`, {
-      method: 'POST',
-      credentials: 'include',
-      body: formData,
-    });
+  xhr.upload.onprogress = (event) => {
+    if (event.lengthComputable) {
+      const percent = Math.round((event.loaded / event.total) * 100);
+      setProgress(percent);
+    }
+  };
 
-    clearInterval(fakeProgressInterval);
-    setProgress(100);
+  xhr.onload = async () => {
     setUploading(false);
-
-    const data = await res.json();
-
-    if (res.ok) {
+    if (xhr.status === 200) {
+      const data = JSON.parse(xhr.responseText);
       localStorage.removeItem('tempVideo');
       setUploadStatus('✅ Upload successful!');
       await refreshAndDispatchUser(dispatch);
       router.push('/dashboard');
     } else {
-      setUploadStatus(`❌ Upload failed: ${data.error || 'Unknown error'}`);
+      const error = JSON.parse(xhr.responseText);
+      setUploadStatus(`❌ Upload failed: ${error?.error || 'Server error'}`);
     }
-  } catch (err) {
-    clearInterval(fakeProgressInterval);
+  };
+
+  xhr.onerror = () => {
     setUploading(false);
     setUploadStatus('❌ Upload failed: Network error');
-  }
-};
+  };
 
-const simulateProgress = () => {
-  let value = 0;
-  const interval = setInterval(() => {
-    value += Math.random() * 10;
-    setProgress((prev) => Math.min(Math.floor(value), 95));
-  }, 300);
-  return interval;
+  xhr.send(formData);
 };
 
   return (
     <div className="xclusive-container">
-     {isLoggedIn && ( <div className="xclusive-header">
-        <Image
-          src="/logo.png"
-          alt="Xclusive 3D Logo"
-          width={160}
-          height={90}
-          className="logo-1"
-        />
-      </div>)}
+   {isLoggedIn && (
+  <div className="xclusive-header" style={{ marginTop: '30px' }}>
+    <Image
+      src="/logo.png"
+      alt="Xclusive 3D Logo"
+      width={160}
+      height={90}
+      className="logo-1"
+    />
+  </div>
+)}
 
     <center>  <div className="upload-section">
  
@@ -209,14 +204,9 @@ reader.readAsDataURL(file);
       <video src={videoPreview} controls width="100%" />
     </div>
   )}
+  
 
-  {uploading && (
-    <div className="progress-wrapper">
-      <div className="progress-bar" style={{ width: `${progress}%` }} />
-      <span className="progress-text">{progress}%</span>
-      <div className="spinner" />
-    </div>
-  )}
+
   <div className="credits">
         <button>1080p</button>
         <button>2.7k</button>
@@ -225,8 +215,13 @@ reader.readAsDataURL(file);
   {uploadStatus && <p className="upload-status">{uploadStatus}</p>}
 
     <button className="convert-btn" onClick={handleUpload} disabled={uploading}>
-      Upload to 3D Cloud
-    </button>
+  {uploading ? (
+    <div className="btn-spinner" />
+  ) : (
+    'Upload to 3D Cloud'
+  )}
+</button>
+
   
 </div>
 </center>
