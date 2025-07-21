@@ -70,7 +70,7 @@ reader.readAsDataURL(file);
 };
 
   const triggerInput = () => inputRef.current.click();
-  const handleUpload = async () => {
+ const handleUpload = async () => {
   if (!videoFile) return;
 
   if (!isLoggedIn) {
@@ -83,7 +83,7 @@ reader.readAsDataURL(file);
   setUploadStatus('');
 
   try {
-    // Step 1: Get signed URL
+    // 1. Get signed URL from backend
     const res = await fetch(`${baseUrl}/b2/sign-url`, {
       method: 'POST',
       headers: {
@@ -97,17 +97,18 @@ reader.readAsDataURL(file);
     });
 
     const { signedUrl, key } = await res.json();
-console.log("singned url", signedUrl);
-console.log("key",key);
-    // Step 2: Upload file directly to B2 (🚫 no Content-Type here)
+    console.log("✅ Signed URL:", signedUrl);
+    console.log("🗂️ S3 Key:", key);
+
+    // 2. Upload file directly to B2 signed URL (no custom headers!)
     const uploadRes = await fetch(signedUrl, {
       method: 'PUT',
-      body: videoFile, // ⛔ No custom headers unless they were in the signature
+      body: videoFile,
     });
 
     if (!uploadRes.ok) throw new Error('Upload to B2 failed');
 
-    // Step 3: Save metadata
+    // 3. Save metadata
     const saveRes = await fetch(`${baseUrl}/b2/save-metadata`, {
       method: 'POST',
       credentials: 'include',
