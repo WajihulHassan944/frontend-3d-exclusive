@@ -70,7 +70,7 @@ reader.readAsDataURL(file);
 };
 
   const triggerInput = () => inputRef.current.click();
-const handleUpload = () => {
+  const handleUpload = async () => {
   if (!videoFile) return;
 
   if (!isLoggedIn) {
@@ -82,41 +82,58 @@ const handleUpload = () => {
   setProgress(0);
   setUploadStatus('');
 
-  const formData = new FormData();
-  formData.append('file', videoFile);
+  try {
+    // Step 1: Get signed URL
+    const res = await fetch(`${baseUrl}/b2/sign-url`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+      body: JSON.stringify({
+        fileName: videoFile.name,
+        fileType: videoFile.type,
+      }),
+    });
 
-  const xhr = new XMLHttpRequest();
-  xhr.open('POST', `${baseUrl}/b2/upload`, true);
-  xhr.withCredentials = true;
+    const { signedUrl, key } = await res.json();
+console.log("singned url", signedUrl);
+console.log("key",key);
+    // Step 2: Upload file directly to B2 (🚫 no Content-Type here)
+    const uploadRes = await fetch(signedUrl, {
+      method: 'PUT',
+      body: videoFile, // ⛔ No custom headers unless they were in the signature
+    });
 
-  xhr.upload.onprogress = (event) => {
-    if (event.lengthComputable) {
-      const percent = Math.round((event.loaded / event.total) * 100);
-      setProgress(percent);
-    }
-  };
+    if (!uploadRes.ok) throw new Error('Upload to B2 failed');
 
-  xhr.onload = async () => {
+    // Step 3: Save metadata
+    const saveRes = await fetch(`${baseUrl}/b2/save-metadata`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        originalFileName: videoFile.name,
+        key,
+        quality: '1080p',
+        lengthInSeconds: 0,
+      }),
+    });
+
+    if (!saveRes.ok) throw new Error('Metadata save failed');
+
+    localStorage.removeItem('tempVideo');
+    setUploadStatus('✅ Upload successful!');
+    await refreshAndDispatchUser(dispatch);
+    router.push('/dashboard');
+  } catch (err) {
+    console.error(err);
+    setUploadStatus(`❌ Upload failed: ${err.message}`);
+  } finally {
     setUploading(false);
-    if (xhr.status === 200) {
-      const data = JSON.parse(xhr.responseText);
-      localStorage.removeItem('tempVideo');
-      setUploadStatus('✅ Upload successful!');
-      await refreshAndDispatchUser(dispatch);
-      router.push('/dashboard');
-    } else {
-      const error = JSON.parse(xhr.responseText);
-      setUploadStatus(`❌ Upload failed: ${error?.error || 'Server error'}`);
-    }
-  };
-
-  xhr.onerror = () => {
-    setUploading(false);
-    setUploadStatus('❌ Upload failed: Network error');
-  };
-
-  xhr.send(formData);
+  }
 };
+
 
   return (
     <div className="xclusive-container">
@@ -214,7 +231,7 @@ reader.readAsDataURL(file);
       </div>
   {uploadStatus && <p className="upload-status">{uploadStatus}</p>}
 
-    <button className="convert-btn" onClick={handleUpload} disabled={uploading}>
+    <button className="convert-btn" onClick={handleUpload} >
   {uploading ? (
     <div className="btn-spinner" />
   ) : (
