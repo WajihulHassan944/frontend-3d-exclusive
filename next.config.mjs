@@ -14,33 +14,6 @@ const nextConfig = {
       },
     ],
   },
-  async headers() {
-    return [
-      {
-        source: '/api/:path*',
-        headers: [
-          {
-            key: 'Access-Control-Allow-Credentials',
-            value: 'true',
-          },
-          {
-            key: 'Access-Control-Allow-Origin',
-            value: '*', // Optional: use '*' only if you're not sending cookies
-            // OR use below instead for specific domains
-            // value: 'https://frontend-3d-exclusive.vercel.app, https://backend-3d-exclusive.vercel.app',
-          },
-          {
-            key: 'Access-Control-Allow-Methods',
-            value: 'GET,POST,OPTIONS',
-          },
-          {
-            key: 'Access-Control-Allow-Headers',
-            value: 'Content-Type',
-          },
-        ],
-      },
-    ];
-  },
 };
 
 export default nextConfig;

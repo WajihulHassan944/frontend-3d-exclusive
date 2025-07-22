@@ -19,61 +19,58 @@ const LoginForm = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-const handleLogin = async (e) => {
-  e.preventDefault();
-  setError('');
-  setLoading(true);
 
-  try {
-    // Step 1: Call the frontend proxy route to handle login
-    const res = await fetch('/api/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include', // still needed to persist cookie on frontend
-      body: JSON.stringify({ email, password }),
-    });
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
 
-    const data = await res.json();
-
-    if (res.ok && data.success) {
-      toast.success('login successful');
-
-      // Step 2: Fetch user details (OPTIONAL: proxy this too for best compatibility)
-      const userDetailsRes = await fetch(`${baseUrl}/users/userdetails`, {
-        method: 'GET',
+    try {
+      const res = await fetch(`${baseUrl}/users/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
+        body: JSON.stringify({ email, password })
       });
 
-      const userDetailsData = await userDetailsRes.json();
+      const data = await res.json();
 
-      if (userDetailsRes.ok && userDetailsData.success) {
-        const userWithWallet = {
-          ...userDetailsData.user,
-          wallet: userDetailsData.wallet,
-          cart: userDetailsData.cart,
-          videos: userDetailsData.videos,
-        };
+      if (res.ok && data.success) {
+        toast.success('login successful');
+        const userDetailsRes = await fetch(`${baseUrl}/users/userdetails`, {
+          method: 'GET',
+          credentials: 'include',
+        });
 
-        dispatch(loginUser(userWithWallet));
+        const userDetailsData = await userDetailsRes.json();
 
-        const hasTempVideo = localStorage.getItem('tempVideo');
-        router.push(hasTempVideo ? '/upload' : '/upload');
+        if (userDetailsRes.ok && userDetailsData.success) {
+          const user = userDetailsData.user;
+           const userWithWallet = {
+    ...userDetailsData.user,
+    wallet: userDetailsData.wallet,
+    cart: userDetailsData.cart,
+     videos: userDetailsData.videos,
+  };
+
+  dispatch(loginUser(userWithWallet));
+const hasTempVideo = localStorage.getItem('tempVideo');
+router.push(hasTempVideo ? '/upload' : '/upload');
+
+        } else {
+          setError('Failed to fetch user details.');
+        }
       } else {
-        setError('Failed to fetch user details.');
-        toast.error('User details fetch failed.');
+        setError(data.message || 'Login failed.');
+        toast.error(data.message);
       }
-    } else {
-      setError(data.message || 'Login failed.');
-      toast.error(data.message);
+    } catch (err) {
+      console.error(err);
+      setError('Something went wrong.');
+    } finally {
+      setLoading(false);
     }
-  } catch (err) {
-    console.error(err);
-    setError('Something went wrong.');
-    toast.error('An unexpected error occurred.');
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   const googleLogin = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
