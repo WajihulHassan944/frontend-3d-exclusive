@@ -25,7 +25,9 @@ const nextConfig = {
           },
           {
             key: 'Access-Control-Allow-Origin',
-            value: 'https://frontend-3d-exclusive.vercel.app', // adjust if domain changes
+            value: '*', // Optional: use '*' only if you're not sending cookies
+            // OR use below instead for specific domains
+            // value: 'https://frontend-3d-exclusive.vercel.app, https://backend-3d-exclusive.vercel.app',
           },
           {
             key: 'Access-Control-Allow-Methods',
