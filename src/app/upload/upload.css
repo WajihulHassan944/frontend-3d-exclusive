@@ -96,6 +96,7 @@ padding-top: 0;
 
 .free-minute {
   margin: 30px 0;
+  margin-bottom: 70px;
   font-weight: 500;
   color: #fa8938;
   background: #fa893833;
@@ -106,11 +107,12 @@ padding-top: 0;
 }
 
 .convert-btn {
-  background-color: #ff8c2f;
+ background-color: #ff6c2f;
+  color: white;
   border: none;
   padding: 12px 20px;
-  font-size: 16px;
-  font-weight: bold;
+  font-size: 21px;
+  font-weight: 700;
   border-radius: 8px;
   cursor: pointer;
   margin-bottom: 20px;
@@ -319,6 +321,116 @@ padding-top: 0;
 }
 
 .convert-btn:disabled {
-  opacity: 0.9;
+  opacity: 0.6;
   cursor: not-allowed;
+}
+.format-selector {
+  margin:50px 0;
+  text-align: center;
+}
+
+.format-title {
+  color: #fff;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.format-option {
+
+  border-radius: 7px;
+  background: rgba(0,0,0,0.4);
+  color: #fff;
+  width: 100%;
+  max-width: 400px; /* fixed width for uniformity */
+  text-align: left;
+  padding: 12px 18px;
+  margin: 10px auto;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.format-option:hover {
+  background: rgba(255, 126, 57, 0.1);
+}
+
+.format-option input {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #ff7e39;
+  border-radius: 50%;
+  outline: none;
+  cursor: pointer;
+  position: relative;
+  margin-top: 2px;
+  margin-right: 10px;
+  background-color: transparent;
+  transition: all 0.2s ease;
+}
+
+.format-option input:checked::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  width: 8px;
+  height: 8px;
+  background-color: #ff7e39;
+  border-radius: 50%;
+}
+
+.format-option label {
+  font-size: 15px;
+  cursor: pointer;
+ 
+}
+
+.format-option label span {
+  color: #b3b3ff;
+  font-size: 13px;
+}
+
+
+
+
+
+.video-meta-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 126, 57, 0.4);
+  color: #fff;
+  padding: 20px;
+  border-radius: 16px;
+  max-width: 450px;
+  margin: 20px auto 0;
+  font-size: 14px;
+  line-height: 1.6;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+.video-meta-card strong {
+  color: #ffbb88;
+}
+
+.meta-success {
+  color: #50fa7b;
+  font-weight: 600;
+  margin-top: 10px;
+ 
+}
+.meta-icon{
+  margin-right: 10px;
+  font-size: 18px;
+}
+
+.meta-error {
+  color: #ff6b6b;
+  font-weight: 600;
+  margin-top: 10px;
 }

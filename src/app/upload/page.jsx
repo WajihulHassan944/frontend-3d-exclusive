@@ -13,6 +13,7 @@ import Credits from './credits';
 import HomeCredits from './HomeCredits/HomeCredits';
 import Whycloud from './Whycloud/Whycloud';
 import Whatexpect from './Whatexpect/Whatexpect';
+import { FiCheckCircle } from "react-icons/fi";
 
 
 const Home = () => {
@@ -29,6 +30,7 @@ const dispatch = useDispatch();
  const [videoMeta, setVideoMeta] = useState(null); // holds calculated info
 const [showVideoNote, setShowVideoNote] = useState(false); // controls div
 const videoNoteRef = useRef(null);
+const [conversionFormat, setConversionFormat] = useState('MV-HEVC');
 
  const router = useRouter();
  useEffect(() => {
@@ -263,6 +265,7 @@ const handleUpload = async () => {
         key,
         quality,
         lengthInSeconds: Math.round(duration),
+         conversionFormat,
       }),
     });
 
@@ -366,26 +369,24 @@ reader.readAsDataURL(file);
       <video src={videoPreview} controls width="100%" />
     </div>
   )}
-  {showVideoNote && videoMeta && isLoggedIn && (
-  <div
-    ref={videoNoteRef}
-    className="bg-yellow-100 border border-yellow-400 text-yellow-800 p-4 rounded-md mt-4 text-sm"
-  >
+ {showVideoNote && videoMeta && isLoggedIn && (
+  <div ref={videoNoteRef} className="video-meta-card">
     {videoMeta.error ? (
       <p>⚠️ {videoMeta.error}</p>
     ) : (
       <>
         <p><strong>Video:</strong> {videoMeta.fileName}</p>
-        <p><strong>Duration:</strong> {videoMeta.duration} minute(s)</p>
         <p><strong>Quality:</strong> {videoMeta.quality}</p>
         <p><strong>Credits Required:</strong> {videoMeta.isUsingFreeMinute ? '0 (using free minute)' : videoMeta.cost}</p>
         <p><strong>Your Balance:</strong> {videoMeta.balance} credit(s)</p>
         {videoMeta.canProceed ? (
-          <p className="text-green-700 mt-2 font-medium">
-            ✅ You have sufficient credits. You may proceed with the upload.
-          </p>
+      <p className="meta-success">
+  <FiCheckCircle className="meta-icon" />
+  You have sufficient credits. You may proceed with the upload.
+</p>
+
         ) : (
-          <p className="text-red-700 mt-2 font-medium">
+          <p className="meta-error">
             ❌ You need <strong>{videoMeta.cost - videoMeta.balance}</strong> more credit(s) to upload this video.
             <br />Please top up your wallet before uploading.
           </p>
@@ -398,21 +399,48 @@ reader.readAsDataURL(file);
 
 
   {uploadStatus && <p className="upload-status">{uploadStatus}</p>}
+<div className="format-selector">
+  <p className="format-title">Choose conversion format</p>
+  <div
+    className={`format-option ${conversionFormat === 'MV-HEVC' ? 'selected' : ''}`}
+    onClick={() => setConversionFormat('MV-HEVC')}
+  >
+    <input
+      type="radio"
+      name="conversionFormat"
+      checked={conversionFormat === 'MV-HEVC'}
+      readOnly
+    />
+    <label>MV-HEVC <span>(Meta Quest & Apple Vision Pro)</span></label>
+  </div>
+  <div
+    className={`format-option ${conversionFormat === 'Full Side by Side' ? 'selected' : ''}`}
+    onClick={() => setConversionFormat('Full Side by Side')}
+  >
+    <input
+      type="radio"
+      name="conversionFormat"
+      checked={conversionFormat === 'Full Side by Side'}
+      readOnly
+    />
+    <label>Full Side by Side <span>(compatible with YouTube 3D)</span></label>
+  </div>
+</div>
 
  <button
   className="convert-btn"
   onClick={handleUpload}
-  disabled={uploading || (isLoggedIn && showVideoNote && videoMeta && !videoMeta.canProceed)}
+  disabled={uploading || (isLoggedIn && showVideoNote && videoMeta && !videoMeta.canProceed) || !videoFile}
   style={{
-  opacity: uploading || (isLoggedIn && showVideoNote && videoMeta && !videoMeta.canProceed) ? 0.8 : 1,
-  cursor: uploading || (isLoggedIn && showVideoNote && videoMeta && !videoMeta.canProceed) ? 'not-allowed' : 'pointer',
+  opacity: uploading || (isLoggedIn && showVideoNote && videoMeta && !videoMeta.canProceed) || !videoFile? 0.6 : 1,
+  cursor: uploading || (isLoggedIn && showVideoNote && videoMeta && !videoMeta.canProceed) || !videoFile ? 'not-allowed' : 'pointer',
 }}
 
 >
   {uploading ? (
     <div className="btn-spinner" />
   ) : (
-    'Upload to 3D Cloud'
+    'Convert to 3D'
   )}
 </button>
 
