@@ -49,7 +49,7 @@ const TermsAndConditions = () => {
         </div>
 
         <div className="term-item">
-          <h3>6. Prohibited Content</h3>
+          <h3>4. Prohibited Content</h3>
           <p>You are not allowed to upload or process content that:</p>
           <ul>
             <li>Violates the law</li>
@@ -60,35 +60,35 @@ const TermsAndConditions = () => {
         </div>
 
         <div className="term-item">
-          <h3>8. Feedback</h3>
+          <h3>5. Feedback</h3>
           <p>
             Any feedback you provide to Xclusive3D may be freely used by us.
           </p>
         </div>
 
         <div className="term-item">
-          <h3>9. Acceptable Use</h3>
+          <h3>6. Acceptable Use</h3>
           <p>
             You are considered to use Xclusive3D under acceptable use and your content may be freely used by us.
           </p>
         </div>
 
         <div className="term-item">
-          <h3>10. Liability and Indemnification</h3>
+          <h3>7. Liability and Indemnification</h3>
           <p>
             You agree to indemnify Xclusive3D and may be freely used by Xclusive-3D.
           </p>
         </div>
 
         <div className="term-item">
-          <h3>11. Changes to the Terms</h3>
+          <h3>8. Changes to the Terms</h3>
           <p>
             We may update these Terms at any time. The revised version will apply as of publication. Continued use of our services after changes means you accept the updated Terms.
           </p>
         </div>
 
         <div className="term-item">
-          <h3>12. Governing Law and Jurisdiction</h3>
+          <h3>9. Governing Law and Jurisdiction</h3>
           <p>
             These Terms shall be governed by and construed in accordance with the laws of the applicable region.
           </p>
