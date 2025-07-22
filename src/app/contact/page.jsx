@@ -53,13 +53,7 @@ const ContactForm = () => {
 
   return (
     <div className="contact-container">
-      <Image
-        src="/logo.png"
-        alt="Xclusive 3D Logo"
-        width={140}
-        height={90}
-        className="logo-6"
-      />
+     
       <h2 className="contact-title">Contact</h2>
       <div className="contact-wrapper">
         <form className="contact-form" onSubmit={handleSubmit}>

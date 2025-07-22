@@ -19,58 +19,61 @@ const LoginForm = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+const handleLogin = async (e) => {
+  e.preventDefault();
+  setError('');
+  setLoading(true);
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    setError('');
-    setLoading(true);
+  try {
+    // Step 1: Call the frontend proxy route to handle login
+    const res = await fetch('/api/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include', // still needed to persist cookie on frontend
+      body: JSON.stringify({ email, password }),
+    });
 
-    try {
-      const res = await fetch(`${baseUrl}/users/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+    const data = await res.json();
+
+    if (res.ok && data.success) {
+      toast.success('login successful');
+
+      // Step 2: Fetch user details (OPTIONAL: proxy this too for best compatibility)
+      const userDetailsRes = await fetch(`${baseUrl}/users/userdetails`, {
+        method: 'GET',
         credentials: 'include',
-        body: JSON.stringify({ email, password })
       });
 
-      const data = await res.json();
+      const userDetailsData = await userDetailsRes.json();
 
-      if (res.ok && data.success) {
-        toast.success('login successful');
-        const userDetailsRes = await fetch(`${baseUrl}/users/userdetails`, {
-          method: 'GET',
-          credentials: 'include',
-        });
+      if (userDetailsRes.ok && userDetailsData.success) {
+        const userWithWallet = {
+          ...userDetailsData.user,
+          wallet: userDetailsData.wallet,
+          cart: userDetailsData.cart,
+          videos: userDetailsData.videos,
+        };
 
-        const userDetailsData = await userDetailsRes.json();
+        dispatch(loginUser(userWithWallet));
 
-        if (userDetailsRes.ok && userDetailsData.success) {
-          const user = userDetailsData.user;
-           const userWithWallet = {
-    ...userDetailsData.user,
-    wallet: userDetailsData.wallet,
-    cart: userDetailsData.cart,
-     videos: userDetailsData.videos,
-  };
-
-  dispatch(loginUser(userWithWallet));
-const hasTempVideo = localStorage.getItem('tempVideo');
-router.push(hasTempVideo ? '/upload' : '/upload');
-
-        } else {
-          setError('Failed to fetch user details.');
-        }
+        const hasTempVideo = localStorage.getItem('tempVideo');
+        router.push(hasTempVideo ? '/upload' : '/upload');
       } else {
-        setError(data.message || 'Login failed.');
-        toast.error(data.message);
+        setError('Failed to fetch user details.');
+        toast.error('User details fetch failed.');
       }
-    } catch (err) {
-      console.error(err);
-      setError('Something went wrong.');
-    } finally {
-      setLoading(false);
+    } else {
+      setError(data.message || 'Login failed.');
+      toast.error(data.message);
     }
-  };
+  } catch (err) {
+    console.error(err);
+    setError('Something went wrong.');
+    toast.error('An unexpected error occurred.');
+  } finally {
+    setLoading(false);
+  }
+};
 
   const googleLogin = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
@@ -128,14 +131,7 @@ router.push(hasTempVideo ? '/upload' : '/dashboard');
   });
 return (
   <div className="login-container">
-    <Image
-      src="/logo.png"
-      alt="Xclusive 3D Logo"
-      width={160}
-      height={120}
-      className="logo-login"
-    />
-
+  
     <h2 className="login-title">Sign in</h2>
 
     <button onClick={googleLogin} className="social-btn google">

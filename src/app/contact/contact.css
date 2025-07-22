@@ -2,17 +2,11 @@
   max-width: 500px;
   margin: 0 auto;
   padding: 30px 20px;
-  padding-top: 0;
+  padding-top: 60px;
+ min-height: 80vh;
  
 }
 
-/* Logo styling */
-.logo-6 {
-  display: block;
-  margin: 30px auto 20px;
-  margin-bottom: 30px;
-  object-fit: contain;
-}
 
 /* Contact heading */
 .contact-title {

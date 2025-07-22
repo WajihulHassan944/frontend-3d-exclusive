@@ -8,7 +8,7 @@ import './signup.css';
 import { baseUrl } from '@/const';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
-
+import { FiCheck } from 'react-icons/fi';
 const SignupForm = () => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -19,6 +19,8 @@ const SignupForm = () => {
   const [loadingCountry, setLoadingCountry] = useState(true);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const [agreeToTerms, setAgreeToTerms] = useState(false);
+
   // Fetch actual country name using IP geolocation
   useEffect(() => {
    const fetchCountry = async () => {
@@ -131,14 +133,7 @@ const SignupForm = () => {
   });
 return (
   <div className="signup-container">
-    <Image
-      src="/logo.png"
-      alt="Logo"
-      width={160}
-      height={120}
-      className="logo-register"
-    />
-
+   
     <h2 className="signup-title">Sign up</h2>
 
     <button
@@ -205,10 +200,22 @@ return (
           />
         </div>
       )}
+      <div className="terms-checkbox" onClick={() => !loading && setAgreeToTerms(!agreeToTerms)}>
+  <div className={`custom-checkbox ${agreeToTerms ? 'checked' : ''}`}>
+    {agreeToTerms && <FiCheck size={12} color="#fff" />}
+  </div>
+  <label>
+    I agree to the{' '}
+    <a href="/termsandconditions" target="_blank" rel="noopener noreferrer">
+      Terms and Conditions
+    </a>
+  </label>
+</div>
 
-      <button type="submit" className="signup-btn" disabled={loading}>
-        {loading ? 'Creating Account...' : 'Create Account'}
-      </button>
+    <button type="submit" className="signup-btn" disabled={loading || !agreeToTerms}>
+  {loading ? 'Creating Account...' : 'Create Account'}
+</button>
+
 
       <p className="login-link">
         Already have an account? <a href="/login">Login</a>

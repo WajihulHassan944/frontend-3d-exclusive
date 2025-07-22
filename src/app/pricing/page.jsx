@@ -7,13 +7,7 @@ import './price.css';
 const PricingSection = () => {
   return (
   <center> <div className="pricing-container">
-      <Image
-        src="/logo.png"
-        alt="Xclusive 3D Logo"
-        width={120}
-        height={80}
-        className="logo-pricing"
-      />
+     
 
       <h2 className="pricing-title">Pricing</h2>
 
@@ -41,8 +35,8 @@ const PricingSection = () => {
 
       <div className="pricing-buttons">
         <button>10 credits €9</button>
-        <button>50 credits €29</button>
-        <button>90 credits €59</button>
+        <button>50 credits €39</button>
+        <button>100 credits €69</button>
       </div>
     </div>
   </center> 

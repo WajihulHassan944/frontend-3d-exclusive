@@ -93,14 +93,6 @@ padding-top: 0;
   cursor: pointer;
 }
 
-.device-info {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  font-size: 14px;
-  margin-bottom: 10px;
-  opacity: 0.9;
-}
 
 .free-minute {
   margin: 30px 0;
@@ -307,18 +299,26 @@ padding-top: 0;
 }
 
 
-
 .btn-spinner {
   width: 18px;
   height: 18px;
   border: 3px solid #fff;
-  border-top: 3px solid #f97316;
+  border-top: 3px solid #f97316; /* orange spin color */
   border-radius: 50%;
   animation: xclusive-spin 1s linear infinite;
   margin: 0 auto;
 }
 
+@keyframes xclusive-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 .convert-btn:disabled {
-  opacity: 0.7;
+  opacity: 0.9;
   cursor: not-allowed;
 }

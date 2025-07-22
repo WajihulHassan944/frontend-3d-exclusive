@@ -96,7 +96,7 @@ export default function Navbar() {
             </div>
           ) : (
             <>
-              <Link href="/login" className="btn btn-outline">Login</Link>
+              <Link href="/login" className="btn btn-outline">Sign in</Link>
               <Link href="/signup" className="btn btn-filled">Sign&nbsp;Up</Link>
             </>
           )}

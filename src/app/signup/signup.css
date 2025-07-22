@@ -2,15 +2,12 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
+    min-height: 80vh;
   padding: 40px 20px;
   box-sizing: border-box;
 }
 
-.logo-register {
-  margin-bottom: 30px;
-  object-fit: contain;
-}
 
 .signup-title {
   font-size: 2.8rem;
@@ -159,4 +156,38 @@
   .signup-btn {
     font-size: 0.95rem;
   }
+}.terms-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #fff;
+  font-size: 14px;
+  margin: 1rem 0;
+  cursor: pointer;
+  user-select: none;
+}
+
+.custom-checkbox {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #f97316;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  transition: background-color 0.2s ease;
+}
+
+.custom-checkbox.checked {
+  background-color: #f97316;
+}
+
+.terms-checkbox a {
+  color: #f97316;
+  text-decoration: underline;
+}
+.signup-btn:disabled {
+  opacity: 0.8;
+  cursor: not-allowed;
 }

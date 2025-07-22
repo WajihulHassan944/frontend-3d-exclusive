@@ -57,13 +57,7 @@ export default function Faq() {
   return (
     <section className="faq-section">
       <div className="faq-header">
-        <Image
-          src="/logo.png"
-          alt="Xclusive 3D Logo"
-          width={160}
-          height={120}
-          className="faq-logo"
-        />
+     
         <h2 className="faq-title">FAQs</h2>
       </div>
 
