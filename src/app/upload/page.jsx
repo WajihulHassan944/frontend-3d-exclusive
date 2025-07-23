@@ -178,7 +178,7 @@ const handleUpload = async () => {
   if (!videoFile) return;
 
   if (!isLoggedIn) {
-    router.push('/login');
+    router.push('/signup');
     return;
   }
 

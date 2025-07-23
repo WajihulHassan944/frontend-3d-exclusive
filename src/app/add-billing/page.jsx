@@ -9,9 +9,10 @@ const stripePromise = loadStripe("pk_test_51Re7bwCDHYmyh26mg712Usqdmn1sobEbtsT2P
 
 const TopupCredit = () => {
   return (
-    <Elements stripe={stripePromise}>
+    <><Elements stripe={stripePromise}>
       <BillingMethods />
     </Elements>
+    </>
   );
 };
 

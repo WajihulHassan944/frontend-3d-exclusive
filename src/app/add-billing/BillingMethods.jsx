@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import { baseUrl } from '@/const';
 import toast from 'react-hot-toast';
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
+import Link from 'next/link';
 
 const BillingMethods = () => {
   const user = useSelector((state) => state.user);
@@ -90,11 +91,7 @@ const BillingMethods = () => {
 
   return (
    <div className="topup-wrapper">
-      <img
-        className="topup-logo"
-        src="/logo.png"
-        alt="Logo"
-      />
+     
       <h1 className="topup-title">Billing Methods</h1>
 
   <div className="topup-section">
@@ -145,7 +142,10 @@ const BillingMethods = () => {
       <button className="topup-btn" onClick={handleAddCard} disabled={cardSubmitting}>
         {cardSubmitting ? 'Saving...' : 'Add Card'}
       </button>
-    </div> </div>
+   <center> <Link href="/transactions-history" className='viewTransactionsBtn'>View transactions history</Link></center>
+    </div> 
+   
+    </div>
   );
 };
 

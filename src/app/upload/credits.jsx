@@ -13,49 +13,59 @@ const Credits = () => {
   const router = useRouter();
   const [loadingAmount, setLoadingAmount] = useState(null);
 
-  const handleBuyCredits = async (amount) => {
-    setLoadingAmount(amount);
-    try {
-      const res = await fetch(`${baseUrl}/cart/add`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({ amount }),
-      });
+ const handleBuyCredits = async (credits) => {
+  setLoadingAmount(credits);
 
-      const data = await res.json();
-
-      if (res.ok && data.success) {
-        toast.success('Credits added to cart!');
-        router.push('/cart');
-        await refreshAndDispatchUser(dispatch);
-      } else {
-        toast.error(data.error || 'Failed to add credits');
-      }
-    } catch (err) {
-      console.error('❌ Error adding credits:', err);
-      toast.error('Something went wrong');
-    } finally {
-      setLoadingAmount(null);
-    }
+  // Map credits to actual Euro amount
+  const pricingMap = {
+    10: 9,
+    50: 39,
+    100: 69,
   };
+  const amount = pricingMap[credits];
+
+  try {
+    const res = await fetch(`${baseUrl}/cart/add`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ credits, amount }),
+    });
+
+    const data = await res.json();
+
+    if (res.ok && data.success) {
+      toast.success('Credits added to cart!');
+      router.push('/cart');
+      await refreshAndDispatchUser(dispatch);
+    } else {
+      toast.error(data.error || 'Failed to add credits');
+    }
+  } catch (err) {
+    console.error('❌ Error adding credits:', err);
+    toast.error('Something went wrong');
+  } finally {
+    setLoadingAmount(null);
+  }
+};
 
   return (
     <div className="credits">
-      {[10, 50, 100].map((amount) => (
-        <button
-          key={amount}
-          onClick={() => handleBuyCredits(amount)}
-          className={loadingAmount === amount ? 'loading' : ''}
-          disabled={loadingAmount !== null}
-        >
-          {loadingAmount === amount ? (
-            <div className="spinner-buy" />
-          ) : (
-            `Buy ${amount} credits € ${amount === 10 ? 9 : amount === 50 ? 39 : 69}`
-          )}
-        </button>
-      ))}
+     {[10, 50, 100].map((credits) => (
+  <button
+    key={credits}
+    onClick={() => handleBuyCredits(credits)}
+    className={loadingAmount === credits ? 'loading' : ''}
+    disabled={loadingAmount !== null}
+  >
+    {loadingAmount === credits ? (
+      <div className="spinner-buy" />
+    ) : (
+      `Buy ${credits} credits € ${credits === 10 ? 9 : credits === 50 ? 39 : 69}`
+    )}
+  </button>
+))}
+
     </div>
   );
 };
