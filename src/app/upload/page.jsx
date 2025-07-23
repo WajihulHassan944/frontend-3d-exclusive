@@ -56,24 +56,16 @@ const [conversionFormat, setConversionFormat] = useState('MV-HEVC');
     (async () => {
       try {
         const { duration, width, height } = await getVideoMetadata(file);
-        const quality = `${height}p`;
-        const durationMinutes = Math.ceil(duration / 60);
-        const qualityCostMap = {
-          "1080p": 1,
-          "2.7K": 2,
-          "4K": 3,
-          "8K": 6,
-        };
+    const quality = `${height}p`;
+const durationMinutes = Math.ceil(duration / 60);
 
-        if (!qualityCostMap[quality]) {
-          setVideoMeta({
-            error: `Unsupported video quality (${quality}). Only 1080p, 2.7K, 4K, and 8K are allowed.`,
-          });
-          setShowVideoNote(true);
-          return;
-        }
+// Updated credit calculation logic
+let costPerMinute = 1;
+if (height >= 2160 && height < 4320) {
+  costPerMinute = 6;
+}
 
-        const cost = durationMinutes * qualityCostMap[quality];
+const cost = durationMinutes * costPerMinute;
         const hasFreeMinute = user?.hasFreeConversion;
         const isUsingFreeMinute = hasFreeMinute && durationMinutes <= 1;
         const balance = user?.wallet?.balance || 0;
@@ -123,24 +115,17 @@ const handleFileChange = async (e) => {
   // Get metadata
   try {
     const { duration, width, height } = await getVideoMetadata(file);
-    const quality = `${height}p`;
-    const durationMinutes = Math.ceil(duration / 60);
-    const qualityCostMap = {
-      "1080p": 1,
-      "2.7K": 2,
-      "4K": 3,
-      "8K": 6,
-    };
+   const quality = `${height}p`;
+const durationMinutes = Math.ceil(duration / 60);
 
-    if (!qualityCostMap[quality]) {
-      setVideoMeta({
-        error: `Unsupported video quality (${quality}). Only 1080p, 2.7K, 4K, and 8K are allowed.`,
-      });
-      setShowVideoNote(true);
-      return;
-    }
+// Updated credit calculation logic
+let costPerMinute = 1;
+if (height >= 2160 && height < 4320) {
+  costPerMinute = 6;
+}
 
-    const cost = durationMinutes * qualityCostMap[quality];
+const cost = durationMinutes * costPerMinute;
+
     const hasFreeMinute = user?.hasFreeConversion;
     const isUsingFreeMinute = hasFreeMinute && durationMinutes <= 1;
     const balance = user?.wallet?.balance || 0;
@@ -203,23 +188,17 @@ const handleUpload = async () => {
 
   try {
     const { duration, width, height } = await getVideoMetadata(videoFile);
-    const quality = `${height}p`;
-    const durationMinutes = Math.ceil(duration / 60); // round up to nearest minute
+   const quality = `${height}p`;
+const durationMinutes = Math.ceil(duration / 60);
 
-    const qualityCostMap = {
-      "1080p": 1,
-      "2.7K": 2,
-      "4K": 3,
-      "8K": 6,
-    };
+// Updated credit calculation logic
+let costPerMinute = 1;
+if (height >= 2160 && height < 4320) {
+  costPerMinute = 6;
+}
 
-    if (!qualityCostMap[quality]) {
-      alert("❌ Unsupported video quality. Only 1080p, 2.7K, 4K, and 8K are allowed.");
-      setUploading(false);
-      return;
-    }
+const cost = durationMinutes * costPerMinute;
 
-    const cost = durationMinutes * qualityCostMap[quality];
     const hasFreeMinute = user?.hasFreeConversion;
     const balance = user?.wallet?.balance || 0;
     const isUsingFreeMinute = hasFreeMinute && durationMinutes <= 1;
@@ -376,7 +355,7 @@ reader.readAsDataURL(file);
     ) : (
       <>
         <p><strong>Video:</strong> {videoMeta.fileName}</p>
-        <p><strong>Quality:</strong> {videoMeta.quality}</p>
+        {/* <p><strong>Quality:</strong> {videoMeta.quality}</p> */}
         <p><strong>Credits Required:</strong> {videoMeta.isUsingFreeMinute ? '0 (using free minute)' : videoMeta.cost}</p>
         <p><strong>Your Balance:</strong> {videoMeta.balance} credit(s)</p>
         {videoMeta.canProceed ? (
