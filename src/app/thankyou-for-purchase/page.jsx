@@ -31,7 +31,7 @@ export default function Page() {
     doc.text('Official Payment Receipt', 105, 30, null, null, 'center');
 
     doc.setFontSize(12);
-    doc.text(`Customer: ${user.firstName} ${user.lastName}`, 20, 50);
+    doc.text(`Customer: ${billing.name}`, 20, 50);
     doc.text(`Email: ${user.email}`, 20, 58);
     doc.text(`Country: ${user.country}`, 20, 66);
 
@@ -68,7 +68,7 @@ doc.text(`Stripe Payment ID: ${lastCredit.stripePayment.id || '-'}`, 20, 194);
         {lastCredit && (
           <div className="receipt-box">
             <h3>Receipt Summary</h3>
-            <p><strong>Name:</strong> {user.firstName} {user.lastName}</p>
+            <p><strong>Name:</strong> {lastCredit.billingInfo.name}</p>
             <p><strong>Email:</strong> {user.email}</p>
             <p><strong>Country:</strong> {user.country}</p>
 

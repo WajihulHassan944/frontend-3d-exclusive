@@ -17,6 +17,7 @@ export default function ShoppingCart() {
   const router = useRouter();
 const [checkoutLoading, setCheckoutLoading] = useState(false);
 const [billingData, setBillingData] = useState({
+  name:'',
   street: '',
   postalCode: '',
   city: '',
@@ -87,29 +88,8 @@ const [billingData, setBillingData] = useState({
     }
   };
 
-  const handleTopUp = async (topUpAmount) => {
-    try {
-      const res = await fetch(`${baseUrl}/wallet/add-funds`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({ userId: user._id, amount: Number(topUpAmount) }),
-      });
 
-      const data = await res.json();
-      if (data.success) {
-        toast.success('Top-up successful!');
-        await clearCart();
-        await refreshAndDispatchUser(dispatch);
-        router.push('/thankyou-for-purchase');
-      } else {
-        toast.error(data.message || 'Top-up failed');
-      }
-    } catch (err) {
-      console.error(err);
-      toast.error('Top-up failed');
-    }
-  };
+
   const handleCheckout = async () => {
   const total = credits.reduce((sum, credit) => sum + credit.amount, 0);
   const primaryCard = user?.wallet?.cards?.find(card => card.isPrimary);
@@ -189,7 +169,7 @@ const [billingData, setBillingData] = useState({
         ))
       )}{credits.length > 0 && (
   <div className="billing-form">
-    <h3 className="billing-title">Billing Information (EU-Compliant)</h3>
+    <h3 className="billing-title">Billing Information</h3>
 
    {user?.wallet?.cards?.length > 0 ? (
   <div className="primary-card">
@@ -211,7 +191,19 @@ const [billingData, setBillingData] = useState({
   </p>
 )}
 
-
+<input
+      type="text"
+      placeholder="Name"
+      value={billingData.name}
+      onChange={(e) => setBillingData({ ...billingData, name: e.target.value })}
+    />
+<input
+      type="text"
+      placeholder="Company Name (Optional)"
+      value={billingData.companyName}
+      onChange={(e) => setBillingData({ ...billingData, companyName: e.target.value })}
+    />
+    
     <input
       type="text"
       placeholder="Street Address"
@@ -238,13 +230,7 @@ const [billingData, setBillingData] = useState({
     />
     <input
       type="text"
-      placeholder="Company Name (Optional)"
-      value={billingData.companyName}
-      onChange={(e) => setBillingData({ ...billingData, companyName: e.target.value })}
-    />
-    <input
-      type="text"
-      placeholder="EU VAT Number (Optional)"
+      placeholder="VAT Number (Optional)"
       value={billingData.vatNumber}
       onChange={(e) => setBillingData({ ...billingData, vatNumber: e.target.value })}
     />

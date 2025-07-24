@@ -36,7 +36,7 @@ const TransactionsHistory = () => {
     doc.text('Official Payment Receipt', 105, 30, null, null, 'center');
 
     doc.setFontSize(12);
-    doc.text(`Customer: ${user.firstName} ${user.lastName}`, 20, 50);
+    doc.text(`Customer: ${billing.name}`, 20, 50);
     doc.text(`Email: ${user.email}`, 20, 58);
     doc.text(`Country: ${user.country}`, 20, 66);
 
