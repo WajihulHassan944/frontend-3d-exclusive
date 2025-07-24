@@ -165,8 +165,11 @@
   margin: 1rem 0;
   cursor: pointer;
   user-select: none;
+  width: 100%;
 }
-
+.terms-checkbox:nth-of-type(1){
+  margin-top: 0;
+}
 .custom-checkbox {
   width: 16px;
   height: 16px;
@@ -190,4 +193,8 @@
 .signup-btn:disabled {
   opacity: 0.8;
   cursor: not-allowed;
+}
+.checked-label{
+  max-width: 91%;
+  line-height: 20px;
 }

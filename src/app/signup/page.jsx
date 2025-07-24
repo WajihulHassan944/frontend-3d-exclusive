@@ -20,6 +20,7 @@ const SignupForm = () => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const [agreeToTerms, setAgreeToTerms] = useState(false);
+const [subscribeNewsletter, setSubscribeNewsletter] = useState(false);
 
   // Fetch actual country name using IP geolocation
   useEffect(() => {
@@ -69,6 +70,8 @@ const SignupForm = () => {
     formData.append('email', email);
     formData.append('password', password);
     formData.append('country', country);
+    formData.append('subscribeNewsletter', subscribeNewsletter ? 'true' : 'false');
+
     if (profileImage) formData.append('profileImage', profileImage);
 
     setLoading(true);
@@ -211,6 +214,16 @@ return (
     </a>
   </label>
 </div>
+
+<div className="terms-checkbox" style={{marginBottom:'20px', marginTop:'7px'}} onClick={() => !loading && setSubscribeNewsletter(!subscribeNewsletter)}>
+  <div className={`custom-checkbox ${subscribeNewsletter ? 'checked' : ''}`}>
+    {subscribeNewsletter && <FiCheck size={12} color="#fff" />}
+  </div>
+  <label className="checked-label">
+    Yes, I would like to receive special promotions and tips & tricks for the best 3D experiences.
+  </label>
+</div>
+
 
     <button type="submit" className="signup-btn" disabled={loading || !agreeToTerms}>
   {loading ? 'Creating Account...' : 'Create Account'}
