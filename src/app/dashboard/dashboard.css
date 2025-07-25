@@ -53,6 +53,7 @@
   padding: 0.7rem 0;
   font-size: 0.95rem;
   flex-wrap: wrap;
+  text-align: center;
 }
 
 /* Table header */
@@ -62,8 +63,13 @@
   border-bottom: 1px solid rgba(255, 255, 255, 0.15);
   margin-bottom: 0.6rem;
   padding-bottom: 0.4rem;
-
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+  gap: 1rem;
 }
+
 /* Row data */
 .row-body:not(:last-of-type) {
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
@@ -73,25 +79,40 @@
 .row span,
 .row a {
   flex-shrink: 0;
+  text-align: center;
+  display: inline-block;
 }
 
 /* Serial */
-.row span:nth-child(1) {
+.row span:nth-child(1),
+.row-head span:nth-child(1) {
   width: 40px;
+  text-align: center;
 }
 
-/* File name */
-.row span:nth-child(2) {
-  flex: 1;
+
+/* Video filename - only left aligned */
+.row span:nth-child(2),
+.row-head span:nth-child(2) {
+  text-align: left;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 280px;
+  max-width: 260px;
+  width: 100%;
 }
 
 /* Status */
-.row span:nth-child(3) {
+.row span:nth-child(3),
+.row-head span:nth-child(3) {
   min-width: 100px;
+  text-align: center;
+}
+
+/* Download column */
+.row span:nth-child(4),
+.row-head span:nth-child(4) {
+  width: 80px;
   text-align: center;
 }
 
@@ -231,5 +252,18 @@
 
   .download {
     align-self: flex-end;
+  }
+}
+
+.spinning {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
   }
 }

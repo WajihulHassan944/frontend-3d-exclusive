@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useSelector } from 'react-redux';
-import { FiDownload } from 'react-icons/fi';
+import { FiDownload, FiUploadCloud, FiLoader } from 'react-icons/fi';
 import './dashboard.css';
 
 export default function Dashboard() {
@@ -46,9 +46,19 @@ export default function Dashboard() {
               <span className={`pill ${v.status.toLowerCase().replace(/\s/g, '-')}`}>
                 {v.status}
               </span>
-              <Link href={v.b2Url} className="download" target="_blank">
-                <FiDownload size={20} />
-              </Link>
+        <span className="download">
+  {v.status === 'completed' ? (
+    <Link href={v.b2Url} target="_blank">
+      <FiDownload size={20} title="Download" />
+    </Link>
+  ) : v.status === 'processing' ? (
+    <FiLoader size={20} title="Processing" className="spinning" />
+  ) : (
+    <FiUploadCloud size={20} title="Uploaded" />
+  )}
+</span>
+
+
             </div>
           ))
         )}
