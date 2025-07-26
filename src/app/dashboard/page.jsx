@@ -48,7 +48,7 @@ export default function Dashboard() {
               </span>
         <span className="download">
   {v.status === 'completed' ? (
-    <Link href={v.b2Url} target="_blank">
+    <Link href={v.convertedUrl} target="_blank">
       <FiDownload size={20} title="Download" />
     </Link>
   ) : v.status === 'processing' ? (
