@@ -57,7 +57,7 @@ useEffect(() => {
 }, [user]);
 
   const totalVideos = videos.length;
-  const processing = videos.filter((v) => (v.status === 'processing' || v.status === 'pending')).length;
+  const processing = videos.filter((v) => (v.status === 'processing' || v.status === 'pending' || v.status === 'uploaded')).length;
   const completed = videos.filter((v) => v.status === 'completed').length;
   const failed = videos.filter((v) => v.status === 'failed').length;
 
