@@ -95,6 +95,7 @@ const TransactionsHistory = () => {
         )}
       </div>
 
+      <div className='specialinvoicewrapper'>
       {selectedInvoice && (
         <div>
           <div className="invoice-preview" ref={invoiceRef}>
@@ -109,9 +110,15 @@ const TransactionsHistory = () => {
                 <div className="invoice-title">INVOICE</div>
                 <div className="invoice-contact">
                   <div>info@Xclusive3d.com</div>
-                  <div className='blueColored'>
-                    VAT number: <strong>NL02166652B18</strong>
-                  </div>
+                 <div className="blueColored">
+  VAT number:{" "}
+  <strong>
+    {selectedInvoice.billingInfo.vatNumber
+      ? selectedInvoice.billingInfo.vatNumber
+      : "Not provided"}
+  </strong>
+</div>
+
                 </div>
               </div>
 
@@ -187,7 +194,7 @@ const TransactionsHistory = () => {
             </div>
           </div>
         </div>
-      )}
+      )}</div>
     </div>
   );
 };

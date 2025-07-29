@@ -85,7 +85,15 @@ const lastInvoice = user?.invoices
                 <div className="invoice-title">INVOICE</div>
                 <div className="invoice-contact">
                   <div>info@Xclusive3d.com</div>
-                  <div className="blueColored">VAT number: <strong>NL02166652B18</strong></div>
+             <div className="blueColored">
+  VAT number:{" "}
+  <strong>
+    {lastInvoice.billingInfo.vatNumber
+      ? lastInvoice.billingInfo.vatNumber
+      : "Not provided"}
+  </strong>
+</div>
+
                 </div>
               </div>
 

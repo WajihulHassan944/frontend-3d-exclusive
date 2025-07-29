@@ -212,3 +212,12 @@ border-bottom: none;
 .blueColored{
   color: #3e4595 !important;
 }
+
+@media(max-width:768px){
+  
+.specialinvoicewrapper {
+ width: 100%;
+ overflow-x: auto;
+}
+
+}
