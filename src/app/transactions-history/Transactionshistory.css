@@ -54,9 +54,161 @@
   color: #ffcc00;
 }
 
+
+
+
+
 .no-transactions {
   text-align: center;
   font-size: 16px;
   color: #ccc;
   font-style: italic;
+}
+
+
+
+
+
+
+
+
+
+.invoice-preview {
+  width: 800px;
+  margin: 0 auto;
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 14px;
+  color: #333;
+  background: #fff;
+  padding: 40px;
+  border: 1px solid #ddd;
+border-bottom: none;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+.invoice-top-border {
+  height: 4px;
+  background: #800080;
+  margin-bottom: 20px;
+}
+
+.invoice-header {
+  display: flex;
+  gap: 20px;
+}
+
+.invoice-info-left {
+  width: 22%;
+  font-size: 13px;
+}
+
+.invoice-logo {
+  font-size: 25px;
+  font-weight: bold;
+  color: #4f86e8;
+  margin-bottom: 10px;
+}
+
+.invoice-title {
+  margin-top: -40px;
+  font-size: 21px;
+  margin-bottom: 35px;
+  color: #4f86e8;
+}
+
+.invoice-contact {
+  line-height: 1.6;
+}
+
+.invoice-info-right {
+  width: 78%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.invoice-logo-img {
+  width: 90px;
+  height: auto;
+  margin-bottom: 10px;
+}
+
+.billing-block {
+  width: 100%;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.invoice-meta {
+  margin-top: 35px;
+  width: 100%;
+  
+}
+
+.meta-row {
+  display: flex;
+  margin-bottom: 5px;
+}
+
+.meta-label {
+ margin-right: 5px;
+  font-weight: 500;
+}
+
+.meta-value {
+  width: 80%;
+}
+
+.invoice-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 40px;
+}
+
+.invoice-table th,
+.invoice-table td {
+  border: 1px solid #ccc;
+  padding: 10px 12px;
+  text-align: left;
+}
+
+.invoice-table th {
+  background-color: #800080;
+  color: #fff;
+  font-weight: 500;
+}
+
+.invoice-summary {
+  width: 100%;
+  margin-top: 20px;
+  border-collapse: collapse;
+}
+
+.invoice-summary td {
+  padding: 8px 12px;
+  text-align: right;
+}
+
+.invoice-summary tr.total td {
+  font-weight: bold;
+  border-top: 2px solid #800080;
+}
+
+.invoice-footer {
+  margin-top: 30px;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.spaced-div{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 70px;
+}
+
+
+.blueColored{
+  color: #3e4595 !important;
 }

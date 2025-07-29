@@ -51,6 +51,7 @@ const LoginForm = () => {
     wallet: userDetailsData.wallet,
     cart: userDetailsData.cart,
      videos: userDetailsData.videos,
+                    invoices: userDetailsData.invoices,
   };
 
   dispatch(loginUser(userWithWallet));
@@ -102,7 +103,7 @@ router.push(hasTempVideo ? '/upload' : '/upload');
     ...userDetailsData.user,
     wallet: userDetailsData.wallet,
     cart: userDetailsData.cart,
-    
+                        invoices: userDetailsData.invoices,
     videos: userDetailsData.videos,
   };
 

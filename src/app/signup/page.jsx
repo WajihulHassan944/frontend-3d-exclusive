@@ -215,7 +215,7 @@ return (
   </label>
 </div>
 
-<div className="terms-checkbox" style={{marginBottom:'20px', marginTop:'7px'}} onClick={() => !loading && setSubscribeNewsletter(!subscribeNewsletter)}>
+<div className="terms-checkbox" style={{marginBottom:'20px', marginTop:'7px'}} onClick={() => setSubscribeNewsletter(!subscribeNewsletter)}>
   <div className={`custom-checkbox ${subscribeNewsletter ? 'checked' : ''}`}>
     {subscribeNewsletter && <FiCheck size={12} color="#fff" />}
   </div>

@@ -1,7 +1,16 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import Image from 'next/image';
+import Select from 'react-select';
+import countries from 'i18n-iso-countries';
+import enLocale from 'i18n-iso-countries/langs/en.json';
+
+countries.registerLocale(enLocale);
+const countryOptions = Object.entries(countries.getNames('en')).map(([code, name]) => ({
+  value: code,
+  label: name,
+}));
+
 import './cart.css';
 import { FaTrashAlt, FaVrCardboard } from 'react-icons/fa';
 import { useSelector, useDispatch } from 'react-redux';
@@ -25,7 +34,7 @@ const [billingData, setBillingData] = useState({
   companyName: '',
   vatNumber: ''
 });
-
+console.log(billingData);
   const [credits, setCredits] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -117,7 +126,7 @@ const [billingData, setBillingData] = useState({
      body: JSON.stringify({
   userId: user._id,
   amount: Number(total),
-  credits, // 🔥 Include full credits array
+  credits, 
   billingInfo: billingData,
 }),
 
@@ -222,12 +231,47 @@ const [billingData, setBillingData] = useState({
       value={billingData.city}
       onChange={(e) => setBillingData({ ...billingData, city: e.target.value })}
     />
-    <input
-      type="text"
-      placeholder="Country"
-      value={billingData.country}
-      onChange={(e) => setBillingData({ ...billingData, country: e.target.value })}
-    />
+  <Select
+  options={countryOptions}
+  value={countryOptions.find((opt) => opt.value === billingData.country)}
+ onChange={(selected) => {
+  setBillingData({ ...billingData, country: selected?.label || '' });
+}}
+
+  placeholder="Select Country"
+  className="country-select"
+  classNamePrefix="select"
+  styles={{
+    control: (provided) => ({
+      ...provided,
+      backgroundColor: 'white',
+      color: 'black',
+      textAlign: 'left',
+    }),
+    singleValue: (provided) => ({
+      ...provided,
+      color: 'black',
+      textAlign: 'left',
+    }),
+    option: (provided, state) => ({
+      ...provided,
+      backgroundColor: state.isFocused ? '#f0f0f0' : 'white',
+      color: 'black',
+      textAlign: 'left',
+    }),
+    menu: (provided) => ({
+      ...provided,
+      backgroundColor: 'white',
+    }),
+    placeholder: (provided) => ({
+      ...provided,
+      color: 'gray',
+      textAlign: 'left',
+    }),
+  }}
+/>
+
+
     <input
       type="text"
       placeholder="VAT Number (Optional)"

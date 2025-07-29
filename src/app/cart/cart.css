@@ -175,3 +175,8 @@
 .redtextLink{
   color: #ff4400;
 }
+/* cart.css */
+.country-select {
+  margin-bottom: 10px;
+  text-align: left;
+}

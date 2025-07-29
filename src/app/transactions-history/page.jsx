@@ -1,109 +1,193 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { FaDownload } from 'react-icons/fa';
-import { jsPDF } from 'jspdf';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 import './Transactionshistory.css';
 
 const TransactionsHistory = () => {
   const user = useSelector((state) => state.user);
-  const transactions = user?.wallet?.transactions || [];
+  const invoices = user?.invoices || [];
 
-  const getTotalCredits = (creditsField) => {
-    if (Array.isArray(creditsField)) {
-      return creditsField.reduce((acc, curr) => acc + (Number(curr.credits) || 0), 0);
-    }
-    return Number(creditsField) || 0;
+  const [selectedInvoice, setSelectedInvoice] = useState(null);
+  const invoiceRef = useRef(null);
+
+  const groupCredits = (credits = []) => {
+    const map = new Map();
+    credits.forEach(c => {
+      const key = `${c.credits}-${c.amount}`;
+      if (!map.has(key)) {
+        map.set(key, { credits: c.credits, amount: c.amount, quantity: 1 });
+      } else {
+        map.get(key).quantity += 1;
+      }
+    });
+    return [...map.values()];
   };
 
-  const downloadReceipt = (transaction) => {
-    if (!transaction || !user || transaction.type !== 'credit') return;
+  const renderAndDownloadInvoice = async (invoice) => {
+    setSelectedInvoice(invoice);
+    setTimeout(async () => {
+      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
 
-    const billing = transaction.billingInfo || {};
-    const date = new Date(transaction.createdAt).toLocaleString();
-    const totalCredits = getTotalCredits(transaction.credits);
+      // Delay to ensure DOM is updated/rendered
+      await new Promise((res) => setTimeout(res, 500));
 
-    const doc = new jsPDF();
+      if (!invoiceRef.current) return;
 
-    // Header
-    doc.setFontSize(18);
-    doc.setFont('helvetica', 'bold');
-    doc.text('Xclusive 3D', 105, 20, null, null, 'center');
+      const canvas = await html2canvas(invoiceRef.current, { scale: 2 });
+      const imgData = canvas.toDataURL('image/png');
 
-    doc.setFontSize(16);
-    doc.setFont('helvetica', 'normal');
-    doc.text('Official Payment Receipt', 105, 30, null, null, 'center');
+      const pdf = new jsPDF('p', 'pt', 'a4');
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
 
-    doc.setFontSize(12);
-    doc.text(`Customer: ${billing.name}`, 20, 50);
-    doc.text(`Email: ${user.email}`, 20, 58);
-    doc.text(`Country: ${user.country}`, 20, 66);
+      const imgWidth = pageWidth;
+      const imgHeight = (canvas.height * pageWidth) / canvas.width;
 
-    doc.text('Billing Information:', 20, 82);
-    doc.text(`Street: ${billing.street || '-'}`, 20, 90);
-    doc.text(`City: ${billing.city || '-'}`, 20, 98);
-    doc.text(`Postal Code: ${billing.postalCode || '-'}`, 20, 106);
-    doc.text(`Country: ${billing.country || '-'}`, 20, 114);
-    doc.text(`Company: ${billing.companyName || '-'}`, 20, 122);
-    doc.text(`VAT Number: ${billing.vatNumber || '-'}`, 20, 130);
-
-    doc.text('Transaction Details:', 20, 146);
-    doc.text(`Date: ${date}`, 20, 154);
-    doc.text(`Description: ${transaction.description}`, 20, 162);
-    doc.text(`Amount: €${transaction.amount?.toFixed(2)} EUR`, 20, 170);
-    doc.text(`Credits: ${totalCredits}`, 20, 178);
-doc.text(`Transaction ID: ${transaction._id}`, 20, 186);
-doc.text(`Stripe Payment ID: ${transaction.stripePayment.id || '-'}`, 20, 194);
-
-    doc.save(`receipt_${user.firstName}_${transaction._id}.pdf`);
+      pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+      pdf.save(`${invoice.invoiceNumber}.pdf`);
+    }, 100); // slight delay before capture
   };
 
   return (
     <div className='transaction-history-wrap'>
-      <h2 className="transactions-title">Past Transactions</h2>
-
+      <h2 className="transactions-title">Invoices</h2>
       <div className="transactions-container">
-        {transactions.length === 0 ? (
-          <p className="no-transactions">You have not made any transactions yet.</p>
+        {invoices.length === 0 ? (
+          <p className="no-transactions">You have not made any purchases yet.</p>
         ) : (
           <table className="transactions-table">
             <thead>
               <tr>
                 <th>Sr.</th>
                 <th>Date</th>
-                <th>Type</th>
+                <th>Invoice #</th>
                 <th>Amount</th>
                 <th>Credits</th>
-                <th>Receipt</th>
+                <th>Download</th>
               </tr>
             </thead>
             <tbody>
-             {[...transactions].reverse().map((tx, index) => (
-
-                <tr key={tx._id || index}>
-                  <td>{index + 1}</td>
-                  <td>{new Date(tx.createdAt).toLocaleDateString()}</td>
-                  <td>{tx.type}</td>
-                  <td>€{tx.amount?.toFixed(2)}</td>
-                  <td>{getTotalCredits(tx.credits)}</td>
-                  <td>
-                    {tx.type === 'credit' ? (
+              {[...invoices].reverse().map((inv, index) => {
+                const totalCredits = inv.credits.reduce((sum, c) => sum + (c.credits || 0), 0);
+                return (
+                  <tr key={inv._id}>
+                    <td>{index + 1}</td>
+                    <td>{new Date(inv.issuedAt).toLocaleDateString()}</td>
+                    <td>{inv.invoiceNumber}</td>
+                    <td>€{inv.total.toFixed(2)}</td>
+                    <td>{totalCredits}</td>
+                    <td>
                       <FaDownload
                         className="download-icon"
-                        onClick={() => downloadReceipt(tx)}
-                        title="Download Receipt"
+                        title="View & Download Invoice"
+                        onClick={() => renderAndDownloadInvoice(inv)}
                       />
-                    ) : (
-                      '-'
-                    )}
-                  </td>
-                </tr>
-              ))}
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         )}
       </div>
+
+      {selectedInvoice && (
+        <div>
+          <div className="invoice-preview" ref={invoiceRef}>
+            <div className="invoice-top-border" />
+            <div className='spaced-div'>
+              <div className="invoice-logo">XCLUSIVE 3D</div>
+              <img src="/logoMain.png" alt="logo" className="invoice-logo-img" />
+            </div>
+
+            <div className="invoice-header">
+              <div className="invoice-info-left">
+                <div className="invoice-title">INVOICE</div>
+                <div className="invoice-contact">
+                  <div>info@Xclusive3d.com</div>
+                  <div className='blueColored'>
+                    VAT number: <strong>NL02166652B18</strong>
+                  </div>
+                </div>
+              </div>
+
+              <div className="invoice-info-right">
+                <div className="billing-block">
+                  <div>{selectedInvoice.billingInfo.name}</div>
+                  {selectedInvoice.billingInfo.companyName && (
+                    <div>{selectedInvoice.billingInfo.companyName}</div>
+                  )}
+                  <div>
+                    {selectedInvoice.billingInfo.street},{" "}
+                    {selectedInvoice.billingInfo.postalCode}{" "}
+                    {selectedInvoice.billingInfo.city},{" "}
+                    {selectedInvoice.billingInfo.countryName}
+                  </div>
+
+                  <div className="invoice-meta">
+                    <div className="meta-row">
+                      <div className="meta-label">Date:</div>
+                      <div className="meta-value">
+                        {new Date(selectedInvoice.issuedAt).toLocaleDateString('en-GB')}
+                      </div>
+                    </div>
+                    <div className="meta-row">
+                      <div className="meta-label">Invoice Number:</div>
+                      <div className="meta-value">{selectedInvoice.invoiceNumber}</div>
+                    </div>
+                  </div>
+
+                  <table className="invoice-table">
+                    <thead>
+                      <tr>
+                        <th>Description</th>
+                        <th>Quantity</th>
+                        <th>Cost</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {groupCredits(selectedInvoice.credits).map((c, idx) => (
+                        <tr key={idx}>
+                          <td>{c.credits} Credits for 3d conversion</td>
+                          <td>{c.quantity}</td>
+                          <td>€ {c.amount.toFixed(2).replace('.', ',')}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+
+                  <table className="invoice-summary">
+                    <tbody>
+                      <tr>
+                        <td>Subtotal</td>
+                        <td>€ {selectedInvoice.amount.toFixed(2).replace('.', ',')}</td>
+                      </tr>
+                      <tr>
+                        <td>VAT</td>
+                        <td>€ {selectedInvoice.vat.toFixed(2).replace('.', ',')}</td>
+                      </tr>
+                      <tr className="total">
+                        <td>Total</td>
+                        <td>€ {selectedInvoice.total.toFixed(2).replace('.', ',')}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+
+                  <div className="invoice-footer">
+                    Payment method: iDEAL <br />
+                    Credits are valid for 1 year (365 days) <br />
+                    Thank you for your order and enjoy our immersive 3D conversion.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
