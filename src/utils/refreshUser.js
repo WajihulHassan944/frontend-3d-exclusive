@@ -16,6 +16,8 @@ export const refreshAndDispatchUser = async (dispatch) => {
         ...data.user,
         wallet: data.wallet,
         videos: data.videos,
+        cart: data.cart,
+        invoices: data.invoices,
       };
       dispatch(loginUser(updatedUser));
       return true;

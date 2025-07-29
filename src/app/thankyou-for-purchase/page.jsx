@@ -62,8 +62,17 @@ const lastInvoice = user?.invoices
 
         <FaCheckCircle size={60} color="#ff8c2f" />
         <p>Your payment was successful. Please enjoy the Xclusive3D conversion service.</p>
+  <div className="invoice-download-btn-wrap">
+  <button className="download-btn-success" onClick={downloadPDF}>
+    Download Invoice
+  </button>
+  <Link href="/upload">
+    <button className="upload-btn">Upload More</button>
+  </Link>
+</div>
 
-        {lastInvoice && (
+       <div className='specialinvoicewrapper'>
+         {lastInvoice && (
           <div className="invoice-preview thankpageinvoice" ref={invoiceRef}>
             <div className="invoice-top-border" />
             <div className="spaced-div">
@@ -151,15 +160,8 @@ const lastInvoice = user?.invoices
           </div>
         )}
 
-      <div className="invoice-download-btn-wrap">
-  <button className="download-btn-success" onClick={downloadPDF}>
-    Download Invoice
-  </button>
-  <Link href="/upload">
-    <button className="upload-btn">Upload More</button>
-  </Link>
-</div>
-
+       </div>
+    
       </div>
     </div>
   );

@@ -208,7 +208,8 @@ border-bottom: none;
   display: flex;
   justify-content: center;
   gap: 1rem;
-  margin-top: 2rem;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
 }
 
 .download-btn-success {
@@ -227,4 +228,19 @@ border-bottom: none;
 
 .download-btn-success:hover {
   background-color: #36006a;
+}
+
+
+@media(max-width:768px){
+  
+.download-btn-success {
+   padding: 5px 15px;
+  font-size: 13px;
+  height: 40px;
+  }
+.specialinvoicewrapper {
+ width: 100%;
+ overflow-x: auto;
+}
+
 }

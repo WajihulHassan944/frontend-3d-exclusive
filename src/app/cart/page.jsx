@@ -134,9 +134,9 @@ console.log(billingData);
 
     const data = await res.json();
     if (data.success) {
+      await refreshAndDispatchUser(dispatch);
       toast.success('Top-up successful!');
       await clearCart();
-      await refreshAndDispatchUser(dispatch);
       router.push('/thankyou-for-purchase');
     } else {
       toast.error(data.message || 'Top-up failed');
