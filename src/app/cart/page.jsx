@@ -34,10 +34,48 @@ const [billingData, setBillingData] = useState({
   companyName: '',
   vatNumber: ''
 });
-console.log(billingData);
-  const [credits, setCredits] = useState([]);
-  const [loading, setLoading] = useState(true);
+const [vatPercent, setVatPercent] = useState(null);
+const [finalPrice, setFinalPrice] = useState(0);
+const [vatNote, setVatNote] = useState('');
 
+const [credits, setCredits] = useState([]);
+  const [loading, setLoading] = useState(true);
+useEffect(() => {
+  const checkVAT = async () => {
+    const { vatNumber, country } = billingData;
+    if (!country) return;
+
+    try {
+      const res = await fetch(`${baseUrl}/wallet/checkVat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ vatNumber, country }),
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        const baseTotal = credits.reduce((sum, c) => sum + c.amount, 0);
+        const vatAmount = baseTotal * data.vatRate;
+        const final = baseTotal + vatAmount;
+setVatNote(data.vatNote || '');
+
+        setVatPercent(data.vatRate * 100);
+        setFinalPrice(final);
+      }
+    } catch (err) {
+      console.error('VAT check error:', err);
+    }
+  };
+
+  checkVAT();
+}, [billingData, credits]);
+const isBillingComplete = billingData.name &&
+  billingData.country &&
+  billingData.street &&
+  billingData.postalCode &&
+  billingData.city;
+
+const isCheckoutDisabled = checkoutLoading || vatPercent === null || !isBillingComplete;
   useEffect(() => {
     const fetchCart = async () => {
       try {
@@ -281,11 +319,33 @@ console.log(billingData);
   </div>
 )}
 
+
+{credits.length > 0 && (
+  <>
+    <div className="final-price-box">
+      <p className="subtotal-line">
+  <span className='colored'>Subtotal:</span>  €{credits.reduce((sum, c) => sum + c.amount, 0).toFixed(2)}
+</p>
+
+{vatPercent !== null && (
+  <p className="vat-total-line">
+   Total incl. <span>VAT ({vatPercent}%):</span> €{finalPrice.toFixed(2)}
+  </p>
+)}
+
+    </div>
+  </>
+)}
+
+
+
+{vatNote && <p className="vat-note">{vatNote}</p>}
+
       {!loading && credits.length > 0 && (
        <button
   className="checkout-btn"
   onClick={handleCheckout}
-  disabled={checkoutLoading}
+  disabled={checkoutLoading || isCheckoutDisabled}
 >
   {checkoutLoading ? (
     <div className="spinner-cart" />

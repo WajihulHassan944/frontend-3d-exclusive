@@ -180,3 +180,35 @@
   margin-bottom: 10px;
   text-align: left;
 }
+.vat-note {
+  margin: 10px 0;
+  font-size: 0.9rem;
+  color: #ccc;
+  line-height: 20px;
+  font-style: italic;
+}
+
+.final-price-box {
+  margin: 16px 0;
+  font-size: 1.1rem;
+  background-color: rgba(0, 0, 0, 0.4); /* semi-dark background */
+  padding: 16px;
+  border-left: 4px solid #ff672f;
+  border-radius: 8px;
+  color: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.subtotal-line,
+.vat-total-line {
+  margin: 4px 0;
+  font-weight: 500;
+  color: white;
+}
+.vat-total-line span {
+  color: #ff672f;
+  font-weight: 600;
+}

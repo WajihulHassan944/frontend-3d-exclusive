@@ -3,6 +3,7 @@
 import React from 'react';
 import Image from 'next/image';
 import './price.css';
+import PricingSectionInPricing from './PricingSection/PricingSection';
 
 const PricingSection = () => {
   return (
@@ -10,13 +11,14 @@ const PricingSection = () => {
      
 
       <h2 className="pricing-title">Pricing</h2>
-
+      <p className='pricingSubTitle'>Choose the perfect plan for your 3D video conversion needs</p>
+      <div className="free-minute-pricing">🎁 Get 1 minute of free conversion after registration</div>
       <div className="price-box">
-        <h3 className="price-box-heading">Cost per 3D video</h3>
+        <h3 className="price-box-heading">Credit Usage per minute</h3>
         <div className="price-table">
           <div className="price-row">
-            <span>Resolution</span>
-            <span>Credits</span>
+            <span style={{fontWeight:'600'}}>Resolution</span>
+            <span style={{color:'#fa8938', fontWeight:'600'}}>Credits</span>
           </div>
           <div className="price-row">
             <span>1080p</span>
@@ -33,11 +35,13 @@ const PricingSection = () => {
         </div>
       </div>
 
-      <div className="pricing-buttons">
-        <button>10 credits €9</button>
-        <button>50 credits €39</button>
-        <button>100 credits €69</button>
-      </div>
+      
+      <PricingSectionInPricing />
+
+
+
+
+
     </div>
   </center> 
    );

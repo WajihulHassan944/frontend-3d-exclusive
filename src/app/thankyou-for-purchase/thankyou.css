@@ -200,7 +200,7 @@ border-bottom: none;
 
 
 .blueColored{
-  color: #3e4595 !important;
+  color: #5a69d7 !important;
 }
 
 
@@ -229,7 +229,10 @@ border-bottom: none;
 .download-btn-success:hover {
   background-color: #36006a;
 }
-
+.lightBlueColored{
+  color: #517ee1;
+  font-weight: 600;
+}
 
 @media(max-width:768px){
   

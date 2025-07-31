@@ -34,7 +34,8 @@ const lastInvoice = user?.invoices
     return [...map.values()];
   };
 
-  const downloadPDF = async () => {
+  const downloadPDF = async (e) => {
+    e?.preventDefault();
     if (!invoiceRef.current || !lastInvoice) return;
     const canvas = await html2canvas(invoiceRef.current, { scale: 2 });
     const imgData = canvas.toDataURL('image/png');
@@ -46,11 +47,11 @@ const lastInvoice = user?.invoices
  
   };
 
-  useEffect(() => {
-    if (lastInvoice) {
-      setTimeout(downloadPDF, 500); // Download and preview on mount
-    }
-  }, [lastInvoice]);
+  // useEffect(() => {
+  //   if (lastInvoice) {
+  //     setTimeout(downloadPDF, 500); // Download and preview on mount
+  //   }
+  // }, [lastInvoice]);
 
   return (
     <div className="verify-container thankscont">
@@ -67,7 +68,7 @@ const lastInvoice = user?.invoices
     Download Invoice
   </button>
   <Link href="/upload">
-    <button className="upload-btn">Upload More</button>
+    <button className="upload-btn">Start 3D processing</button>
   </Link>
 </div>
 
@@ -86,13 +87,14 @@ const lastInvoice = user?.invoices
                 <div className="invoice-contact">
                   <div>info@Xclusive3d.com</div>
              <div className="blueColored">
-  VAT number:{" "}
+  VAT number:{" "}<br />
   <strong>
     {lastInvoice.billingInfo.vatNumber
       ? lastInvoice.billingInfo.vatNumber
       : "Not provided"}
   </strong>
 </div>
+<div className="lightBlueColored">CoC: 34270611</div>
 
                 </div>
               </div>
@@ -158,7 +160,7 @@ const lastInvoice = user?.invoices
                   </table>
 
                   <div className="invoice-footer">
-                    Payment method: iDEAL <br />
+                    Payment method: {lastInvoice.method} <br />
                     Credits are valid for 1 year (365 days) <br />
                     Thank you for your order and enjoy our immersive 3D conversion.
                   </div>
