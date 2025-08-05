@@ -1,43 +1,89 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { baseUrl } from '@/const';
 import toast from 'react-hot-toast';
-import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
+import { PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js';
+
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 
 const BillingMethods = () => {
   const user = useSelector((state) => state.user);
   const stripe = useStripe();
   const elements = useElements();
-
+const searchParams = useSearchParams();
   const [cardSubmitting, setCardSubmitting] = useState(false);
 
   const primaryCard = user?.wallet?.cards?.find(card => card.isPrimary);
   const otherCards = user?.wallet?.cards?.filter(card => !card.isPrimary) || [];
 
-  const handleAddCard = async () => {
-    setCardSubmitting(true);
-    try {
-      const card = elements.getElement(CardElement);
-      const { paymentMethod, error } = await stripe.createPaymentMethod({
-        type: 'card',
-        card,
-      });
 
-      if (error) {
-        toast.error(error.message);
+
+ useEffect(() => {
+    const setupIntentClientSecret = searchParams.get('setup_intent_client_secret');
+    const redirectStatus = searchParams.get('redirect_status');
+
+    if (stripe && setupIntentClientSecret && redirectStatus === 'succeeded') {
+      (async () => {
+        setCardSubmitting(true);
+        const { setupIntent, error } = await stripe.retrieveSetupIntent(setupIntentClientSecret);
+
+        if (error || !setupIntent) {
+          toast.error(error?.message || 'Setup failed');
+          setCardSubmitting(false);
+          return;
+        }
+
+        const res = await fetch(`${baseUrl}/wallet/add-billing-method`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            userId: user._id,
+            paymentMethodId: setupIntent.payment_method,
+          }),
+        });
+
+        const data = await res.json();
+        if (data.success) {
+          toast.success('Payment method added!');
+          window.location.href = '/add-billing'; // clean URL (no query params)
+        } else {
+          toast.error(data.message || 'Failed to save billing method');
+        }
+
         setCardSubmitting(false);
-        return;
-      }
+      })();
+    }
+  }, [stripe]);
 
+
+
+
+
+
+const handleAddCard = async () => {
+  setCardSubmitting(true);
+  try {
+    const { setupIntent, error } = await stripe.confirmSetup({
+      elements,
+      confirmParams: {
+        return_url: `${window.location.origin}/add-billing`, // optional if you don't want redirect
+      },
+      redirect: "if_required", // avoid full-page redirect
+    });
+
+    if (error) {
+      toast.error(error.message);
+    } else if (setupIntent && setupIntent.status === 'succeeded') {
+      // Send to backend to link with user
       const res = await fetch(`${baseUrl}/wallet/add-billing-method`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           userId: user._id,
-          paymentMethodId: paymentMethod.id,
+          paymentMethodId: setupIntent.payment_method,
         }),
       });
 
@@ -46,14 +92,15 @@ const BillingMethods = () => {
         toast.success('Card added!');
         window.location.reload();
       } else {
-        toast.error(data.message || 'Failed to add card');
+        toast.error(data.message || 'Failed to save billing method');
       }
-    } catch (err) {
-      console.error(err);
-      toast.error('Failed to add card');
     }
-    setCardSubmitting(false);
-  };
+  } catch (err) {
+    console.error(err);
+    toast.error('Failed to add billing method');
+  }
+  setCardSubmitting(false);
+};
 
   const handleSetPrimary = async (stripeCardId) => {
     try {
@@ -137,8 +184,9 @@ const BillingMethods = () => {
 
       <h3>Add New Card</h3>
       <div className="stripe-box">
-        <CardElement />
-      </div>
+  <PaymentElement options={{ layout: 'tabs' }} />
+</div>
+
       <button className="topup-btn" onClick={handleAddCard} disabled={cardSubmitting}>
         {cardSubmitting ? 'Saving...' : 'Add Card'}
       </button>

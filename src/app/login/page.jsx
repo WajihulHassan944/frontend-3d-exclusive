@@ -55,8 +55,15 @@ const LoginForm = () => {
   };
 
   dispatch(loginUser(userWithWallet));
+const hasPendingCredits = localStorage.getItem('pendingCredits');
 const hasTempVideo = localStorage.getItem('tempVideo');
-router.push(hasTempVideo ? '/upload' : '/upload');
+
+if (hasPendingCredits) {
+  router.push('/cart');
+} else {
+  router.push(hasTempVideo ? '/upload' : '/dashboard');
+}
+
 
         } else {
           setError('Failed to fetch user details.');
@@ -108,8 +115,14 @@ router.push(hasTempVideo ? '/upload' : '/upload');
   };
 
   dispatch(loginUser(userWithWallet));
+const hasPendingCredits = localStorage.getItem('pendingCredits');
 const hasTempVideo = localStorage.getItem('tempVideo');
-router.push(hasTempVideo ? '/upload' : '/dashboard');
+
+if (hasPendingCredits) {
+  router.push('/cart');
+} else {
+  router.push(hasTempVideo ? '/upload' : '/dashboard');
+}
 
           } else {
             setError('Failed to fetch user details.');

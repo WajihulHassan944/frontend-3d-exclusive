@@ -1,0 +1,65 @@
+.newsletter-toggle {
+  margin: 20px 0;
+  font-family: 'Inter', sans-serif;
+}
+
+.toggle-label {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 12px;
+  font-size: 16px;
+  color: #fff;
+  font-weight: 500;
+}
+
+
+.toggle-switch {
+  width: 48px;
+  height: 26px;
+  border-radius: 9999px;
+  background-color: #ccc;
+  position: relative;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.toggle-switch.active {
+  background-color: #f97316;
+}
+
+.toggle-thumb {
+  width: 22px;
+  height: 22px;
+  background-color: white;
+  border-radius: 50%;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  transition: transform 0.3s ease;
+}
+
+.toggle-switch.active .toggle-thumb {
+  transform: translateX(22px);
+}
+.toggle-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #f97316;
+  border-top: 2px solid transparent;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+  margin-left: 8px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.toggle-control{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}

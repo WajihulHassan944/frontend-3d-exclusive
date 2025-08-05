@@ -6,6 +6,7 @@ import './profilesettings.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { baseUrl } from '@/const';
 import { loginUser } from '@/redux/features/userSlice';
+import NewsletterToggle from './NewsletterToggle/NewsletterToggle';
 
 const ProfileSettings = () => {
   const dispatch = useDispatch();
@@ -233,6 +234,7 @@ const ProfileSettings = () => {
             onChange={handleChange}
           />
         </div>
+        <NewsletterToggle />
         <button className="save-button" onClick={handleSaveChanges} disabled={loading}>
           {loading ? <span className="spinner" /> : 'Save changes'}
         </button>

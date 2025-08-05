@@ -1,0 +1,42 @@
+.feedback-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 60px 20px;
+  min-height: 60vh;
+}
+
+.feedback-box {
+  background-color: white;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  max-width: 480px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.feedback-icon {
+  font-size: 60px;
+  margin-bottom: 20px;
+}
+
+.success .feedback-icon {
+  color: hsl(150, 70%, 45%);
+}
+
+.error .feedback-icon {
+  color: hsl(0, 75%, 55%);
+}
+
+.feedback-title {
+  font-size: 24px;
+  margin-bottom: 12px;
+  color: hsl(0, 0%, 20%);
+}
+
+.feedback-message {
+  font-size: 16px;
+  color: hsl(0, 0%, 40%);
+  line-height: 1.6;
+}

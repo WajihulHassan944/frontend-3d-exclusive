@@ -37,49 +37,6 @@ padding-top: 3rem;
   width: fit-content;
 }
 
-/* Pricing Box */
-.price-box {
-  border-radius: 15px;
-  padding: 1.5rem 2rem;
-  padding-bottom: 40px;
-  width: 100%;
-  background-color: rgba(0,0,0,0.4);
-  margin-bottom: 2rem;
-  max-width: 500px;
-}
-
-.price-box-heading {
-  font-size: 24px;
-  font-weight: bold;
-  margin-top: 13px;
-  margin-bottom: 1.8rem;
-}
-
-.price-table {
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-}
-
-.price-row {
-  display: flex;
-  justify-content: space-between;
-  font-size: 1.1rem;
-  padding: 1.5rem 0;
-  padding-bottom: 0.9rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-.price-row:first-child{
-  
-  padding-top: 8px;
-}
-.price-row:first-child span{
-  font-size: 19px;
-}
-.price-row:last-child {
-  border-bottom: none;
-}
-
 /* Buttons */
 .pricing-buttons {
   display: flex;

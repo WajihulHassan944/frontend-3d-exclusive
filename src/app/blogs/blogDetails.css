@@ -1,0 +1,154 @@
+.blogDetailsContainer {
+  padding: 40px 20px;
+  max-width: 960px;
+  margin: auto;
+  color: white;
+  font-family: 'Inter', sans-serif;
+}
+
+.backLink a {
+  color: #ff5c35;
+  font-size: 16px;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.metaData {
+  display: flex;
+  gap: 16px;
+  margin-top: 16px;
+  margin-bottom: 10px;
+  color: #ccc;
+  font-size: 14px;
+  align-items: center;
+}
+
+.tag {
+  background-color: #ff5c35;
+  padding: 2px 10px;
+  border-radius: 12px;
+  color: white;
+  font-weight: bold;
+}
+
+.title {
+  font-size: 36px;
+  font-weight: 800;
+  line-height: 1.2;
+  margin-top: 10px;
+}
+
+.subheading {
+  font-size: 18px;
+  margin-top: 10px;
+  margin-bottom: 30px;
+  color: #bbb;
+}
+
+.blogImageWrapper {
+  margin: 30px 0;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.blogImage {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+.blogContent h2, .blogContent h3 {
+  margin-top: 30px;
+  color: #fff;
+}
+
+.blogContent h2 {
+  font-size: 26px;
+}
+
+.blogContent h3 {
+  font-size: 22px;
+  margin-bottom: 10px;
+}
+
+.blogContent p {
+  font-size: 16px;
+  line-height: 1.7;
+  color: #ddd;
+  margin-bottom: 18px;
+}
+
+.blogContent ul {
+  margin-left: 20px;
+  margin-bottom: 20px;
+  color: #ccc;
+}
+
+.blogContent ul li {
+  list-style: disc;
+  margin-bottom: 8px;
+}
+
+.ctaButton {
+  display: inline-block;
+  margin-top: 40px;
+  background-color: #ff5c35;
+  padding: 12px 24px;
+  color: white;
+  font-weight: bold;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.ctaButton:hover {
+  background-color: #e74b28;
+}
+
+.formatTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1.5rem;
+  font-size: 0.95rem;
+  color: white;
+  margin-bottom: 20px;
+}
+
+.formatTable thead {
+  background-color: #222;
+}
+
+.formatTable th {
+  padding: 12px;
+  text-align: left;
+  font-weight: 600;
+}
+
+.formatTable tbody tr:nth-child(even) {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.formatTable td {
+  padding: 12px;
+}
+
+.formatTable tbody tr:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* checkbox-style emoji colors (optional) */
+.formatTable td {
+  vertical-align: middle;
+}
+
+.formatTable td:has(✅) {
+  color: #00ff00;
+  font-weight: bold;
+}
+
+.formatTable td:has(❌) {
+  color: #ff3b3b;
+  font-weight: bold;
+}
+

@@ -4,31 +4,32 @@
 }
 
 .why-heading {
-  font-size: 24px;
+  font-size: 29px;
   font-weight: 700;
-  margin-bottom: 40px;
+  margin-bottom: 60px;
   text-align: center;
 }
 
 .features {
   display: flex;
   justify-content: center;
-  gap: 80px;
+  gap: 60px;
   flex-wrap: wrap;
 }
 
 .feature-item {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
+  flex-direction: column;
   gap: 16px;
-  max-width: 280px;
-  text-align: left;
+  max-width: 250px;
+  text-align: center;
 }
 
 .icon-circle {
-  min-width: 48px;
-  height: 48px;
-  background-color: #ff7a1f;
+  width: 60px;
+  height: 60px;
+  background:linear-gradient(135deg, hsl(25 95% 60%), hsl(20 90% 65%));
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -37,15 +38,19 @@
   color: white;
   margin-top: 4px;
 }
-
+.icon-circle .why-icons{
+  font-size: 30px;
+}
 .feature-text h3 {
-  font-size: 16px;
-  font-weight: 700;
-  margin-bottom: 6px;
+  font-size: 1.125rem;
+    line-height: 1.75rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+  margin-top: 5px;
 }
 
 .feature-text p {
-  font-size: 14px;
-  line-height: 1.4;
-  color: #e0e0e0;
+  font-size: 16px;
+  line-height: 1.625;
+  color: #d1d5db;
 }

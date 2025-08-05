@@ -58,7 +58,8 @@ export default function Faq() {
     <section className="faq-section">
       <div className="faq-header">
      
-        <h2 className="faq-title">FAQs</h2>
+        <h2 className="faq-title">Frequently Asked Questions</h2>
+       <center> <p className='faq-subtitle'>Find answers to common questions about our 3D video conversion service</p></center>
       </div>
 
       <ul className="faq-list">
@@ -71,9 +72,9 @@ export default function Faq() {
             >
               <span>{q}</span>
               {openIdx === idx ? (
-                <FiChevronUp size={24} className="chevron-icon" />
+                <FiChevronUp className="chevron-icon" />
               ) : (
-                <FiChevronDown size={24} className="chevron-icon" />
+                <FiChevronDown className="chevron-icon" />
               )}
             </button>
             <div className={`faq-answer ${openIdx === idx ? 'show' : ''}`}>

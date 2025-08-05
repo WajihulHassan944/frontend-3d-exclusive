@@ -48,12 +48,11 @@
 .contact-sec-form-box,
 .contact-sec-info-box,
 .contact-sec-response-box {
-  background-color: rgba(0,0,0,0.33);
+  background-color: #ffffff0d;
   border-radius: 16px;
+  border:1px solid #ffffff1a;
   padding: 32px;
-  flex: 1 1 350px;
   max-width: 550px;
-  box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
 }
 
 .contact-sec-heading {
@@ -157,15 +156,14 @@
 }
 
 .contact-sec-response-box {
-  flex: 1 1 100%;
   max-width: 550px;
   border-radius: 16px;
   padding: 32px;
-  box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+  border:1px solid #ffffff1a;
 }
 
 .contact-sec-response-title {
-  font-size: 22spx;
+  font-size: 22px;
   font-weight: 600;
   margin-bottom: 12px;
 }
@@ -201,8 +199,11 @@
   .contact-sec-form-box,
   .contact-sec-info-box,
   .contact-sec-response-box {
+ 
     padding: 24px;
     max-width: 100%;
+       background-color: #ffffff0d;
+        border:1px solid #ffffff1a;
   }
 
   .contact-sec-input-row {

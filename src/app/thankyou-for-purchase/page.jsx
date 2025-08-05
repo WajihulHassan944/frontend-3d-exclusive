@@ -136,7 +136,7 @@ const lastInvoice = user?.invoices
                         <tr key={idx}>
                           <td>{c.credits} Credits for 3d conversion</td>
                           <td>{c.quantity}</td>
-                          <td>€ {c.amount.toFixed(2).replace('.', ',')}</td>
+                          <td>{lastInvoice.currency} {c.amount.toFixed(2).replace('.', ',')}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -146,15 +146,15 @@ const lastInvoice = user?.invoices
                     <tbody>
                       <tr>
                         <td>Subtotal</td>
-                        <td>€ {lastInvoice.amount.toFixed(2).replace('.', ',')}</td>
+                        <td>{lastInvoice.currency} {lastInvoice.amount.toFixed(2).replace('.', ',')}</td>
                       </tr>
                       <tr>
                         <td>VAT</td>
-                        <td>€ {lastInvoice.vat.toFixed(2).replace('.', ',')}</td>
+                        <td>{lastInvoice.currency} {lastInvoice.vat.toFixed(2).replace('.', ',')}</td>
                       </tr>
                       <tr className="total">
                         <td>Total</td>
-                        <td>€ {lastInvoice.total.toFixed(2).replace('.', ',')}</td>
+                        <td>{lastInvoice.currency} {lastInvoice.total.toFixed(2).replace('.', ',')}</td>
                       </tr>
                     </tbody>
                   </table>

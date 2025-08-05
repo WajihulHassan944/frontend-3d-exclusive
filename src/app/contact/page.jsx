@@ -123,43 +123,7 @@ const ContactForm = () => {
 
       {/* Right: Contact Info and Response Time */}
       <div className="contact-sec-info-wrapper">
-        <div className="contact-sec-info-grid">
-          
-          {/* Info Card 1 */}
-          <div className="contact-sec-info-box">
-          <h2 className="contact-sec-heading">Get in touch</h2>
-        
-            <div className="contact-sec-info-item">
-              <div className="contact-sec-info-icon">
-                <FaEnvelope />
-              </div>
-              <div>
-                <strong>Email</strong>
-                <p>support@xclusive3d.com</p>
-              </div>
-            </div>
-            <div className="contact-sec-info-item">
-              <div className="contact-sec-info-icon">
-                <FaPhoneAlt />
-              </div>
-              <div>
-                <strong>Phone</strong>
-                <p>+1 (555) 123-4567</p>
-              </div>
-            </div>
-             <div className="contact-sec-info-item">
-              <div className="contact-sec-info-icon">
-                <FaMapMarkerAlt />
-              </div>
-              <div>
-               <strong>Office</strong>
-                <p>San Francisco, CA<br />United States</p>
-              </div>
-            </div>
-          </div>
-
-        
-        </div>
+       
 
         {/* Response Time */}
         <div className="contact-sec-response-box">

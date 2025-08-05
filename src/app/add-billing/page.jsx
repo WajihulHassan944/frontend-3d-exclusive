@@ -1,19 +1,44 @@
 'use client';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
-import TopupCreditInner from './TopupCreditInner';
 import BillingMethods from './BillingMethods';
-
+import "./TopupCredit.css";
 const stripePromise = loadStripe("pk_test_51Re7bwCDHYmyh26mg712Usqdmn1sobEbtsT2P2vhnh8ael8mu70YS9jLuxUmvyy5JKfEqIYU3VQjE1yk3dtOA1Hu0026iz3jsD");
+import { baseUrl } from '@/const';
+const Page = () => {
+    const [clientSecret, setClientSecret] = useState('');
+  
+    useEffect(() => {
+    const fetchClientSecret = async () => {
+      const res = await fetch(`${baseUrl}/wallet/create-setup-intent`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include', // if using cookies/auth
+      });
+      const data = await res.json();
+      setClientSecret(data.clientSecret);
+    };
 
-const TopupCredit = () => {
+    fetchClientSecret();
+  }, []);
+  
+ const options = {
+    clientSecret,
+    appearance: {
+      theme: 'stripe',
+    },
+  };
+
   return (
-    <><Elements stripe={stripePromise}>
-      <BillingMethods />
-    </Elements>
+    <>
+      {clientSecret && (
+        <Elements stripe={stripePromise} options={options}>
+          <BillingMethods />
+        </Elements>
+      )}
     </>
   );
 };
 
-export default TopupCredit;
+export default Page;

@@ -10,10 +10,13 @@ import { refreshAndDispatchUser } from '@/utils/refreshUser';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import Credits from './credits';
-import HomeCredits from './HomeCredits/HomeCredits';
 import Whycloud from './Whycloud/Whycloud';
 import Whatexpect from './Whatexpect/Whatexpect';
 import { FiCheckCircle } from "react-icons/fi";
+import PricingSection from '../pricing/page';
+import PricingSectionInPricing from '../pricing/PricingSection/PricingSection';
+import CustomerTestimonials from './CustomerTestimonials/CustomerTestimonials';
+import NewsletterSignup from './NewsletterSignup/NewsletterSignup';
 
 
 const Home = () => {
@@ -30,66 +33,76 @@ const dispatch = useDispatch();
  const [videoMeta, setVideoMeta] = useState(null); // holds calculated info
 const [showVideoNote, setShowVideoNote] = useState(false); // controls div
 const videoNoteRef = useRef(null);
-const [conversionFormat, setConversionFormat] = useState('MV-HEVC');
+const [conversionFormat, setConversionFormat] = useState('Full Side by Side');
 
  const router = useRouter();
  useEffect(() => {
   const savedBase64 = localStorage.getItem('tempVideo');
   if (savedBase64 && !videoFile) {
-    const byteString = atob(savedBase64.split(',')[1]);
-    const mimeString = savedBase64.split(',')[0].split(':')[1].split(';')[0];
+    try {
+      const parts = savedBase64.split(',');
+      if (parts.length !== 2) throw new Error('Invalid Base64 format');
 
-    const ab = new ArrayBuffer(byteString.length);
-    const ia = new Uint8Array(ab);
-    for (let i = 0; i < byteString.length; i++) {
-      ia[i] = byteString.charCodeAt(i);
-    }
+      const mimeString = parts[0].split(':')[1].split(';')[0];
+      const byteString = atob(parts[1]);
 
-    const blob = new Blob([ab], { type: mimeString });
-    const file = new File([blob], 'saved-temp.mp4', { type: mimeString });
-    const fileURL = URL.createObjectURL(blob);
-
-    setVideoFile(file);
-    setVideoPreview(fileURL);
-
-    // Run the same metadata logic
-    (async () => {
-      try {
-        const { duration, width, height } = await getVideoMetadata(file);
-    const quality = `${height}p`;
-const durationMinutes = Math.ceil(duration / 60);
-
-// Updated credit calculation logic
-let costPerMinute = 1;
-if (height >= 2160 && height < 4320) {
-  costPerMinute = 6;
-}
-
-const cost = durationMinutes * costPerMinute;
-        const hasFreeMinute = user?.hasFreeConversion;
-        const isUsingFreeMinute = hasFreeMinute && durationMinutes <= 1;
-        const balance = user?.wallet?.balance || 0;
-
-        setVideoMeta({
-          fileName: file.name,
-          duration: durationMinutes,
-          quality,
-          cost,
-          balance,
-          isUsingFreeMinute,
-          canProceed: isUsingFreeMinute || balance >= cost,
-        });
-
-        setShowVideoNote(true);
-        setTimeout(() => {
-          videoNoteRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }, 100);
-      } catch (err) {
-        console.error('Metadata extraction error:', err);
-        setVideoMeta({ error: 'Failed to read video metadata.' });
-        setShowVideoNote(true);
+      const ab = new ArrayBuffer(byteString.length);
+      const ia = new Uint8Array(ab);
+      for (let i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
       }
-    })();
+
+      const blob = new Blob([ab], { type: mimeString });
+      const file = new File([blob], 'saved-temp.mp4', { type: mimeString });
+      const fileURL = URL.createObjectURL(blob);
+
+      setVideoFile(file);
+      setVideoPreview(fileURL);
+
+      (async () => {
+        try {
+          const { duration, width, height } = await getVideoMetadata(file);
+          const quality = `${height}p`;
+          const durationMinutes = Math.ceil(duration / 60);
+
+          let costPerMinute = 1;
+          if (height >= 2160 && height < 4320) {
+            costPerMinute = 6;
+          }
+
+          const cost = durationMinutes * costPerMinute;
+        const hasFreeMinute =
+  user?.hasFreeConversion &&
+  user?.newsletterOptIn === true &&
+  height < 4320; // disallow 8K free
+
+const isUsingFreeMinute = hasFreeMinute && durationMinutes <= 1;
+
+          const balance = user?.wallet?.balance || 0;
+
+          setVideoMeta({
+            fileName: file.name,
+            duration: durationMinutes,
+            quality,
+            cost,
+            balance,
+            isUsingFreeMinute,
+            canProceed: isUsingFreeMinute || balance >= cost,
+          });
+
+          setShowVideoNote(true);
+          setTimeout(() => {
+            videoNoteRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }, 100);
+        } catch (err) {
+          console.error('Metadata extraction error:', err);
+          setVideoMeta({ error: 'Failed to read video metadata.' });
+          setShowVideoNote(true);
+        }
+      })();
+    } catch (err) {
+      console.error('Base64 decode error:', err);
+    }
   }
 }, []);
 
@@ -126,8 +139,13 @@ if (height >= 2160 && height < 4320) {
 
 const cost = durationMinutes * costPerMinute;
 
-    const hasFreeMinute = user?.hasFreeConversion;
-    const isUsingFreeMinute = hasFreeMinute && durationMinutes <= 1;
+  const hasFreeMinute =
+  user?.hasFreeConversion &&
+  user?.newsletterOptIn === true &&
+  height < 4320; // disallow 8K free
+
+const isUsingFreeMinute = hasFreeMinute && durationMinutes <= 1;
+
     const balance = user?.wallet?.balance || 0;
 
     setVideoMeta({
@@ -199,9 +217,14 @@ if (height >= 2160 && height < 4320) {
 
 const cost = durationMinutes * costPerMinute;
 
-    const hasFreeMinute = user?.hasFreeConversion;
-    const balance = user?.wallet?.balance || 0;
-    const isUsingFreeMinute = hasFreeMinute && durationMinutes <= 1;
+    
+const balance = user?.wallet?.balance || 0;
+const hasFreeMinute =
+  user?.hasFreeConversion &&
+  user?.newsletterOptIn === true &&
+  height < 4320; // disallow 8K free
+
+const isUsingFreeMinute = hasFreeMinute && durationMinutes <= 1;
 
     if (isUsingFreeMinute) {
       alert("🎁 Using free 1-minute conversion.");
@@ -330,7 +353,7 @@ reader.readAsDataURL(file);
         </div>
         <h1 className='dropHeading'>Drag & drop your video</h1>
         <p className='dropPara'>Upload your 2D video to convert to 3D</p>
-
+        <button className='upload-input-btn'>Choose File</button>
           <input
             type="file"
             accept="video/*"
@@ -380,6 +403,18 @@ reader.readAsDataURL(file);
   {uploadStatus && <p className="upload-status">{uploadStatus}</p>}
 <div className="format-selector">
   <p className="format-title">Choose conversion format</p>
+    <div
+    className={`format-option ${conversionFormat === 'Full Side by Side' ? 'selected' : ''}`}
+    onClick={() => setConversionFormat('Full Side by Side')}
+  >
+    <input
+      type="radio"
+      name="conversionFormat"
+      checked={conversionFormat === 'Full Side by Side'}
+      readOnly
+    />
+    <label>Full Side by Side <span>(compatible with YouTube 3D)</span></label>
+  </div>
   <div
     className={`format-option ${conversionFormat === 'MV-HEVC' ? 'selected' : ''}`}
     onClick={() => setConversionFormat('MV-HEVC')}
@@ -392,18 +427,7 @@ reader.readAsDataURL(file);
     />
     <label>MV-HEVC <span>(Meta Quest & Apple Vision Pro)</span></label>
   </div>
-  <div
-    className={`format-option ${conversionFormat === 'Full Side by Side' ? 'selected' : ''}`}
-    onClick={() => setConversionFormat('Full Side by Side')}
-  >
-    <input
-      type="radio"
-      name="conversionFormat"
-      checked={conversionFormat === 'Full Side by Side'}
-      readOnly
-    />
-    <label>Full Side by Side <span>(compatible with YouTube 3D)</span></label>
-  </div>
+
 </div>
 
  <button
@@ -431,10 +455,12 @@ reader.readAsDataURL(file);
      
 
       {!isLoggedIn && <center><div className="free-minute">🎁 Get 1 minute of free conversion after registration</div></center>}
-{!isLoggedIn && <HomeCredits />}
-    {isLoggedIn && <center><Credits /></center>}
+{/* {isLoggedIn && <center><Credits /></center>} */}
+    <PricingSectionInPricing />
     <Whycloud />
+    <CustomerTestimonials />
     <Whatexpect />
+    <NewsletterSignup />
     </div>
   );
 };

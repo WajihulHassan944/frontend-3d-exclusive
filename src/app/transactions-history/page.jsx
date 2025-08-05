@@ -78,7 +78,7 @@ const TransactionsHistory = () => {
                     <td>{index + 1}</td>
                     <td>{new Date(inv.issuedAt).toLocaleDateString()}</td>
                     <td>{inv.invoiceNumber}</td>
-                    <td>€{inv.total.toFixed(2)}</td>
+                    <td>{inv.currency} {inv.total.toFixed(2)}</td>
                     <td>{totalCredits}</td>
                     <td>
                       <FaDownload
@@ -111,13 +111,14 @@ const TransactionsHistory = () => {
                 <div className="invoice-contact">
                   <div>info@Xclusive3d.com</div>
                  <div className="blueColored">
-  VAT number:{" "}
+  VAT number:{" "}<br />
   <strong>
     {selectedInvoice.billingInfo.vatNumber
       ? selectedInvoice.billingInfo.vatNumber
       : "Not provided"}
   </strong>
 </div>
+<div className="lightBlueColored">CoC: 34270611</div>
 
                 </div>
               </div>
@@ -161,7 +162,7 @@ const TransactionsHistory = () => {
                         <tr key={idx}>
                           <td>{c.credits} Credits for 3d conversion</td>
                           <td>{c.quantity}</td>
-                          <td>€ {c.amount.toFixed(2).replace('.', ',')}</td>
+                          <td>{selectedInvoice.currency} {c.amount.toFixed(2).replace('.', ',')}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -171,21 +172,21 @@ const TransactionsHistory = () => {
                     <tbody>
                       <tr>
                         <td>Subtotal</td>
-                        <td>€ {selectedInvoice.amount.toFixed(2).replace('.', ',')}</td>
+                        <td>{selectedInvoice.currency} {selectedInvoice.amount.toFixed(2).replace('.', ',')}</td>
                       </tr>
                       <tr>
                         <td>VAT</td>
-                        <td>€ {selectedInvoice.vat.toFixed(2).replace('.', ',')}</td>
+                        <td>{selectedInvoice.currency} {selectedInvoice.vat.toFixed(2).replace('.', ',')}</td>
                       </tr>
                       <tr className="total">
                         <td>Total</td>
-                        <td>€ {selectedInvoice.total.toFixed(2).replace('.', ',')}</td>
+                        <td>{selectedInvoice.currency} {selectedInvoice.total.toFixed(2).replace('.', ',')}</td>
                       </tr>
                     </tbody>
                   </table>
 
                   <div className="invoice-footer">
-                    Payment method: iDEAL <br />
+                    Payment method: {selectedInvoice.method} <br />
                     Credits are valid for 1 year (365 days) <br />
                     Thank you for your order and enjoy our immersive 3D conversion.
                   </div>

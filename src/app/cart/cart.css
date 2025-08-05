@@ -1,5 +1,5 @@
 .cart-container-page {
-  max-width: 400px;
+  max-width: 550px;
   margin: 0 auto;
   padding: 3rem 1.25rem 4rem;
   color: #fff;
@@ -211,4 +211,40 @@
 .vat-total-line span {
   color: #ff672f;
   font-weight: 600;
+}
+.payment-option {
+  border: 2px solid transparent;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 10px;
+  display: block;
+  cursor: pointer;
+  transition: border 0.2s ease;
+}
+
+.payment-option input {
+  margin-right: 10px;
+}
+
+.payment-option.selected-option {
+  border-color: orange;
+}
+.stripe-message {
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.stripe-message.success {
+  background-color: #e6ffed;
+  color: #24764d;
+  border: 1px solid #a2f0c2;
+}
+
+.stripe-message.error {
+  background-color: #ffe6e6;
+  color: #b30000;
+  border: 1px solid #ffb3b3;
 }

@@ -1,15 +1,18 @@
 import React from 'react';
 import './Whycloud.css';
-import { FaPlay, FaYoutube, FaBolt } from 'react-icons/fa';
+import { FaRegPlayCircle } from 'react-icons/fa';
+import { AiOutlineYoutube } from 'react-icons/ai';
+import { FiUpload } from 'react-icons/fi';
+import { MdOutlineBolt } from 'react-icons/md';
 
 const Whycloud = () => {
   return (
     <div className="why-cloud-wrapper">
-      <h2 className="why-heading">Why convert to 3D in the cloud?</h2>
+      <h2 className="why-heading">Why convert to 3D at Xclusive3D</h2>
       <div className="features">
         <div className="feature-item">
           <div className="icon-circle">
-            <FaPlay />
+            <FaRegPlayCircle className='why-icons' />
           </div>
           <div className="feature-text">
             <h3>Immersive Experience</h3>
@@ -19,7 +22,7 @@ const Whycloud = () => {
 
         <div className="feature-item">
           <div className="icon-circle">
-            <FaYoutube />
+            <AiOutlineYoutube className='why-icons' />
           </div>
           <div className="feature-text">
             <h3>YouTube Ready</h3>
@@ -29,7 +32,17 @@ const Whycloud = () => {
 
         <div className="feature-item">
           <div className="icon-circle">
-            <FaBolt />
+            <FiUpload className='why-icons' />
+          </div>
+          <div className="feature-text">
+            <h3>Downloadable Files</h3>
+            <p>Get your converted 3D video files ready to download</p>
+          </div>
+        </div>
+
+        <div className="feature-item">
+          <div className="icon-circle">
+            <MdOutlineBolt className='why-icons' />
           </div>
           <div className="feature-text">
             <h3>AI Powered</h3>
