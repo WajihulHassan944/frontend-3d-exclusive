@@ -353,7 +353,7 @@ reader.readAsDataURL(file);
         </div>
         <h1 className='dropHeading'>Drag & drop your video</h1>
         <p className='dropPara'>Upload your 2D video to convert to 3D</p>
-        <button className='upload-input-btn'>Choose File</button>
+        <button className='upload-input-btn' onClick={() => inputRef.current?.click()}>Choose File</button>
           <input
             type="file"
             accept="video/*"
