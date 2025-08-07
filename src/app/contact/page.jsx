@@ -132,7 +132,7 @@ const ContactForm = () => {
             We typically respond to all inquiries within 24 hours during business days.
           </p>
           <p className="contact-sec-response-hours">
-            Business hours: Monday - Friday, 9:00 AM - 6:00 PM PST
+            Business hours: Monday - Friday, 9:00 AM - 6:00 PM CEST
           </p>
         </div>
       </div>

@@ -161,7 +161,8 @@ const PricingSectionInPricing = () => {
 
   return (
 <>
-<center><div className="price-box">
+<div className='priceBoxWrapper'>
+<div className="price-box">
         <h3 className="price-box-heading">Credit Usage per minute</h3>
         <div className="price-table">
           <div className="price-row">
@@ -184,7 +185,8 @@ const PricingSectionInPricing = () => {
            <div className='price-note-div'>✓ Credits valid for 1 year from purchase date</div>
        
       </div>
-</center>
+      </div>
+
 <h1 className='buy-credit-title'>Buy your credits</h1>
     <div className="pricing-card-wrapper">
       {plans.map((plan, index) => (

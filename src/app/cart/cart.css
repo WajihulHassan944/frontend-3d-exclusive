@@ -131,8 +131,26 @@
   background: #fafafa;
   border-radius: 8px;
   box-shadow: 0 2px 8px #00000015;
+  position: relative;
 }
+.backArrowIconWrap{
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fb8c33;
+  border-radius: 50%;
+  cursor: pointer;
 
+}
+.backArrowIconWrap .backArrowIcon{
+  color: #fff;
+  font-size: 13px;
+}
 .billing-form input {
   padding: 10px;
   border: 1px solid #ccc;

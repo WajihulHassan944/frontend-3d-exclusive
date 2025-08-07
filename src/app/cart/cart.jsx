@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import Select from 'react-select';
 import countries from 'i18n-iso-countries';
 import enLocale from 'i18n-iso-countries/langs/en.json';
+import { FaArrowLeft } from 'react-icons/fa';
 import { PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js';
 countries.registerLocale(enLocale);
 const countryOptions = Object.entries(countries.getNames('en')).map(([code, name]) => ({
@@ -20,6 +21,7 @@ import { refreshAndDispatchUser } from '@/utils/refreshUser';
 import { baseUrl } from '@/const';
 import Link from 'next/link';
 import { useCurrencySymbolByUserCountry } from '@/utils/getCurrencySymbolByCountry';
+import { getLocalizedAmount } from '@/utils/getLocalizedAmount';
 
 export default function ShoppingCart() {
   const currencySymbol = useCurrencySymbolByUserCountry();
@@ -27,6 +29,9 @@ export default function ShoppingCart() {
   const dispatch = useDispatch();
   const router = useRouter();
 const [checkoutLoading, setCheckoutLoading] = useState(false);
+
+const [stripeCard, setStripeCard] = useState(false);
+
 const [billingData, setBillingData] = useState({
   name:'',
   street: '',
@@ -41,9 +46,10 @@ console.log(billingData);
 const searchParams = useSearchParams();
  const stripe = useStripe();
    const elements = useElements();
-const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('card'); // 'card' | 'element'
+const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null); // 'card' | 'element'
 const [cardSubmitting, setCardSubmitting] = useState(false);
 const [stripeRedirectSuccess, setStripeRedirectSuccess] = useState(null);
+const [page, setPage] = useState(1);
 
 
 
@@ -57,6 +63,7 @@ useEffect(() => {
 
   if (redirectStatus === 'succeeded') {
     setStripeRedirectSuccess(true);
+    setPage(2);
   } else if (redirectStatus === 'failed') {
     setStripeRedirectSuccess(false);
     toast.error('Payment method setup failed.');
@@ -134,7 +141,8 @@ const isBillingComplete = billingData.name &&
   billingData.postalCode &&
   billingData.city;
 
-const isCheckoutDisabled = checkoutLoading || vatPercent === null || !isBillingComplete;
+const isCheckoutDisabled = checkoutLoading || vatPercent === null || !isBillingComplete ||
+  (selectedPaymentMethod === 'element' && !stripeCard && stripeRedirectSuccess !== true);
 
     const fetchCart = async () => {
       try {
@@ -162,13 +170,8 @@ useEffect(() => {
 
   const handleBuyCredits = async (credits) => {
     setLoading(true);
+const amount = await getLocalizedAmount(credits);
 
-    const pricingMap = {
-      10: 9,
-      50: 39,
-      100: 69,
-    };
-    const amount = pricingMap[credits];
 
     try {
       const res = await fetch(`${baseUrl}/cart/add`, {
@@ -273,6 +276,7 @@ useEffect(() => {
   currencySymbol,
   billingInfo: billingData,
   usePrimaryCard: selectedPaymentMethod === 'card',
+  stripeCard: selectedPaymentMethod === 'element' ? stripeCard : false,
 }),
 
     });
@@ -293,26 +297,48 @@ useEffect(() => {
     setCheckoutLoading(false);
   }
 };
-
 const handleStripeSubmit = async () => {
   if (!stripe || !elements) return;
-setCardSubmitting(true);
+  setCardSubmitting(true);
+
   try {
     const { setupIntent, error } = await stripe.confirmSetup({
       elements,
       confirmParams: {
-        return_url: `${window.location.origin}/cart`, // optional if you don't want redirect
+        return_url: `${window.location.origin}/cart`, 
       },
-      redirect: "if_required", // avoid full-page redirect
+      redirect: "if_required", 
     });
 
     if (error) {
       toast.error(error.message);
+    }  else if (setupIntent && setupIntent.status === 'succeeded') {
+      const res = await fetch(`${baseUrl}/wallet/add-billing-method`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: user._id,
+          paymentMethodId: setupIntent.payment_method,
+        }),
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        toast.success('Card added!');
+        setPage(2);
+        setStripeCard(true);
+      } else {
+        toast.error(data.message || 'Failed to save billing method');
+      }
+    } else {
+      console.warn("SetupIntent not completed:", setupIntent);
+      toast.error("Payment method setup incomplete.");
     }
   } catch (err) {
     console.error(err);
-    toast.error('Failed to add billing method');
+    toast.error("Failed to add billing method.");
   }
+
   setCardSubmitting(false);
 };
 
@@ -342,9 +368,14 @@ setCardSubmitting(true);
             </button>
           </div>
         ))
-      )}{credits.length > 0 && (
-  <div className="billing-form">
+      )}
+      
+{credits.length > 0 && ( <>
+{page === 1 ? (
+  <>
+      <div className="billing-form">
     <h3 className="billing-title">Billing Information</h3>
+  
 {stripeRedirectSuccess === true && (
   <p className="stripe-message success">Payment method setup succeeded. You can now proceed.</p>
 )}
@@ -357,7 +388,10 @@ setCardSubmitting(true);
   <><div className="payment-method-options">
   <label
     className={`payment-option ${selectedPaymentMethod === 'card' ? 'selected-option' : ''}`}
-    onClick={() => setSelectedPaymentMethod('card')}
+   onClick={() => {
+  setSelectedPaymentMethod('card');
+  setPage(2);
+}}
   >
     <input
       type="radio"
@@ -457,6 +491,30 @@ setCardSubmitting(true);
   </button>
 )} 
 
+  </div>
+
+  </>
+) : (
+  <>
+     <div className="billing-form">
+<div className='backArrowIconWrap'>
+  <FaArrowLeft
+  onClick={() => setPage(1)}
+  className="backArrowIcon"
+/>
+</div>
+
+    <h3 className="billing-title">Billing Information</h3>
+  
+{stripeRedirectSuccess === true && (
+  <p className="stripe-message success">Payment method setup succeeded. You can now proceed.</p>
+)}
+
+{stripeRedirectSuccess === false && (
+  <p className="stripe-message error">Payment method setup failed. Please try again.</p>
+)}
+
+
 
 <input
       type="text"
@@ -538,8 +596,6 @@ setCardSubmitting(true);
       onChange={(e) => setBillingData({ ...billingData, vatNumber: e.target.value })}
     />
   </div>
-)}
-
 
 {credits.length > 0 && (
   <>
@@ -566,7 +622,7 @@ setCardSubmitting(true);
        <button
   className="checkout-btn"
   onClick={handleCheckout}
-  disabled={checkoutLoading || isCheckoutDisabled || !stripeRedirectSuccess}
+  disabled={checkoutLoading || isCheckoutDisabled }
 >
   {checkoutLoading ? (
     <div className="spinner-cart" />
@@ -575,6 +631,13 @@ setCardSubmitting(true);
   )}
 </button>
 
+      )}
+
+  </>
+)}
+
+
+      </>
       )}
     </div>
   );

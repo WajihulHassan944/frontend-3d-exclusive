@@ -90,6 +90,8 @@
   font-size: 14px;
   outline: none;
   transition: border 0.3s;
+   font-family: 'Inter', sans-serif;
+
 }
 
 .contact-sec-input-group input:focus,
