@@ -214,7 +214,6 @@ const PricingSectionInPricing = () => {
           <div className="pricing-button-container">
             <button
               className="pricing-get-started-btn"
-              onClick={() => handleClick(plan.credits)}
               disabled={loadingAmount === plan.credits}
             >
               {loadingAmount === plan.credits ? 'Processing...' : 'Get Started'}
