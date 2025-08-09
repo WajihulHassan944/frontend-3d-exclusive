@@ -193,6 +193,11 @@ const PricingSectionInPricing = () => {
         <div
           key={index}
           className={`pricing-card ${plan.popular ? 'pricing-card-popular' : ''}`}
+           onClick={() => handleClick(plan.credits)}
+             style={{
+          cursor: loadingAmount === plan.credits ? 'default' : 'pointer',
+          pointerEvents: loadingAmount === plan.credits ? 'none' : 'auto',
+        }}
         >
           {plan.popular && <div className="pricing-card-label">Most Popular</div>}
           <h3 className="pricing-card-credits">{plan.credits} credits</h3>

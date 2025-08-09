@@ -381,6 +381,7 @@ reader.readAsDataURL(file);
         {/* <p><strong>Quality:</strong> {videoMeta.quality}</p> */}
         <p><strong>Credits Required:</strong> {videoMeta.isUsingFreeMinute ? '0 (using free minute)' : videoMeta.cost}</p>
         <p><strong>Your Balance:</strong> {videoMeta.balance} credit(s)</p>
+         <p><strong>1 min Free Conversion:</strong> {user.hasFreeConversion ? "Not Used": "Availed"}</p>
         {videoMeta.canProceed ? (
       <p className="meta-success">
   <FiCheckCircle className="meta-icon" />

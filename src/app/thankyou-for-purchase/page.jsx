@@ -89,12 +89,11 @@ const lastInvoice = user?.invoices
              <div className="blueColored">
   VAT number:{" "}<br />
   <strong>
-    {lastInvoice.billingInfo.vatNumber
-      ? lastInvoice.billingInfo.vatNumber
-      : "Not provided"}
+    NL002166652B18
   </strong>
 </div>
 <div className="lightBlueColored">CoC: 34270611</div>
+<div className="lightBlueColored">The Netherlands</div>
 
                 </div>
               </div>
@@ -102,15 +101,25 @@ const lastInvoice = user?.invoices
               <div className="invoice-info-right">
                 <div className="billing-block">
                   <div>{lastInvoice.billingInfo.name}</div>
-                  {lastInvoice.billingInfo.companyName && <div>{lastInvoice.billingInfo.companyName}</div>}
+                  <div>{lastInvoice.billingInfo.companyName}</div>
                   <div>
-                    {lastInvoice.billingInfo.street},{" "}
+                    {lastInvoice.billingInfo.street}<br />
                     {lastInvoice.billingInfo.postalCode}{" "}
-                    {lastInvoice.billingInfo.city},{" "}
-                    {lastInvoice.billingInfo.countryName}
+                    {lastInvoice.billingInfo.city}{" "}<br />
+                    The {lastInvoice.billingInfo.countryName}
                   </div>
 
                   <div className="invoice-meta">
+                   
+                
+                    <div className="meta-row">
+                      <div className="meta-label">VAT Number:</div>
+                      <div className="meta-value">
+                       {lastInvoice.billingInfo.vatNumber
+      ? lastInvoice.billingInfo.vatNumber
+      : "Not provided"}
+                      </div>
+                    </div>
                     <div className="meta-row">
                       <div className="meta-label">Date:</div>
                       <div className="meta-value">
@@ -123,43 +132,57 @@ const lastInvoice = user?.invoices
                     </div>
                   </div>
 
-                  <table className="invoice-table">
-                    <thead>
-                      <tr>
-                        <th>Description</th>
-                        <th>Quantity</th>
-                        <th>Cost</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {groupCredits(lastInvoice.credits).map((c, idx) => (
-                        <tr key={idx}>
-                          <td>{c.credits} Credits for 3d conversion</td>
-                          <td>{c.quantity}</td>
-                          <td>{lastInvoice.currency} {c.amount.toFixed(2).replace('.', ',')}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                <table className="invoice-table">
+  <thead>
+    <tr>
+      <th>Description</th>
+      <th>Quantity</th>
+      <th>Cost</th>
+    </tr>
+  </thead>
+  <tbody>
+    {groupCredits(lastInvoice.credits).map((c, idx) => (
+      <tr key={idx}>
+        <td>{c.credits} Credits for 3d conversion</td>
+        <td>{c.quantity}</td>
+        <td>{lastInvoice.currency} {c.amount.toFixed(2).replace('.', ',')}</td>
+      </tr>
+    ))}
 
-                  <table className="invoice-summary">
-                    <tbody>
-                      <tr>
-                        <td>Subtotal</td>
-                        <td>{lastInvoice.currency} {lastInvoice.amount.toFixed(2).replace('.', ',')}</td>
-                      </tr>
-                      <tr>
-                        <td>VAT</td>
-                        <td>{lastInvoice.currency} {lastInvoice.vat.toFixed(2).replace('.', ',')}</td>
-                      </tr>
-                      <tr className="total">
-                        <td>Total</td>
-                        <td>{lastInvoice.currency} {lastInvoice.total.toFixed(2).replace('.', ',')}</td>
-                      </tr>
-                    </tbody>
-                  </table>
+    {/* Empty spacing rows */}
+    <tr style={{borderBottom:'2px solid #000'}}>
+      <td  style={{ height: "45px" }}></td>
+       <td  style={{ height: "45px" }}></td>
+        <td  style={{ height: "45px" }}></td>
+    </tr>
+    
+    {/* Subtotal */}
+    <tr>
+      <td></td>
+      <td> </td>
+      <td>{lastInvoice.currency} {lastInvoice.amount.toFixed(2).replace('.', ',')}</td>
+    </tr>
+
+    {/* VAT Row */}
+    {(lastInvoice.vat > 0 || lastInvoice.vatRate > 0) && (
+      <tr>
+        <td></td>
+        <td>VAT</td>
+        <td>{lastInvoice.currency} {lastInvoice.vat.toFixed(2).replace('.', ',')}</td>
+      </tr>
+    )}
+
+    {/* Total */}
+    <tr className="total" style={{borderBottom:'2px solid #000'}}>
+      <td></td>
+      <td></td>
+      <td>{lastInvoice.currency} {lastInvoice.total.toFixed(2).replace('.', ',')}</td>
+    </tr>
+  </tbody>
+</table>
 
                   <div className="invoice-footer">
+                    {lastInvoice.vatNote != "" ? "VAT Reversed" : ""} <br />
                     Payment method: {lastInvoice.method} <br />
                     Credits are valid for 1 year (365 days) <br />
                     Thank you for your order and enjoy our immersive 3D conversion.

@@ -83,18 +83,27 @@ useEffect(() => {
 
 
 
-
 useEffect(() => {
-  if (user?.country) {
-    const matched = countryOptions.find((opt) => opt.label === user.country || opt.value === user.country);
-    if (matched) {
-      setBillingData((prev) => ({
-        ...prev,
-        country: matched.label
-      }));
-    }
+  if (user?.invoices?.length) {
+    const latestInvoice = user.invoices[0]; // first = latest
+    const info = latestInvoice.billingInfo;
+
+    // Match the country for dropdown (still using user.country)
+    const matched = countryOptions.find(
+      (opt) => opt.label === user.country || opt.value === user.country
+    );
+
+    setBillingData({
+      name: info.name || '',
+      street: info.street || '',
+      postalCode: info.postalCode || '',
+      city: info.city || '',
+      companyName: info.companyName || '',
+      vatNumber: info.vatNumber || '',
+      country: matched?.label || ''
+    });
   }
-}, [user?.country]);
+}, [user?.invoices, user?.country]);
 
 const [vatPercent, setVatPercent] = useState(null);
 const [finalPrice, setFinalPrice] = useState(0);
@@ -138,8 +147,7 @@ setVatNote(data.vatNote || '');
 const isBillingComplete = billingData.name &&
   billingData.country &&
   billingData.street &&
-  billingData.postalCode &&
-  billingData.city;
+  billingData.postalCode;
 
 const isCheckoutDisabled = checkoutLoading || vatPercent === null || !isBillingComplete ||
   (selectedPaymentMethod === 'element' && !stripeCard && stripeRedirectSuccess !== true);
@@ -250,7 +258,7 @@ const amount = await getLocalizedAmount(credits);
   const primaryCard = user?.wallet?.cards?.find(card => card.isPrimary);
 
 
-  if (!billingData.street || !billingData.postalCode || !billingData.city || !billingData.country) {
+  if (!billingData.street || !billingData.postalCode ||  !billingData.country) {
     return toast.error('Please fill in the required billing fields.');
   }
 
@@ -308,6 +316,7 @@ const handleStripeSubmit = async () => {
         return_url: `${window.location.origin}/cart`, 
       },
       redirect: "if_required", 
+      
     });
 
     if (error) {
@@ -325,6 +334,7 @@ const handleStripeSubmit = async () => {
       const data = await res.json();
       if (data.success) {
         toast.success('Card added!');
+         await refreshAndDispatchUser(dispatch);
         setPage(2);
         setStripeCard(true);
       } else {
@@ -541,12 +551,12 @@ const handleStripeSubmit = async () => {
       value={billingData.postalCode}
       onChange={(e) => setBillingData({ ...billingData, postalCode: e.target.value })}
     />
-    <input
+    {/* <input
       type="text"
       placeholder="City"
       value={billingData.city}
       onChange={(e) => setBillingData({ ...billingData, city: e.target.value })}
-    />
+    /> */}
 <Select
   options={countryOptions}
   value={countryOptions.find((opt) => opt.label === billingData.country)}

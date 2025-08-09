@@ -13,10 +13,10 @@
   color: #ffffff;
 }
 
-.terms-grid {
+/* .terms-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-}
+} */
 
 .term-item {
   padding: 20px 25px;
@@ -36,6 +36,7 @@
   font-size: 15px;
   line-height: 1.6;
   margin-bottom: 12px;
+  color: #d1d5db;
 }
 
 .term-item ul {

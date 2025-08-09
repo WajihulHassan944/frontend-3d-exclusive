@@ -61,7 +61,7 @@ const hasTempVideo = localStorage.getItem('tempVideo');
 if (hasPendingCredits) {
   router.push('/cart');
 } else {
-  router.push(hasTempVideo ? '/upload' : '/dashboard');
+  router.push(hasTempVideo ? '/upload' : '/upload');
 }
 
 
@@ -121,7 +121,7 @@ const hasTempVideo = localStorage.getItem('tempVideo');
 if (hasPendingCredits) {
   router.push('/cart');
 } else {
-  router.push(hasTempVideo ? '/upload' : '/dashboard');
+  router.push(hasTempVideo ? '/upload' : '/upload');
 }
 
           } else {

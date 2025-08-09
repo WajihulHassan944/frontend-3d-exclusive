@@ -117,7 +117,7 @@ useEffect(() => {
         <section className="card-1 credits-card">
           <h3>Credits</h3>
           <p className="count">Credits: {wallet?.balance ?? 0}</p>
-          <Link href="/upload" className="topup-btn">
+          <Link href="/pricing" className="topup-btn">
             Top Up
           </Link>
         </section>

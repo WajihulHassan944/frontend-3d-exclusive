@@ -16,7 +16,7 @@ const Whycloud = () => {
           </div>
           <div className="feature-text">
             <h3>Immersive Experience</h3>
-            <p>Experience your videos in immersive 3D</p>
+            <p>Turn your 2D videos into stunning 3D — ready to watch on your Meta Quest or Apple Vision Pro</p>
           </div>
         </div>
 

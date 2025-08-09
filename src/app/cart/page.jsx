@@ -27,6 +27,7 @@ const Page = () => {
     appearance: {
       theme: 'stripe',
     },
+    
   };
 
   return (
