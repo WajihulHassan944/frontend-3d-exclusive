@@ -204,8 +204,9 @@ const amount = await getLocalizedAmount(credits);
   };
 
   if (pendingCredits) {
+    localStorage.removeItem('pendingCredits');
     handleBuyCredits(pendingCredits).then(() => {
-      fetchCart(); // fetch updated cart after adding credits
+      fetchCart(); 
     });
   } else {
     fetchCart();
