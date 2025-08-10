@@ -126,3 +126,39 @@
 .forgot-pass-wrapper .forgot-password:hover{
   color: #d85615;
 }
+
+.password-input-wrapper {
+  position: relative;
+}
+
+.password-input-wrapper input {
+  width: 100%;
+  padding-right: 45px; /* space for eye icon */
+}
+
+.toggle-password {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #aaa;
+  cursor: pointer;
+}
+
+.signup-link {
+  margin-top: 10px;
+  font-size: 0.9rem;
+  color: #ccc;
+  text-align: center;
+}
+
+.signup-link a {
+  color: #fff;
+  font-weight: 600;
+    text-shadow: 1px 1px 2px #333;
+    line-height: 1.5; 
+}
+
+.signup-link a:hover {
+  color: #d85615;
+}

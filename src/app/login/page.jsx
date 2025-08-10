@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 import './login.css';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useDispatch } from 'react-redux';
@@ -10,6 +9,7 @@ import { useGoogleLogin } from '@react-oauth/google';
 import { baseUrl } from '@/const';
 import { loginUser } from '@/redux/features/userSlice';
 import toast from 'react-hot-toast';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 const LoginForm = () => {
   const router = useRouter();
@@ -19,7 +19,7 @@ const LoginForm = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-
+const [showPassword, setShowPassword] = useState(false);
   const handleLogin = async (e) => {
     e.preventDefault();
     setError('');
@@ -163,19 +163,33 @@ return (
         onChange={(e) => setEmail(e.target.value)}
         required
       />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        required
-      />
+     <div className="password-input-wrapper">
+  <input
+    type={showPassword ? "text" : "password"}
+    placeholder="Password"
+    value={password}
+    onChange={(e) => setPassword(e.target.value)}
+    required
+  />
+  <span
+    className="toggle-password"
+    onClick={() => setShowPassword(!showPassword)}
+  >
+    {showPassword ? <FaEyeSlash /> : <FaEye />}
+  </span>
+</div>
+
       <button type="submit" className="login-btn" disabled={loading}>
         {loading ? 'Logging in...' : 'Sign in'}
       </button>
       <div className='forgot-pass-wrapper'>
       <Link href="/forgot-password" className='forgot-password'>Forgot password</Link>
       </div>
+      <div className="signup-link">
+  If you don’t have an account you can{' '}
+  <Link href="/signup">sign up here</Link>.
+</div>
+
     </form>
 
     {error && <p className="error-message">{error}</p>}
