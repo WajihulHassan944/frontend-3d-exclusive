@@ -1,11 +1,12 @@
 'use client';
 
 import React, { useState } from 'react';
-import Image from 'next/image';
+import ReCAPTCHA from "react-google-recaptcha";
 import './contact.css';
 import { FaEnvelope, FaPhoneAlt, FaMapMarkerAlt } from 'react-icons/fa';
 import { baseUrl } from '@/const';
 import toast from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
 const ContactForm = () => {
   const [formData, setFormData] = useState({
     name: '',
@@ -13,7 +14,8 @@ const ContactForm = () => {
     subject: '',
     message: '',
   });
-
+const [captchaToken, setCaptchaToken] = useState("");
+const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [successMsg, setSuccessMsg] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
@@ -28,18 +30,25 @@ const ContactForm = () => {
     setSuccessMsg('');
     setErrorMsg('');
 
-    try {
-      const res = await fetch(`${baseUrl}/users/contact`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
+  if (!captchaToken) {
+  toast.error("Please complete the CAPTCHA.");
+  setLoading(false);
+  return;
+}
+
+try {
+  const res = await fetch(`${baseUrl}/users/contact`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ ...formData, captcha: captchaToken }), // send token
+   });
 
       const data = await res.json();
       if (data.success) {
         setSuccessMsg('Message sent successfully!');
              toast.success('Message sent successfully!');
         setFormData({ name: '', email: '', subject: '', message: '' });
+        router.push('/contact-response');
       } else {
         setErrorMsg('Failed to send message. Please try again.');
              toast.error('Failed to send message. Please try again.');
@@ -114,7 +123,10 @@ const ContactForm = () => {
               required
             ></textarea>
           </div>
-
+<ReCAPTCHA
+  sitekey="6LeMIKUrAAAAALLLKn6GEULnrp1p6aRozFYx-V_i" // replace with real key
+  onChange={(token) => setCaptchaToken(token)}
+/>
           <button type="submit" className="contact-sec-send-btn" disabled={loading}>
             {loading ? <div className="spinner white"></div> : 'Send Message'}
           </button>

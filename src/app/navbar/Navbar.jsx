@@ -52,7 +52,7 @@ export default function Navbar() {
              <> <li><Link href="/dashboard">Dashboard</Link></li>
               <li><Link href="/upload">Convert to 3D</Link></li>
               <li><Link href="/pricing">Pricing</Link></li>
-               <li><Link href="/faq">Faqs</Link></li>
+               <li><Link href="/faq">FAQ</Link></li>
                <li><Link href="/add-billing">Billing</Link></li>
               
                  </>
@@ -62,7 +62,7 @@ export default function Navbar() {
                 <li><Link href="/pricing">Pricing</Link></li>
                 <li><Link href="/contact">Contact</Link></li>
                 <li><Link href="/blogs">Blogs</Link></li>
-                <li><Link href="/faq">FAQs</Link></li>
+                <li><Link href="/faq">FAQ</Link></li>
               </>
             )}
           </ul>
@@ -139,7 +139,7 @@ export default function Navbar() {
             <Link href="/" onClick={() => setOpen(false)}>Home</Link>
             <Link href="/pricing" onClick={() => setOpen(false)}>Pricing</Link>
             <Link href="/contact" onClick={() => setOpen(false)}>Contact</Link>
-            <Link href="/faq" onClick={() => setOpen(false)}>FAQs</Link>
+            <Link href="/faq" onClick={() => setOpen(false)}>FAQ</Link>
             <hr />
             <Link href="/login" onClick={() => setOpen(false)}>Login</Link>
             <Link href="/signup" className="btn btn-filled" onClick={() => setOpen(false)}>
