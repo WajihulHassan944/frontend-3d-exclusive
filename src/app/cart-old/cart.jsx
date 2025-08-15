@@ -1,14 +1,15 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { fetchCart } from '@/utils/cart/fetchCart';
+import { handleBuyCredits } from '@/utils/cart/handleBuyCredits';
 import { handleDelete } from '@/utils/cart/handleDelete';
-import { Elements, useStripe } from '@stripe/react-stripe-js';
-import { loadStripe } from '@stripe/stripe-js';
-
+import { handleCheckout } from '@/utils/cart/handleCheckout';
+import { handleStripeSubmit } from '@/utils/cart/handleStripeSubmit';
 import Select from 'react-select';
 import countries from 'i18n-iso-countries';
 import enLocale from 'i18n-iso-countries/langs/en.json';
 import { FaArrowLeft } from 'react-icons/fa';
+import { PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js';
 countries.registerLocale(enLocale);
 const countryOptions = Object.entries(countries.getNames('en')).map(([code, name]) => ({
   value: code,
@@ -22,22 +23,16 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { baseUrl } from '@/const';
 import { useCurrencySymbolByUserCountry } from '@/utils/getCurrencySymbolByCountry';
-import { handleBuyCredits } from '@/utils/cart/handleBuyCredits';
-import ShoppingCart from './cart';
-import { handleCheckout } from '@/utils/cart/handleCheckout';
 
-const stripePromise = loadStripe(
-  'pk_test_51Re7bwCDHYmyh26mg712Usqdmn1sobEbtsT2P2vhnh8ael8mu70YS9jLuxUmvyy5JKfEqIYU3VQjE1yk3dtOA1Hu0026iz3jsD'
-);
-export default function Page() {
+export default function ShoppingCart() {
   const currencySymbol = useCurrencySymbolByUserCountry();
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const router = useRouter();
-    const [clientSecret, setClientSecret] = useState('');
-    const [paymentMethods, setPaymentMethods] = useState([]);
-const [loadingPaymentIntent, setLoadingPaymentIntent] = useState(false);
 const [checkoutLoading, setCheckoutLoading] = useState(false);
+
+const [stripeCard, setStripeCard] = useState(false);
+
 const [billingData, setBillingData] = useState({
   name:'',
   street: '',
@@ -49,27 +44,41 @@ const [billingData, setBillingData] = useState({
 });
 
 
-const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null); 
-const [cardSubmitting, setCardSubmitting] = useState(false);
-const [page, setPage] = useState(1);
-const [stripeRedirectSuccess, setStripeRedirectSuccess] = useState(null);
-
 const searchParams = useSearchParams();
+ const stripe = useStripe();
+   const elements = useElements();
+const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null); // 'card' | 'element'
+const [cardSubmitting, setCardSubmitting] = useState(false);
+const [stripeRedirectSuccess, setStripeRedirectSuccess] = useState(null);
+const [page, setPage] = useState(1);
 
 
 
 useEffect(() => {
+  const setupIntentClientSecret = searchParams.get('setup_intent_client_secret');
   const redirectStatus = searchParams.get('redirect_status');
+
+  if (redirectStatus) {
+    setSelectedPaymentMethod('element'); // 👈 Force switch to PaymentElement UI
+  }
 
   if (redirectStatus === 'succeeded') {
     setStripeRedirectSuccess(true);
-    setPage(3);
+    setPage(2);
   } else if (redirectStatus === 'failed') {
     setStripeRedirectSuccess(false);
     toast.error('Payment method setup failed.');
   }
 
-}, [searchParams]);
+  if (stripe && setupIntentClientSecret && redirectStatus === 'succeeded') {
+    (async () => {
+      setCardSubmitting(true);
+      const { setupIntent, error } = await stripe.retrieveSetupIntent(setupIntentClientSecret);
+      // Optional: handle setupIntent or error here
+      setCardSubmitting(false);
+    })();
+  }
+}, [stripe]);
 
 
 
@@ -141,6 +150,9 @@ const isBillingComplete = billingData.name &&
   billingData.street &&
   billingData.postalCode;
 
+const isCheckoutDisabled = checkoutLoading || vatPercent === null || !isBillingComplete ||
+  (selectedPaymentMethod === 'element' && !stripeCard && stripeRedirectSuccess !== true);
+
    
 
 useEffect(() => {
@@ -154,53 +166,6 @@ useEffect(() => {
 
   }
 }, []);
-
-
-
-const fetchClientSecret = async () => {
-  try {
-    setLoadingPaymentIntent(true); // start spinner
-    const res = await fetch(`${baseUrl}/wallet/create-payment-intent-all-methods`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-      body: JSON.stringify({
-        amount: finalPrice,
-      }),
-    });
-
-    const data = await res.json();
-    if (data?.clientSecret) {
-      setClientSecret(data.clientSecret);
-      setPaymentMethods(data.paymentMethods || []);
-    }
-  } catch (error) {
-    console.error('❌ Error fetching client secret:', error);
-  } finally {
-    setLoadingPaymentIntent(false); // stop spinner
-  }
-};
-
- useEffect(() => {
-      if (page === 2 && finalPrice > 0) {
-        fetchClientSecret();
-      }
-  }, [page, finalPrice]);
-
-  const options = {
-    clientSecret,
-    appearance: {
-      theme: 'stripe',
-    },
-    // ✅ Hide name, email, and address fields
-    fields: {
-      billingDetails: {
-        name: 'never',
-        email: 'never',
-        address: 'never',
-      },
-    },
-  };
 
 
   return (
@@ -230,11 +195,181 @@ const fetchClientSecret = async () => {
       
 {credits.length > 0 && ( <>
 {page === 1 ? (
+  <>
+      <div className="billing-form">
+    <h3 className="billing-title">Billing Information</h3>
+  
+{stripeRedirectSuccess === true && (
+  <p className="stripe-message success">Payment method setup succeeded. You can now proceed.</p>
+)}
 
+{stripeRedirectSuccess === false && (
+  <p className="stripe-message error">Payment method setup failed. Please try again.</p>
+)}
 
+   {user?.wallet?.cards?.length > 0 ? (
+  <><div className="payment-method-options">
+  <label
+    className={`payment-option ${selectedPaymentMethod === 'card' ? 'selected-option' : ''}`}
+   onClick={() => {
+  setSelectedPaymentMethod('card');
+  setPage(2);
+}}
+  >
+    <input
+      type="radio"
+      name="payment"
+      value="card"
+      checked={selectedPaymentMethod === 'card'}
+      onChange={() => setSelectedPaymentMethod('card')}
+    />
+    <div className="primary-card">
+      <span className="card-label">Primary Card:</span>
+      <span className="card-details">
+        {user.wallet.cards.find(card => card.isPrimary)?.brand?.toUpperCase()} ••••{' '}
+        {user.wallet.cards.find(card => card.isPrimary)?.last4} — Expires{' '}
+        {user.wallet.cards.find(card => card.isPrimary)?.expMonth}/
+        {user.wallet.cards.find(card => card.isPrimary)?.expYear}
+      </span>
+    </div>
+  </label>
+<label
+  className={`payment-option ${selectedPaymentMethod === 'element' ? 'selected-option' : ''}`}
+  onClick={() => setSelectedPaymentMethod('element')}
+>
+  <input
+    type="radio"
+    name="payment"
+    value="element"
+    checked={selectedPaymentMethod === 'element'}
+    onChange={() => setSelectedPaymentMethod('element')}
+  />
+  <div className="stripe-element-box">
+    <h4>Or use another payment method</h4>
+    <div className="stripe-box">
+      <PaymentElement
+        options={{
+          fields: {
+            billingDetails: {
+              name: 'never',
+              email: 'never',
+              address: 'never',
+            },
+          },
+        }}
+        onFocus={() => setSelectedPaymentMethod('element')} // ✅ ensure focus selects the method
+        onClick={() => setSelectedPaymentMethod('element')} // ✅ extra safety for click
+      />
+    </div>
+  </div>
+</label>
+</div>
+</>
+  
+) : (
+<div className="payment-method-options">
+  <label
+    className={`payment-option ${selectedPaymentMethod === 'card' ? 'selected-option' : ''}`}
+    onClick={() => setSelectedPaymentMethod('card')}
+  >
+    <input
+      type="radio"
+      name="payment"
+      value="card"
+      checked={selectedPaymentMethod === 'card'}
+      onChange={() => setSelectedPaymentMethod('card')}
+    />
+    <div className="primary-card">
+      <span className="card-label">Primary Card:</span>
+      <span className="card-details">
+        {user.wallet.cards.find(card => card.isPrimary)?.brand?.toUpperCase()} ••••{' '}
+        {user.wallet.cards.find(card => card.isPrimary)?.last4} — Expires{' '}
+        {user.wallet.cards.find(card => card.isPrimary)?.expMonth}/
+        {user.wallet.cards.find(card => card.isPrimary)?.expYear}
+      </span>
+    </div>
+  </label>
+<label
+  className={`payment-option ${selectedPaymentMethod === 'element' ? 'selected-option' : ''}`}
+  onClick={() => setSelectedPaymentMethod('element')}
+>
+  <input
+    type="radio"
+    name="payment"
+    value="element"
+    checked={selectedPaymentMethod === 'element'}
+    onChange={() => setSelectedPaymentMethod('element')}
+  />
+  <div className="stripe-element-box">
+    <h4>Or use another payment method</h4>
+    <div className="stripe-box">
+      <PaymentElement
+        options={{
+          fields: {
+            billingDetails: {
+              name: 'never',
+              email: 'never',
+              address: 'never',
+            },
+          },
+        }}
+        onFocus={() => setSelectedPaymentMethod('element')} // ✅ ensure focus selects the method
+        onClick={() => setSelectedPaymentMethod('element')} // ✅ extra safety for click
+      />
+    </div>
+  </div>
+</label>
+</div>
+
+)}
+ {selectedPaymentMethod === 'element' && (
+<button
+  className="checkout-btn"
+  onClick={() =>
+    handleStripeSubmit({
+      stripe,
+      elements,
+      user,
+      dispatch,
+      setPage,
+      setStripeCard,
+      setCardSubmitting,
+     billingData,
+      isCard: selectedPaymentMethod === 'card'
+    })
+  }
+  disabled={cardSubmitting}
+>
+  {cardSubmitting ? <div className="spinner-cart" /> : 'Submit'}
+</button>
+
+)} 
+
+  </div>
+
+  </>
+) : (
   <>
      <div className="billing-form">
+<div className='backArrowIconWrap'>
+  <FaArrowLeft
+  onClick={() => setPage(1)}
+  className="backArrowIcon"
+/>
+</div>
+
     <h3 className="billing-title">Billing Information</h3>
+  
+{stripeRedirectSuccess === true && (
+  <p className="stripe-message success">Payment method setup succeeded. You can now proceed.</p>
+)}
+
+{stripeRedirectSuccess === false && (
+  <p className="stripe-message error">Payment method setup failed. Please try again.</p>
+)}
+
+
+
 <input
       type="text"
       placeholder="Name"
@@ -340,68 +475,6 @@ const fetchClientSecret = async () => {
       {!loading && credits.length > 0 && (
 <button
   className="checkout-btn"
-  onClick={() => {
-    // Save billing data to local storage
-    localStorage.setItem('billingData', JSON.stringify(billingData));
-
-    setPage(2);
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth',
-    });
-  }}
-  disabled={!isBillingComplete}
->
-  Proceed to checkout
-</button>
-
-
-      )}
-
-  </>
-)  : page === 2 ? (
-   <>
-    {loadingPaymentIntent ? (
-      <div className="spinner-cart" /> 
-    ) : clientSecret && isBillingComplete ? (
-      <Elements stripe={stripePromise} options={options}>
-        <ShoppingCart
-          availableMethods={paymentMethods}
-          billingData={billingData}
-          setPage={setPage}
-          selectedPaymentMethod={selectedPaymentMethod}
-          setSelectedPaymentMethod={setSelectedPaymentMethod}
-        />
-      </Elements>
-    ) : null}
-  </>
-
-) : page === 3 ? (
- <div className="billing-form">
- {stripeRedirectSuccess === false && (
-  <div className='backArrowIconWrap'>
-    <FaArrowLeft
-    onClick={() => setPage(1)}
-    className="backArrowIcon"
-  />
-  </div>
- )}
-  <h3 className="billing-title">Payment</h3>
-  
-{selectedPaymentMethod === "card" && (
-  <p className="stripe-message success">Payment method primary card selected. You can now confirm.</p>
-)}
-{stripeRedirectSuccess === true && (
-  <p className="stripe-message success">Payment method setup succeeded. You can now confirm.</p>
-)}
-
-{stripeRedirectSuccess === false && (
-  <p className="stripe-message error">Payment method setup failed. Please try again.</p>
-)}
-
-{!loading && (
-<button
-  className="checkout-btn"
   onClick={() =>
     handleCheckout({
       user,
@@ -409,24 +482,25 @@ const fetchClientSecret = async () => {
       billingData,
       currencySymbol,
       selectedPaymentMethod,
+      stripeCard,
       router,
       dispatch,
       setCheckoutLoading
     })
   }
-  disabled={stripeRedirectSuccess === false}
+  disabled={checkoutLoading || isCheckoutDisabled}
 >
   {checkoutLoading ? (
     <div className="spinner-cart" />
   ) : (
-    'Proceed'
+    'Checkout'
   )}
 </button>
-   )}
 
- </div>
+      )}
 
-) : null}
+  </>
+)}
 
 
       </>

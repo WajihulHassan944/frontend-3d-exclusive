@@ -122,33 +122,39 @@ const PricingSectionInPricing = () => {
   });
 
   const handleBuyCredits = async (credits) => {
-    setLoadingAmount(credits);
-    const amount = localizedPricing[currency]?.[credits] ?? localizedPricing['EUR'][credits];
+  // ✅ Prevent processing until localized pricing is ready
+  if (!localizedPricing[currency] || localizedPricing[currency][credits] === undefined) {
+    toast.error('Please wait, calculating local pricing...');
+    return;
+  }
 
-    try {
-      const res = await fetch(`${baseUrl}/cart/add`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({ credits, amount }),
-      });
+  setLoadingAmount(credits);
+  const amount = localizedPricing[currency][credits];
 
-      const data = await res.json();
+  try {
+    const res = await fetch(`${baseUrl}/cart/add`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ credits, amount }),
+    });
 
-      if (res.ok && data.success) {
-        toast.success('Credits added to cart!');
-        router.push('/cart');
-        await refreshAndDispatchUser(dispatch);
-      } else {
-        toast.error(data.error || 'Failed to add credits');
-      }
-    } catch (err) {
-      console.error('❌ Error adding credits:', err);
-      toast.error('Something went wrong');
-    } finally {
-      setLoadingAmount(null);
+    const data = await res.json();
+
+    if (res.ok && data.success) {
+      toast.success('Credits added to cart!');
+      router.push('/cart');
+      await refreshAndDispatchUser(dispatch);
+    } else {
+      toast.error(data.error || 'Failed to add credits');
     }
-  };
+  } catch (err) {
+    console.error('❌ Error adding credits:', err);
+    toast.error('Something went wrong');
+  } finally {
+    setLoadingAmount(null);
+  }
+};
 
   const handleClick = (credits) => {
     if (isLoggedIn) {
