@@ -2,6 +2,7 @@ import { baseUrl } from '@/const';
 
 export const fetchCart = async (setCredits, setLoading) => {
   try {
+     setLoading(true);
     const res = await fetch(`${baseUrl}/cart/user`, {
       method: 'GET',
       credentials: 'include',

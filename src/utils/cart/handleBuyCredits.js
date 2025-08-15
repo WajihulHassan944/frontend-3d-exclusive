@@ -3,7 +3,7 @@ import { refreshAndDispatchUser } from '@/utils/refreshUser';
 import toast from 'react-hot-toast';
 import { getLocalizedAmount } from '@/utils/getLocalizedAmount';
 
-export const handleBuyCredits = async (credits, dispatch, fetchCart, setLoading) => {
+export const handleBuyCredits = async (credits, dispatch, fetchCart, setLoading ,setCredits) => {
   setLoading(true);
   const amount = await getLocalizedAmount(credits);
 
@@ -20,7 +20,7 @@ export const handleBuyCredits = async (credits, dispatch, fetchCart, setLoading)
     if (res.ok && data.success) {
       await refreshAndDispatchUser(dispatch);
       localStorage.removeItem('pendingCredits');
-      fetchCart();
+      fetchCart(setCredits, setLoading);
     } else {
       toast.error(data.error || 'Failed to add credits');
     }
