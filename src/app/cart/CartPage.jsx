@@ -155,16 +155,22 @@ useEffect(() => {
 }, []);
 
 
-
 const fetchClientSecret = async () => {
   try {
     setLoadingPaymentIntent(true); // start spinner
+
+    // 🌍 Detect country on frontend
+    const geoRes = await fetch(`https://ipwho.is/`);
+    const geoData = await geoRes.json();
+    const userCountry = geoData?.country_code || 'US';
+
     const res = await fetch(`${baseUrl}/wallet/create-payment-intent-all-methods`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
       body: JSON.stringify({
         amount: finalPrice,
+        country: userCountry, // send detected country
       }),
     });
 
@@ -179,6 +185,7 @@ const fetchClientSecret = async () => {
     setLoadingPaymentIntent(false); // stop spinner
   }
 };
+
 
  useEffect(() => {
       if (page === 2 && finalPrice > 0) {
