@@ -198,3 +198,8 @@
   max-width: 91%;
   line-height: 20px;
 }
+
+.social-btn.apple {
+  background-color: #000;
+  color: #fff;
+}
