@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import Image from 'next/image';
 import { useDropzone } from 'react-dropzone';
 import { useGoogleLogin } from '@react-oauth/google';
 import './signup.css';
@@ -44,6 +43,57 @@ const [subscribeNewsletter, setSubscribeNewsletter] = useState(false);
 
     fetchCountry();
   }, []);
+
+useEffect(() => {
+  const script = document.createElement('script');
+  script.src = 'https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js';
+  script.async = true;
+  script.onload = () => {
+    window.AppleID.auth.init({
+      clientId: process.env.NEXT_PUBLIC_APPLE_CLIENT_ID, // from your Apple config
+      scope: 'name email',
+      redirectURI: `${baseUrl}/auth/apple/callback`, // must match what you set in Apple
+      usePopup: true, // so it returns directly to frontend
+    });
+  };
+  document.body.appendChild(script);
+}, []);
+
+const handleAppleLogin = async () => {
+  if (!country || loadingCountry) {
+    toast.error('Please wait until country is determined...');
+    return;
+  }
+
+  try {
+    const response = await window.AppleID.auth.signIn();
+    const { id_token, code } = response.authorization;
+
+    setLoading(true);
+    const res = await fetch(`${baseUrl}/auth/apple/callback`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        idToken: id_token,
+        code,
+        country,
+      }),
+    });
+
+    const data = await res.json();
+    if (res.ok) {
+      toast.success('Apple Registration successful!');
+      router.push('/login');
+    } else {
+      toast.error(data.message || 'Apple signup failed');
+    }
+  } catch (err) {
+    console.error('Apple login error:', err);
+    toast.error('Apple login failed');
+  } finally {
+    setLoading(false);
+  }
+};
 
   const onDrop = (acceptedFiles) => {
     const file = acceptedFiles[0];
@@ -148,6 +198,10 @@ return (
       Sign up with Google
     </button>
 
+ <button className="social-btn apple"   onClick={() => !loading && handleAppleLogin()} disabled={loading}>
+       <img src="/apple.png" alt="Apple" className="social-icon" />
+      Sign in with Apple
+    </button>
     <form className="signup-form" onSubmit={handleSubmit}>
       <input
         type="text"
