@@ -19,6 +19,11 @@ const LoginForm = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
+const [country, setCountry] = useState('');
+  const [loadingCountry, setLoadingCountry] = useState(true);
+  
+
 const [showPassword, setShowPassword] = useState(false);
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -140,6 +145,121 @@ if (hasPendingCredits) {
     },
     onError: () => setError('Google login was cancelled or failed.')
   });
+
+
+  // Fetch actual country name using IP geolocation
+  useEffect(() => {
+   const fetchCountry = async () => {
+  try {
+    const res = await fetch('https://ipwho.is/');
+    const data = await res.json();
+    if (data && data.success && data.country) {
+      setCountry(data.country);
+    } else {
+      setCountry('Unknown');
+    }
+  } catch (err) {
+    console.error('Failed to fetch country:', err);
+    setCountry('Unknown');
+  } finally {
+    setLoadingCountry(false);
+  }
+};
+
+
+    fetchCountry();
+  }, []);
+
+useEffect(() => {
+  const script = document.createElement('script');
+  script.src = 'https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js';
+  script.async = true;
+  script.onload = () => {
+    window.AppleID.auth.init({
+      clientId: process.env.NEXT_PUBLIC_APPLE_CLIENT_ID, // from your Apple config
+      scope: 'name email',
+      redirectURI: `${baseUrl}/auth/callback/apple`, // must match what you set in Apple
+      usePopup: true, // so it returns directly to frontend
+    });
+  };
+  document.body.appendChild(script);
+}, []);
+
+const handleAppleLogin = async () => {
+  if (!country || loadingCountry) {
+    toast.error('Please wait until country is determined...');
+    return;
+  }
+
+  try {
+    const response = await window.AppleID.auth.signIn();
+    const { id_token, code } = response.authorization;
+
+    setLoading(true);
+    setError('');
+
+    // Hit backend Apple callback (will handle login/register + send cookie)
+    const res = await fetch(`${baseUrl}/auth/callback/apple`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include', // 👈 important, so cookie gets stored
+      body: JSON.stringify({
+        idToken: id_token,
+        code,
+        country,
+      }),
+    });
+
+    const data = await res.json();
+
+    if (res.ok && data.success) {
+      toast.success('Apple sign in successful!');
+
+      // Fetch user details after cookie is set
+      const userDetailsRes = await fetch(`${baseUrl}/users/userdetails`, {
+        method: 'GET',
+        credentials: 'include',
+      });
+
+      const userDetailsData = await userDetailsRes.json();
+
+      if (userDetailsRes.ok && userDetailsData.success) {
+        const userWithWallet = {
+          ...userDetailsData.user,
+          wallet: userDetailsData.wallet,
+          cart: userDetailsData.cart,
+          invoices: userDetailsData.invoices,
+          videos: userDetailsData.videos,
+        };
+
+        dispatch(loginUser(userWithWallet));
+
+        const hasPendingCredits = localStorage.getItem('pendingCredits');
+        const hasTempVideo = localStorage.getItem('tempVideo');
+
+        if (hasPendingCredits) {
+          router.push('/cart');
+        } else {
+          router.push(hasTempVideo ? '/upload' : '/upload');
+        }
+      } else {
+        setError('Failed to fetch user details.');
+      }
+    } else {
+      setError(data.message || 'Apple login failed.');
+      toast.error(data.message || 'Apple login failed');
+    }
+  } catch (err) {
+    console.error('Apple login error:', err);
+    setError('Something went wrong during Apple login.');
+    toast.error('Apple sign in failed');
+  } finally {
+    setLoading(false);
+  }
+};
+
+
+
 return (
   <div className="login-container">
   
@@ -150,7 +270,7 @@ return (
       Sign in with Google
     </button>
 
-    <button className="social-btn apple">
+    <button className="social-btn apple" onClick={handleAppleLogin}>
       <img src="/apple.png" alt="Apple" className="social-icon" style={{marginLeft:'-10px'}} />
       Sign in with Apple
     </button>
