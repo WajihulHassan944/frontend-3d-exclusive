@@ -52,7 +52,7 @@ useEffect(() => {
     window.AppleID.auth.init({
       clientId: process.env.NEXT_PUBLIC_APPLE_CLIENT_ID, // from your Apple config
       scope: 'name email',
-      redirectURI: `${baseUrl}/auth/apple/callback`, // must match what you set in Apple
+      redirectURI: `${baseUrl}/auth/callback/apple`, // must match what you set in Apple
       usePopup: true, // so it returns directly to frontend
     });
   };
@@ -70,7 +70,7 @@ const handleAppleLogin = async () => {
     const { id_token, code } = response.authorization;
 
     setLoading(true);
-    const res = await fetch(`${baseUrl}/auth/apple/callback`, {
+    const res = await fetch(`${baseUrl}/auth/callback/apple`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -89,7 +89,7 @@ const handleAppleLogin = async () => {
     }
   } catch (err) {
     console.error('Apple login error:', err);
-    toast.error('Apple login failed');
+    toast.error('Apple signup failed');
   } finally {
     setLoading(false);
   }
@@ -200,7 +200,7 @@ return (
 
  <button className="social-btn apple"   onClick={() => !loading && handleAppleLogin()} disabled={loading}>
        <img src="/apple.png" alt="Apple" className="social-icon" />
-      Sign in with Apple
+      Sign up with Apple
     </button>
     <form className="signup-form" onSubmit={handleSubmit}>
       <input
