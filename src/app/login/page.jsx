@@ -184,7 +184,6 @@ useEffect(() => {
   };
   document.body.appendChild(script);
 }, []);
-
 const handleAppleLogin = async () => {
   if (!country || loadingCountry) {
     toast.error('Please wait until country is determined...');
@@ -192,17 +191,20 @@ const handleAppleLogin = async () => {
   }
 
   try {
-    const response = await window.AppleID.auth.signIn();
+    const response = await window.AppleID.auth.signIn({
+      state: crypto.randomUUID(),  // ✅ ensures unique per request
+      nonce: crypto.randomUUID(),  // ✅ avoids replay issues
+    });
+
     const { id_token, code } = response.authorization;
 
     setLoading(true);
     setError('');
 
-    // Hit backend Apple callback (will handle login/register + send cookie)
     const res = await fetch(`${baseUrl}/auth/callback/apple`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      credentials: 'include', // 👈 important, so cookie gets stored
+      credentials: 'include',
       body: JSON.stringify({
         idToken: id_token,
         code,
