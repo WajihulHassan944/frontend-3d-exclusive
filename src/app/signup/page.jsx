@@ -43,56 +43,34 @@ const [subscribeNewsletter, setSubscribeNewsletter] = useState(false);
 
     fetchCountry();
   }, []);
-
 useEffect(() => {
   const script = document.createElement('script');
-  script.src = 'https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js';
+  script.src =
+    'https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js';
   script.async = true;
   script.onload = () => {
     window.AppleID.auth.init({
-      clientId: process.env.NEXT_PUBLIC_APPLE_CLIENT_ID, // from your Apple config
+      clientId: process.env.NEXT_PUBLIC_APPLE_CLIENT_ID,
       scope: 'name email',
-      redirectURI: `${baseUrl}/auth/callback/apple`, // must match what you set in Apple
-      usePopup: true, // so it returns directly to frontend
+      redirectURI: `${baseUrl}/auth/callback/apple`, // must match Apple Developer config
+      usePopup: false, // 🔑 full redirect mode
     });
   };
   document.body.appendChild(script);
 }, []);
 
-const handleAppleLogin = async () => {
+const handleAppleLogin = () => {
   if (!country || loadingCountry) {
     toast.error('Please wait until country is determined...');
     return;
   }
 
-  try {
-    const response = await window.AppleID.auth.signIn();
-    const { id_token, code } = response.authorization;
-
-    setLoading(true);
-    const res = await fetch(`${baseUrl}/auth/callback/apple`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        idToken: id_token,
-        code,
-        country,
-      }),
-    });
-
-    const data = await res.json();
-    if (res.ok) {
-      toast.success('Apple Registration successful!');
-      router.push('/login');
-    } else {
-      toast.error(data.message || 'Apple signup failed');
-    }
-  } catch (err) {
-    console.error('Apple login error:', err);
-    toast.error('Apple signup failed');
-  } finally {
-    setLoading(false);
-  }
+  // ✅ In redirect flow, you do not await a response here.
+  // Apple will redirect to backend callback
+  window.AppleID.auth.signIn({
+    state: crypto.randomUUID(),
+    nonce: crypto.randomUUID(),
+  });
 };
 
   const onDrop = (acceptedFiles) => {
