@@ -172,92 +172,32 @@ if (hasPendingCredits) {
 
 useEffect(() => {
   const script = document.createElement('script');
-  script.src = 'https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js';
+  script.src =
+    'https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js';
   script.async = true;
   script.onload = () => {
     window.AppleID.auth.init({
-      clientId: process.env.NEXT_PUBLIC_APPLE_CLIENT_ID, // from your Apple config
+      clientId: process.env.NEXT_PUBLIC_APPLE_CLIENT_ID,
       scope: 'name email',
-      redirectURI: `${baseUrl}/auth/callback/apple`, // must match what you set in Apple
-      usePopup: true, // so it returns directly to frontend
+      redirectURI: `${baseUrl}/auth/callback/apple`, // must match Apple Developer config
+      usePopup: false, // 🔑 full redirect mode
     });
   };
   document.body.appendChild(script);
 }, []);
-const handleAppleLogin = async () => {
+
+const handleAppleLogin = () => {
   if (!country || loadingCountry) {
     toast.error('Please wait until country is determined...');
     return;
   }
 
-  try {
-    const response = await window.AppleID.auth.signIn({
-      state: crypto.randomUUID(),  // ✅ ensures unique per request
-      nonce: crypto.randomUUID(),  // ✅ avoids replay issues
-    });
-
-    const { id_token, code } = response.authorization;
-
-    setLoading(true);
-    setError('');
-
-    const res = await fetch(`${baseUrl}/auth/callback/apple`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-      body: JSON.stringify({
-        idToken: id_token,
-        code,
-        country,
-      }),
-    });
-
-    const data = await res.json();
-
-    if (res.ok && data.success) {
-      toast.success('Apple sign in successful!');
-
-      // Fetch user details after cookie is set
-      const userDetailsRes = await fetch(`${baseUrl}/users/userdetails`, {
-        method: 'GET',
-        credentials: 'include',
-      });
-
-      const userDetailsData = await userDetailsRes.json();
-
-      if (userDetailsRes.ok && userDetailsData.success) {
-        const userWithWallet = {
-          ...userDetailsData.user,
-          wallet: userDetailsData.wallet,
-          cart: userDetailsData.cart,
-          invoices: userDetailsData.invoices,
-          videos: userDetailsData.videos,
-        };
-
-        dispatch(loginUser(userWithWallet));
-
-        const hasPendingCredits = localStorage.getItem('pendingCredits');
-        const hasTempVideo = localStorage.getItem('tempVideo');
-
-        if (hasPendingCredits) {
-          router.push('/cart');
-        } else {
-          router.push(hasTempVideo ? '/upload' : '/upload');
-        }
-      } else {
-        setError('Failed to fetch user details.');
-      }
-    } else {
-      setError(data.message || 'Apple login failed.');
-      toast.error(data.message || 'Apple login failed');
-    }
-  } catch (err) {
-    console.error('Apple login error:', err);
-    setError('Something went wrong during Apple login.');
-    toast.error('Apple sign in failed');
-  } finally {
-    setLoading(false);
-  }
+  // ✅ In redirect flow, you do not await a response here.
+  // Apple will redirect to backend callback
+  window.AppleID.auth.signIn({
+    state: crypto.randomUUID(),
+    nonce: crypto.randomUUID(),
+  });
 };
 
 
