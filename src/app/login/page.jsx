@@ -179,7 +179,7 @@ useEffect(() => {
       clientId: process.env.NEXT_PUBLIC_APPLE_CLIENT_ID, // from your Apple config
       scope: 'name email',
       redirectURI: `${baseUrl}/auth/callback/apple`, // must match what you set in Apple
-      usePopup: true, // so it returns directly to frontend
+      usePopup: false, // so it returns directly to frontend
     });
   };
   document.body.appendChild(script);
