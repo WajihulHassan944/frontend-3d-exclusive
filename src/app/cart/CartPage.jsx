@@ -142,6 +142,10 @@ const isBillingComplete = billingData.name &&
   billingData.street &&
   billingData.postalCode;
   useEffect(() => {
+        if (!currency?.code || !currency?.symbol) {
+      // ⚡ Don't fetch until currency is loaded
+      return;
+    }
     const pendingCredits = localStorage.getItem('pendingCredits');
 
     if (pendingCredits) {

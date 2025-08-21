@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { countryToCurrency } from './countryToCurrency';
 
 export const useCurrencyByUserCountry = () => {
-  const [currency, setCurrency] = useState({ code: 'EUR', symbol: '€' });
+  const [currency, setCurrency] = useState({ code: '', symbol: '' });
 
   useEffect(() => {
     const fetchCountryAndCurrency = async () => {
