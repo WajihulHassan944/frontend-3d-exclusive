@@ -1,53 +1,29 @@
-import { useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { countryToCurrency } from './countryToCurrency';
 
-const countryToCurrency = {
-  US: { code: 'USD', symbol: '$' },
-  GB: { code: 'GBP', symbol: '£' },
-  CA: { code: 'CAD', symbol: 'CA$' },
-  AU: { code: 'AUD', symbol: 'A$' },
-  JP: { code: 'JPY', symbol: '¥' },
-  CH: { code: 'CHF', symbol: 'CHF' },
-  SE: { code: 'SEK', symbol: 'kr' },
-  NO: { code: 'NOK', symbol: 'kr' },
-  NZ: { code: 'NZD', symbol: 'NZ$' },
-  SG: { code: 'SGD', symbol: 'S$' },
-  PK: { code: 'PKR', symbol: '₨' },
-  NL: { code: 'EUR', symbol: '€' },
-  DE: { code: 'EUR', symbol: '€' },
-  FR: { code: 'EUR', symbol: '€' },
-  ES: { code: 'EUR', symbol: '€' },
-  IT: { code: 'EUR', symbol: '€' },
-  BE: { code: 'EUR', symbol: '€' },
-};
+export const useCurrencyByUserCountry = () => {
+  const [currency, setCurrency] = useState({ code: 'EUR', symbol: '€' });
 
-const countryNameToCode = {
-  'United States': 'US',
-  'United Kingdom': 'GB',
-  Canada: 'CA',
-  Australia: 'AU',
-  Japan: 'JP',
-  Switzerland: 'CH',
-  Sweden: 'SE',
-  Norway: 'NO',
-  'New Zealand': 'NZ',
-  Singapore: 'SG',
-  Pakistan: 'PK',
-  Netherlands: 'NL',
-  Germany: 'DE',
-  France: 'FR',
-  Spain: 'ES',
-  Italy: 'IT',
-  Belgium: 'BE',
-};
+  useEffect(() => {
+    const fetchCountryAndCurrency = async () => {
+      try {
+        const res = await fetch('https://ipwho.is/');
+        const data = await res.json();
 
-export const useCurrencySymbolByUserCountry = () => {
-  const user = useSelector((state) => state.user);
-  const country = user?.country;
+        if (data.success && data.country_code) {
+          const matchedCurrency = countryToCurrency[data.country_code];
+          setCurrency(matchedCurrency || { code: 'EUR', symbol: '€' });
+        } else {
+          setCurrency({ code: 'EUR', symbol: '€' }); // fallback
+        }
+      } catch (err) {
+        console.error('Failed to get IP location:', err);
+        setCurrency({ code: 'EUR', symbol: '€' }); // fallback
+      }
+    };
 
-  if (!country) return '€';
+    fetchCountryAndCurrency();
+  }, []);
 
-  const code = countryNameToCode[country];
-  const currency = code ? countryToCurrency[code] : null;
-
-  return currency?.symbol || '€';
+  return currency;
 };

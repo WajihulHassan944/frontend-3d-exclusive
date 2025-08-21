@@ -20,7 +20,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useRouter, useSearchParams } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { baseUrl } from '@/const';
-import { useCurrencySymbolByUserCountry } from '@/utils/getCurrencySymbolByCountry';
+import { useCurrencyByUserCountry, useCurrencySymbolByUserCountry } from '@/utils/getCurrencySymbolByCountry';
 import { handleBuyCredits } from '@/utils/cart/handleBuyCredits';
 import ShoppingCart from './cart';
 import { handleCheckout } from '@/utils/cart/handleCheckout';
@@ -29,7 +29,9 @@ const stripePromise = loadStripe(
   'pk_test_51Re7bwCDHYmyh26mg712Usqdmn1sobEbtsT2P2vhnh8ael8mu70YS9jLuxUmvyy5JKfEqIYU3VQjE1yk3dtOA1Hu0026iz3jsD'
 );
 export default function CartPage() {
-  const currencySymbol = useCurrencySymbolByUserCountry();
+
+const currency = useCurrencyByUserCountry(); // ✅ get currency
+const currencySymbol = currency.symbol;
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const router = useRouter();
@@ -139,22 +141,23 @@ const isBillingComplete = billingData.name &&
   billingData.country &&
   billingData.street &&
   billingData.postalCode;
+  useEffect(() => {
+    const pendingCredits = localStorage.getItem('pendingCredits');
 
-   
-
-useEffect(() => {
-  const pendingCredits = localStorage.getItem('pendingCredits');
-
-  if (pendingCredits) {
-    localStorage.removeItem('pendingCredits');
-  handleBuyCredits(pendingCredits, dispatch, fetchCart, setLoading, setCredits);
-  } else {
-   fetchCart(setCredits, setLoading);
-
-  }
-}, []);
-
-
+    if (pendingCredits) {
+      localStorage.removeItem('pendingCredits');
+      handleBuyCredits(
+        pendingCredits,
+        dispatch,
+        fetchCart,
+        setLoading,
+        setCredits,
+        currency // ✅ use it here
+      );
+    } else {
+      fetchCart(setCredits, setLoading, currency); // ✅ use it here
+    }
+  }, [currency]);
 const fetchClientSecret = async () => {
   try {
     setLoadingPaymentIntent(true); // start spinner
@@ -162,7 +165,7 @@ const fetchClientSecret = async () => {
     // 🌍 Detect country on frontend
     const geoRes = await fetch(`https://ipwho.is/`);
     const geoData = await geoRes.json();
-    const userCountry = geoData?.country_code || 'US';
+    const userCountry = geoData?.country_code || 'NL';
 
     const res = await fetch(`${baseUrl}/wallet/create-payment-intent-all-methods`, {
       method: 'POST',
@@ -171,6 +174,7 @@ const fetchClientSecret = async () => {
       body: JSON.stringify({
         amount: finalPrice,
         country: userCountry, // send detected country
+        currencyCode:currency.code,
       }),
     });
 

@@ -22,7 +22,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useRouter, useSearchParams } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { baseUrl } from '@/const';
-import { useCurrencySymbolByUserCountry } from '@/utils/getCurrencySymbolByCountry';
+import { useCurrencyByUserCountry, useCurrencySymbolByUserCountry } from '@/utils/getCurrencySymbolByCountry';
 
 export default function ShoppingCart() {
   const currencySymbol = useCurrencySymbolByUserCountry();
@@ -156,14 +156,21 @@ const isCheckoutDisabled = checkoutLoading || vatPercent === null || !isBillingC
    
 
 useEffect(() => {
+  const currency = useCurrencyByUserCountry(); // ✅ get currency
   const pendingCredits = localStorage.getItem('pendingCredits');
 
   if (pendingCredits) {
     localStorage.removeItem('pendingCredits');
-  handleBuyCredits(pendingCredits, dispatch, fetchCart, setLoading, setCredits);
+    handleBuyCredits(
+      pendingCredits,
+      dispatch,
+      fetchCart,
+      setLoading,
+      setCredits,
+      currency // ✅ pass currency
+    );
   } else {
-   fetchCart(setCredits, setLoading);
-
+    fetchCart(setCredits, setLoading, currency); // ✅ pass currency
   }
 }, []);
 
