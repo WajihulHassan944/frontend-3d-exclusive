@@ -10,5 +10,5 @@ export const localizedPricing = {
   NZD: { 10: 15, 50: 70, 100: 120 },
   SGD: { 10: 15, 50: 60, 100: 100 },
   EUR: { 10: 9, 50: 39, 100: 69 },
-  PKR: { 10: 2500, 50: 9500, 100: 17000 }, // Optional override
+  PKR: { 10: 200, 50: 9500, 100: 17000 }, // Optional override
 };

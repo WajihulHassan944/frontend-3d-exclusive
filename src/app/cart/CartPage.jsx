@@ -26,7 +26,7 @@ import ShoppingCart from './cart';
 import { handleCheckout } from '@/utils/cart/handleCheckout';
 
 const stripePromise = loadStripe(
-  'pk_test_51Re7bwCDHYmyh26mg712Usqdmn1sobEbtsT2P2vhnh8ael8mu70YS9jLuxUmvyy5JKfEqIYU3VQjE1yk3dtOA1Hu0026iz3jsD'
+  'pk_test_51RvNstHpow7HoYZUY8RVBmICJzKPjKo4syjNfAi0l8VKntIqABVgpemRKlkjthFOmN4gfAqLAJPKlGoSZD0N6vt000DBZMHq3k'
 );
 export default function CartPage() {
 
@@ -177,7 +177,7 @@ const fetchClientSecret = async () => {
       credentials: 'include',
       body: JSON.stringify({
         amount: finalPrice,
-        country: userCountry, // send detected country
+        countryCode: userCountry, // send detected country
         currencyCode:currency.code,
       }),
     });
