@@ -124,7 +124,7 @@ try {
             ></textarea>
           </div>
 <ReCAPTCHA
-  sitekey="6LeMIKUrAAAAALLLKn6GEULnrp1p6aRozFYx-V_i" // replace with real key
+  sitekey="6LeP9LIrAAAAALThS9pOb4I_aLiSA-3n1kNTzL09" // replace with real key
   onChange={(token) => setCaptchaToken(token)}
 />
           <button type="submit" className="contact-sec-send-btn" disabled={loading}>

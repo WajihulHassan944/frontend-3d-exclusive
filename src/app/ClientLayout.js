@@ -9,7 +9,7 @@ import UserInitializer from './UserInitializer';
 import { Toaster } from 'react-hot-toast';
 export default function ClientLayout({ children }) {
   return (
-    <GoogleOAuthProvider clientId="592699354732-jvitiqtgfcl9p803g8kdufg6c8dsmunr.apps.googleusercontent.com">
+    <GoogleOAuthProvider clientId="852917251115-oi5pepl5cf67u06d0f9gvpomce2hjbl5.apps.googleusercontent.com">
       <Provider store={store}>
         <UserInitializer />
         <Navbar />
