@@ -4,7 +4,7 @@ import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import BillingMethods from './BillingMethods';
 import "./TopupCredit.css";
-const stripePromise = loadStripe("pk_test_51Re7bwCDHYmyh26mg712Usqdmn1sobEbtsT2P2vhnh8ael8mu70YS9jLuxUmvyy5JKfEqIYU3VQjE1yk3dtOA1Hu0026iz3jsD");
+const stripePromise = loadStripe("pk_live_51RvNstHpow7HoYZURyGWZHskSTYGsl0zHWJVvK9ItweHZgvmo1eMyyDrbESgcorVsb7EHjv6CvTaQSwKjXfFoWGp0066SXf4lT");
 import { baseUrl } from '@/const';
 const Page = () => {
     const [clientSecret, setClientSecret] = useState('');

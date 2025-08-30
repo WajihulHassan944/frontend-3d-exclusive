@@ -149,11 +149,28 @@
   position: relative;
   gap: 0.6rem;
 }
-
 .cart-icon {
   color: white;
   cursor: pointer;
   margin-right: 15px;
+}
+.relative-cart-icon-wrap{
+  position: relative;
+}
+.relative-cart-icon-wrap .cart-badge {
+  position: absolute;
+  top: -6px;
+  right: 6px;
+  background: #f97316; 
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .user-profile {

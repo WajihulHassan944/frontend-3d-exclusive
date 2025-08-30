@@ -14,6 +14,7 @@ export default function Navbar() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
   const user = useSelector((state) => state.user);
+  
   const isLoggedIn = useSelector((state) => state.user.isAuthenticated);
   const logout = useLogout();
   useEffect(() => {
@@ -72,7 +73,12 @@ export default function Navbar() {
         <div className="auth">
           {isLoggedIn ? (
             <div className="user-section" ref={dropdownRef}>
-             <Link href="/cart"> <FiShoppingCart size={22} className="cart-icon" /></Link>
+             <Link href="/cart" className="relative-cart-icon-wrap">
+      <FiShoppingCart size={22} className="cart-icon" />
+      {user.cart.credits.length > 0 && (
+      <span className="cart-badge">{user.cart.credits.length}</span>
+      ) }
+    </Link>
 
               <div
                 className="user-profile"

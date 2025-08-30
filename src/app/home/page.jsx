@@ -2,7 +2,6 @@
 
 import React from 'react';
 import './home.css';
-import Link from 'next/link';
 
 const HeroSection = () => {
   return (
