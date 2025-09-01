@@ -1,0 +1,263 @@
+.dashboard {
+  padding: 20px;
+  padding-top: 90px;
+  font-family: 'GeistSans', 'GeistSans Fallback', sans-serif;
+  color: #222;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.stat-card {
+  border-radius: 12px;
+  padding: 25px;
+  background: whitesmoke;
+  border:1px solid #cecece;
+  box-shadow: 0 1px 3px 0 #0000001a,0 1px 2px -1px #0000001a;
+}
+
+.stat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  
+  margin-bottom: 35px;
+}
+
+.stat-header h3 {
+  font-size: 14px;
+  font-weight: 500;
+  color: black;
+}
+
+.stat-icon {
+  font-size: 18px;
+  color: #888;
+}
+
+.stat-value {
+  font-size: 24px;
+  font-weight: 600;
+  margin: 8px 0 4px 0;
+}
+
+.stat-change {
+  font-size: 13px;
+  font-weight: 400;
+  margin-top: 8px;
+
+}
+
+.stat-change .positive {
+  color: #22c55e;
+}
+
+.stat-change .negative {
+  color: #ef4444;
+}
+
+.bottom-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+.conversion-card,
+.orders-card {
+  border-radius: 12px;
+  padding: 30px 25px;
+  padding-bottom: 5px;
+  background: whitesmoke;
+  border: 1px solid #cecece;
+  box-shadow: 0 1px 3px 0 #0000001a, 0 1px 2px -1px #0000001a;
+}
+
+.conversion-card h3,
+.orders-card h3 {
+  font-size: 17.5px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+.conversion-card{
+  display: flex;
+  flex-direction: column;
+}
+.conversion-status {
+  display: flex;
+  justify-content: flex-start;
+  gap: 35px;
+  margin: 12px 0 20px 0;
+}
+
+.status {
+  font-size: 13px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.status b {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 3px 0;
+  border-radius: 6px;
+}
+.status-icon{
+  font-size: 18px;
+}
+.label span{
+  padding: 5px 10px;
+  border-radius: 8px;
+}
+.label.in-progress {
+  color: #2563eb;
+}
+.label.in-progress span{
+  background: #dbeafe;
+}
+.label.queued {
+  color: #eab308;
+}
+.label.queued span{
+  background: #fef9c3;
+}
+.label.completed {
+  color: #16a34a;
+}
+.label.completed span{
+background: #dcfce7;
+}
+.label.failed {
+  color: #ef4444;
+}
+.label.failed span{
+  background: #fee2e2;
+}
+/* rotating spinner */
+.rotate {
+  animation: spin 1.5s linear infinite;
+}
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.status b{
+  font-size: 18px;
+}
+.status.in-progress b {
+  color: #2563eb;
+}
+.status.queued b {
+  color: #eab308;
+}
+.status.completed b {
+  color: #16a34a;
+}
+.status.failed b {
+  color: #ef4444;
+}
+
+.progress-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  margin-bottom: 6px;
+  color: #333;
+  margin-top: 5px;
+}
+
+.progress-bar {
+  height: 8px;
+  background: #17171733;
+  border-radius: 4px;
+}
+
+.progress {
+  height: 100%;
+  background: #171717;
+  border-radius: 4px;
+}
+
+.orders-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.orders-card li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #cecece;
+  padding: 12px 0;
+  padding-top: 7px;
+  margin-bottom: 20px;
+}
+
+.orders-card li:last-child {
+  border-bottom: none;
+}
+
+.order-left strong {
+  display: block;
+  font-weight: 500;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.order-left span {
+  display: block;
+  font-size: 12px;
+  color: #777;
+}
+
+.order-right {
+  text-align: right;
+  display: flex;
+  gap: 15px;
+}
+
+.order-right b {
+  display: block;
+  margin-bottom: 3px;
+  font-weight: 600;
+  color: #333;
+}
+
+.order-status {
+  font-size: 12px;
+  padding: 2px 6px;
+  border-radius: 6px;
+  text-transform: capitalize;
+}
+
+.order-status.completed {
+  background: #dcfce7;
+  color: #16a34a;
+}
+
+.order-status.processing {
+  background: #dbeafe;
+  color: #3b82f6;
+}
+
+.order-status.pending {
+  background: #fef9c3;
+  color: #eab308;
+}

@@ -1,0 +1,85 @@
+.side-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  background: #171717; /* black sidebar */
+  color: #fff;
+  transition: width 0.3s ease;
+  overflow: hidden;
+  z-index: 1000;
+  font-family: 'GeistSans', 'GeistSans Fallback', sans-serif;
+  padding-top: 3px;
+}
+
+.side-nav.open {
+  width: 255px;
+}
+
+.side-nav.collapsed {
+  width: 70px;
+}
+
+.side-nav-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  padding-left: 15px;
+  border-bottom: 1px solid #cecece;
+  margin-bottom: 15px;
+}
+
+.side-nav-header h2 {
+  font-size: 18px;
+  margin: 0;
+  font-weight: 600;
+}
+.toggle-icon {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  margin-right: 5px;
+}
+.collapsed-toggle {
+  margin: 16px auto;
+  display: block;
+}
+
+.side-nav-menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  padding: 5px 15px;
+}
+
+.side-nav-menu li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-bottom: 13px;
+}
+.side-nav.collapsed .side-nav-menu li {
+  padding: 9px 9px;
+  justify-content: center; /* optional: center icons when closed */
+}
+.side-nav-menu li:hover {
+  background: #222;
+}
+
+.side-nav-menu li span {
+  font-size: 15px;
+}
+
+/* Active item example (Dashboard) */
+.side-nav-menu li:first-child {
+  background: #3b82f6; /* blue highlight */
+  border-radius: 6px;
+
+}
+.side-nav-menu li:first-child:hover {
+  background: #2563eb;
+}
