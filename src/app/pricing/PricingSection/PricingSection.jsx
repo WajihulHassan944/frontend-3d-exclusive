@@ -16,12 +16,12 @@ const PricingSectionInPricing = () => {
   const dispatch = useDispatch();
   const isLoggedIn = useSelector((state) => state.user.isAuthenticated);
   const [loadingAmount, setLoadingAmount] = useState(null);
-
+const [hoveredIndex, setHoveredIndex] = useState(null);
   // ✅ Get currency directly from reusable hook
   const { code: currencyCode, symbol: currencySymbol } = useCurrencyByUserCountry();
 
   // Build plans dynamically
-  const plans = [10, 50, 100].map((credits) => {
+  const plans = [15, 50, 120].map((credits) => {
     const price =
       localizedPricing[currencyCode]?.[credits] ??
       localizedPricing['EUR'][credits];
@@ -29,15 +29,19 @@ const PricingSectionInPricing = () => {
     return {
       credits,
       price: `${currencySymbol} ${price}`,
-      rate: `${currencySymbol} ${(price / credits).toFixed(2)} per credit`,
-      name:
-        credits === 10
-          ? 'Basic Plan'
+      rate: credits === 15
+          ? 'Good to explore'
           : credits === 50
-          ? 'Standard Plan'
-          : 'Pro Plan',
+          ? 'Best value per minute'
+          : 'Lowest cost per minute',
+      name:
+        credits === 15
+          ? 'Starter Package'
+          : credits === 50
+          ? 'Pro Package'
+          : 'Business Package',
       features:
-        credits === 10
+        credits === 15
           ? ['Up to 2.7K conversion', 'Standard processing']
           : credits === 50
           ? [
@@ -131,19 +135,27 @@ const PricingSectionInPricing = () => {
       <div className="pricing-card-wrapper">
         {plans.map((plan, index) => (
           <div
-            key={index}
-            className={`pricing-card ${plan.popular ? 'pricing-card-popular' : ''}`}
-            onClick={() => handleClick(plan.credits)}
-            style={{
-              cursor: loadingAmount === plan.credits ? 'default' : 'pointer',
-              pointerEvents: loadingAmount === plan.credits ? 'none' : 'auto',
-            }}
-          >
+  key={index}
+  className={`pricing-card ${plan.popular ? 'pricing-card-popular' : ''}`}
+  onClick={() => handleClick(plan.credits)}
+  onMouseEnter={() => setHoveredIndex(index)}
+  onMouseLeave={() => setHoveredIndex(null)}
+  style={{
+    cursor: loadingAmount === plan.credits ? 'default' : 'pointer',
+    pointerEvents: loadingAmount === plan.credits ? 'none' : 'auto',
+  }}
+>
+{index === 2 && (
+  <div className="pricing-card-ribbon">
+    <span>Best Value</span>
+  </div>
+)}
             {plan.popular && <div className="pricing-card-label">Most Popular</div>}
             <h3 className="pricing-card-credits">{plan.credits} credits</h3>
             <p className="pricing-card-price">{plan.price}</p>
             <p className="pricing-card-rate">{plan.rate}</p>
             <h4 className="pricing-card-name">{plan.name}</h4>
+            <h5>One-time purchase</h5>
             <ul className="pricing-feature-list">
               {plan.features.map((feature, i) => (
                 <li key={i}>
@@ -153,11 +165,13 @@ const PricingSectionInPricing = () => {
             </ul>
             <div className="pricing-button-container">
               <button
-                className="pricing-get-started-btn"
-                disabled={loadingAmount === plan.credits}
-              >
-                {loadingAmount === plan.credits ? 'Processing...' : 'Get Started'}
-              </button>
+  className={`pricing-get-started-btn ${
+    hoveredIndex !== null && hoveredIndex !== index ? 'button-dull' : ''
+  }`}
+  disabled={loadingAmount === plan.credits}
+>
+  {loadingAmount === plan.credits ? 'Processing...' : 'Get Started'}
+</button>
             </div>
             <p className="credit-valid-para">Credits valid for 1 year</p>
           </div>

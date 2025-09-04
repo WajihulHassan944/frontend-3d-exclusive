@@ -1,16 +1,15 @@
 import React from "react";
 import {
-  
-  FaBars,
-  FaTachometerAlt,
-  FaFileAlt,
-  FaImage,
-  FaUserFriends,
-  FaShoppingCart,
-  FaSearch,
-  FaCog,
-} from "react-icons/fa";
-import { X } from "lucide-react";
+  Menu,
+  LayoutDashboard,
+  FileText,
+  Image,
+  Users,
+  ShoppingCart,
+  Search,
+  Settings,
+  X,
+} from "lucide-react";
 import "./adminSideNav.css";
 
 const AdminSideNav = ({ isOpen, setIsOpen }) => {
@@ -26,42 +25,42 @@ const AdminSideNav = ({ isOpen, setIsOpen }) => {
             <X className="toggle-icon" onClick={toggleNav} />
           </>
         ) : (
-          <FaBars className="toggle-icon collapsed-toggle" onClick={toggleNav} />
+          <Menu className="toggle-icon collapsed-toggle" onClick={toggleNav} />
         )}
       </div>
 
       {/* Menu */}
       <ul className="side-nav-menu">
         <li>
-          <FaTachometerAlt className="side-nav-icon" />
+          <LayoutDashboard className="side-nav-icon" />
           {isOpen && <span>Dashboard</span>}
         </li>
         <li>
-          <FaFileAlt className="side-nav-icon" />
+          <FileText className="side-nav-icon" />
           {isOpen && <span>Posts</span>}
         </li>
         <li>
-          <FaImage className="side-nav-icon" />
+          <Image className="side-nav-icon" />
           {isOpen && <span>Media</span>}
         </li>
         <li>
-          <FaFileAlt className="side-nav-icon" />
+          <FileText className="side-nav-icon" />
           {isOpen && <span>Pages</span>}
         </li>
         <li>
-          <FaUserFriends className="side-nav-icon" />
+          <Users className="side-nav-icon" />
           {isOpen && <span>Users</span>}
         </li>
         <li>
-          <FaShoppingCart className="side-nav-icon" />
+          <ShoppingCart className="side-nav-icon" />
           {isOpen && <span>Orders</span>}
         </li>
         <li>
-          <FaSearch className="side-nav-icon" />
+          <Search className="side-nav-icon" />
           {isOpen && <span>SEO</span>}
         </li>
         <li>
-          <FaCog className="side-nav-icon" />
+          <Settings className="side-nav-icon" />
           {isOpen && <span>Settings</span>}
         </li>
       </ul>

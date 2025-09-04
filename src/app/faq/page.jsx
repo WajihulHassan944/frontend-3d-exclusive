@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import './faq.css';
 import { FiChevronUp, FiChevronDown } from 'react-icons/fi';
-
+import Link from 'next/link';
 const faqs = [
   {
     q: 'What is Xclusive3D.com?',
@@ -54,11 +54,19 @@ Benefits:
   },
   {
     q: 'How much does it cost?',
-    a: `Conversion is credit-based and depends on the resolution. Each minute of 1080p video conversion uses 1 credit. Plans start at €9 for 10 credits, with bulk discounts available. Please see our pricing page for more details.`,
+    a: `Conversion is credit-based and depends on the resolution. Each minute of 1080p video conversion uses 1 credit. Plans start at €24 for 15 credits, with bulk discounts available. Please see our pricing page for more details.`,
   },
   {
-    q: 'What happens with my credits I have left?',
-    a: `Credits are valid for 1 year (365 days).`,
+    q: 'How long are credits valid?',
+    a: `Credits are valid for 12 months after purchase, after which they automatically expire.`,
+  },
+  {
+    q: 'Can I get a refund for unused credits?',
+    a: `No, credits are non-refundable.`,
+  },
+  {
+    q: 'How long do you store my files?',
+    a: `Files are stored for a maximum of 7 days, after which they are permanently deleted.`,
   },
 ];
 
@@ -103,6 +111,17 @@ export default function Faq() {
           </li>
         ))}
       </ul>
+            {/* Contact Section Below FAQ */}
+    <div className="faq-contact-section">
+  <h3 className="faq-contact-title">Still have questions?</h3>
+  <p className="faq-contact-subtitle">
+    Can&apos;t find what you&apos;re looking for? We&apos;d love to help you out.
+  </p>
+  <Link href="/contact" className="faq-contact-btn">
+    Contact Us
+  </Link>
+</div>
+
     </section>
   );
 }

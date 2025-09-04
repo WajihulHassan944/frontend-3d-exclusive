@@ -13,11 +13,6 @@
   color: #ffffff;
 }
 
-/* .terms-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-} */
-
 .term-item {
   padding: 20px 25px;
 }
@@ -67,4 +62,23 @@
   .term-item h3 {
     font-size: 18px;
   }
+}
+
+
+.term-item h4 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 12px 0 8px;
+  color: #f3f4f6; /* lighter white for contrast */
+}
+
+.term-item p {
+  text-align: justify;
+}
+
+
+/* Optional subtle hover effect for sections */
+.term-item:hover {
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 8px;
 }

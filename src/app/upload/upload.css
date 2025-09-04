@@ -48,8 +48,9 @@ padding-top: 0;
 .upload-box p {
   margin: 0;
   font-size: 15px;
-  color: #ffffffcc;
+  color: #ababba;
   line-height: 1.5;
+  margin-bottom: 10px;
 }
 @keyframes bounceUpDown {
   0%, 100% {
@@ -117,12 +118,19 @@ padding-top: 0;
   font-weight: 500;
   color: #fa8938;
   background: #fa893833;
-  padding: 15px 20px;
-  border-radius: 30px;
+  padding: 17px 30px;
+  border-radius: 50px;
   border:1px solid #fa89384d;
   width: fit-content;
+  display: flex;
+  flex-direction: column;
 }
-
+.free-minute span{
+  color: #9ca3af;
+  margin-top: 8px;
+  font-size: .75rem;
+    line-height: 1rem;
+}
 .convert-btn {
  background-color: #ff6c2f;
   color: white;
@@ -360,9 +368,9 @@ padding-top: 0;
   background: rgba(0,0,0,0.4);
   color: #fff;
   width: 100%;
-  max-width: 400px; /* fixed width for uniformity */
+  max-width: 600px; /* fixed width for uniformity */
   text-align: left;
-  padding: 12px 18px;
+  padding: 14px 18px;
   margin: 10px auto;
   display: flex;
   align-items: center;

@@ -101,3 +101,41 @@
     font-size: 1.3rem;
   }
 }
+.faq-contact-section {
+  text-align: center;
+  padding: 40px 20px;
+  border-radius: 12px;
+  margin-top: 50px;
+}
+
+.faq-contact-title {
+ font-size: 1.5rem;
+    line-height: 2rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.faq-contact-subtitle {
+  font-size: 16.5px;
+  color: #d1d5db; /* light gray */
+  margin-bottom: 40px;
+  margin-top: 16px;
+}
+
+.faq-contact-btn {
+  background: #fa8938;
+  color: white;
+  padding: 12px 28px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.faq-contact-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 18px rgba(255, 122, 48, 0.6);
+  background: #ff7a30;
+}

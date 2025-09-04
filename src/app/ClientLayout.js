@@ -19,7 +19,7 @@ export default function ClientLayout({ children }) {
 
   const isAdminLogin = pathname === '/admin/login';
   const isAdminRoute = pathname.startsWith('/admin') && !isAdminLogin;
-
+const isAdminRoot = pathname === '/admin';
   // Set body background color dynamically
   useEffect(() => {
     if (isAdminRoute) {
@@ -38,7 +38,7 @@ export default function ClientLayout({ children }) {
         {isAdminRoute && (
           <>
             <AdminSideNav isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
-            <TopNav isSidebarOpen={isSidebarOpen} />
+            {isAdminRoot && <TopNav isSidebarOpen={isSidebarOpen} />}
           </>
         )}
 

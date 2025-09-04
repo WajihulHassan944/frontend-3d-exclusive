@@ -51,19 +51,26 @@
 }
 
 .newsletter-button {
-  background-color: #ff7a30;
+  background-image: url(/background.png);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   color: white;
   padding: 12px 20px;
   border: none;
   border-radius: 8px;
   font-weight: 600;
-  font-size: 15px;
+  font-size: 1.125rem;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: transform 0.3s ease;
 }
 
 .newsletter-button:hover {
-  background-color: #ff5f00;
+  transform: scale(1.05);
+box-shadow: 
+    0 0 20px rgba(255, 122, 48, 0.6),   /* soft glow all around */
+    0 6px 12px rgba(0, 0, 0, 0.15),     /* balanced bottom shadow */
+    0 -3px 6px rgba(255, 122, 48, 0.3); /* subtle top glow */
 }
 
 .newsletter-note {

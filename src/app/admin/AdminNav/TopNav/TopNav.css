@@ -3,8 +3,8 @@
   top: 0;
   right: 0;
   height: 85px;
-  background: whitesmoke;
-  border-bottom: 1px solid #cecece;
+  background: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
   display: flex;
   align-items: center;
   justify-content: space-between;

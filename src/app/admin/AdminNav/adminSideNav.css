@@ -3,7 +3,7 @@
   top: 0;
   left: 0;
   height: 100vh;
-  background: #171717; /* black sidebar */
+  background: #000; /* black sidebar */
   color: #fff;
   transition: width 0.3s ease;
   overflow: hidden;
@@ -26,7 +26,7 @@
   justify-content: space-between;
   padding: 20px;
   padding-left: 15px;
-  border-bottom: 1px solid #cecece;
+  border-bottom: 1px solid #1e2939;
   margin-bottom: 15px;
 }
 
@@ -58,6 +58,7 @@
   align-items: center;
   gap: 12px;
   padding: 8px 16px;
+  padding-left: 12px;
   cursor: pointer;
   transition: background 0.2s;
   margin-bottom: 13px;
@@ -71,15 +72,20 @@
 }
 
 .side-nav-menu li span {
-  font-size: 15px;
+  font-size: 14px;
+  font-weight: 500;
 }
 
 /* Active item example (Dashboard) */
 .side-nav-menu li:first-child {
-  background: #3b82f6; /* blue highlight */
+  background: #1e2939; /* blue highlight */
   border-radius: 6px;
 
 }
 .side-nav-menu li:first-child:hover {
   background: #2563eb;
+}
+.side-nav-icon{
+  width: 17px;
+  height: 17px;
 }

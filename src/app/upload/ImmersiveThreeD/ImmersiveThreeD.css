@@ -1,0 +1,352 @@
+.immersive-section {
+  text-align: center;
+  padding: 60px 20px;
+  color: #fff;
+  background-image: url(/immersive/background.png);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  margin: 30px 65px;
+}
+.immersive-title {
+  font-size: 3rem;
+  line-height: 1;
+  font-weight: 700;
+  margin-bottom: 10px;
+  margin-top: 20px;
+height: 60px;
+  /* Gradient text */
+  background-image: linear-gradient(
+    to right,
+    hsl(25 95% 60%),
+    hsl(240 30% 15%)
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text; /* fallback for non-webkit browsers */
+  color: transparent;
+}
+
+.immersive-subtitle {
+  font-size: 1.25rem;
+    line-height: 1.75rem;
+  max-width: 48rem;
+  margin: 15px auto 50px;
+  color: #ababba;
+}
+/* Whale image container */
+.immersive-image-container {
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  border-radius: 20px;
+  overflow: hidden;
+  perspective: 1000px;
+}
+
+/* Overlay layer */
+.immersive-image-container::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.1);
+  transition: background 0.3s ease;
+  z-index: 2; /* on top of image */
+  pointer-events: none; /* so it doesn’t block hover */
+}
+
+.immersive-image-container:hover::before {
+  background: transparent; /* remove overlay on hover */
+}
+
+/* Image itself */
+.immersive-image {
+  width: 100%;
+  border-radius: 10px;
+  transition: transform 0.2s ease-out, filter 0.3s ease;
+  filter: blur(2px);
+  will-change: transform; /* helps prevent corner glitches */
+}
+
+.immersive-image-container:hover .immersive-image {
+  filter: blur(0);
+  transform: translateZ(0); /* stabilizes transform */
+}
+
+/* Remove cursor inside container only */
+.immersive-image-container:hover {
+  cursor: none;
+}
+
+/* Hover label */
+.hover-label {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font-size: 0.85rem;
+  padding: 10px 14px;
+  border-radius: 9px;
+  filter: blur(2px);
+  transition: filter 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 3;
+}
+
+.immersive-image-container:hover .hover-label {
+  filter: blur(0);
+}
+
+/* Green dot */
+.hover-label .greenDot {
+  display: inline-block;
+  background-color: #4ade80;
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 50%;
+  animation: pulseOpacity 1.5s infinite ease-in-out;
+}
+
+@keyframes pulseOpacity {
+  0% { opacity: 1; }
+  30% { opacity: 0.8; }
+  60% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+/* Center overlay text */
+.hover-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: #fff;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.mouse-icon {
+  font-size: 2rem;
+  margin-bottom: 6px;
+}
+
+.hover-text-main {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.hover-text-sub {
+  font-size: 0.9rem;
+  color: #d1d5db;
+  margin-top: 4px;
+}
+
+/* Caption */
+.immersive-caption {
+  margin: 30px 0 25px;
+  color:#ababba;
+  font-size: 16px;
+  max-width: 850px;
+  line-height: 1.6;
+}
+
+/* VR Section */
+.vr-box {
+  display: flex;
+  gap: 30px;
+background-image: linear-gradient(to right, hsl(25 95% 60% / .1) , hsl(240 30% 15% / .1));
+  border-radius: 1rem;
+  padding: 2rem;
+  margin-top: 40px;
+  text-align: left;
+  align-items: center;
+  max-width: 900px;
+  border:1px solid #ffffff1a;
+}
+
+/* Left side (image) */
+.vr-image {
+  flex: 1 1 45%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+}
+
+.vr-image img {
+  border-radius: .75rem;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  object-fit: cover;
+  border: 1px solid #242442;
+}
+
+/* Right side (text) */
+.vr-text {
+  flex: 1 1 55%;
+  min-width: 280px;
+}
+
+.vr-text h3 {
+font-size: 1.5rem;
+    line-height: 2rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.vr-text p {
+  margin-bottom: 1.5rem;
+  color: #ababba;
+  font-size: 1.125rem;
+    line-height: 1.75rem;
+}
+
+.vr-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.vr-card {
+  background: #ffffff1a;
+  border: 1px solid #fff3;
+  padding: 15px;
+  border-radius: 8px;
+  max-width: 130px;
+  max-height: 125px;
+}
+.vr-card strong {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  line-height: 1.25rem;
+}
+.vr-card p{
+    color: #ababba;
+    font-size: .875rem;
+    line-height: 1.25rem;
+    margin-bottom: 0;
+}
+.vr-card a {
+  color: #4ade80;
+  font-size: .75rem;
+    line-height: 1rem;
+  text-decoration: none;
+}
+
+.vr-card a:hover {
+  text-decoration: underline;
+}
+
+.vr-note {
+  font-size: .875rem !important;
+    line-height: 1.25rem;
+  color: #ababba;
+  margin-top: 1rem;
+  font-style: italic;
+}
+
+.immersive-image-container:hover .hover-overlay {
+  opacity: 0; /* hide when hovering */
+}
+/* Responsive adjustments for tablets & mobiles */
+@media (max-width: 768px) {
+  .immersive-section {
+    padding: 40px 15px;
+    margin: 20px 0;
+    text-align: center;
+  }
+
+  .immersive-title {
+    font-size: 2rem;
+    height: 80px; /* remove fixed height so text wraps nicely */
+  }
+
+  .immersive-subtitle {
+    font-size: 1rem;
+    line-height: 1.5rem;
+    margin: 10px auto 30px;
+    padding: 0 10px;
+  }
+
+  .immersive-image-container {
+    max-width: 100%;
+    border-radius: 12px;
+  }
+
+  .hover-label {
+    font-size: 0.75rem;
+    padding: 6px 10px;
+  }
+
+  .hover-overlay .mouse-icon {
+    font-size: 1.5rem;
+  }
+
+  .hover-overlay .hover-text-main {
+    font-size: 0.9rem;
+  }
+
+  .hover-overlay .hover-text-sub {
+    font-size: 0.8rem;
+  }
+
+  .immersive-caption {
+    font-size: 0.9rem;
+    margin: 20px 0;
+    padding: 0 10px;
+  }
+
+  /* VR Section becomes stacked */
+  .vr-box {
+    flex-direction: column;
+    padding: 1.25rem;
+    gap: 20px;
+    text-align: center;
+  }
+
+  .vr-image {
+    flex: none;
+    width: 100%;
+  }
+
+  .vr-image img {
+    max-width: 80%;
+  }
+
+  .vr-text {
+    flex: none;
+    width: 100%;
+    text-align: center;
+  }
+
+  .vr-text h3 {
+    font-size: 1.25rem;
+  }
+
+  .vr-text p {
+    font-size: 1rem;
+    line-height: 1.5rem;
+  }
+
+  .vr-cards {
+    justify-content: center;
+  }
+
+  .vr-card {
+    max-width: 45%;
+    flex: 1 1 45%;
+    padding: 12px;
+  }
+
+  .vr-note {
+    font-size: 0.8rem !important;
+    margin-top: 0.75rem;
+  }
+}

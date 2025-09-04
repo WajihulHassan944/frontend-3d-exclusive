@@ -17,6 +17,7 @@ import PricingSection from '../pricing/page';
 import PricingSectionInPricing from '../pricing/PricingSection/PricingSection';
 import CustomerTestimonials from './CustomerTestimonials/CustomerTestimonials';
 import NewsletterSignup from './NewsletterSignup/NewsletterSignup';
+import ImmersiveThreeD from './ImmersiveThreeD/ImmersiveThreeD';
 
 
 const Home = () => {
@@ -352,7 +353,8 @@ reader.readAsDataURL(file);
           <FiUpload size={32} />
         </div>
         <h1 className='dropHeading'>Drag & drop your video</h1>
-        <p className='dropPara'>Upload your 2D video to convert to 3D</p>
+        <p className='dropPara'>Upload your video for 3D conversion or enhancement</p>
+         <p className='dropPara'>Supports all formats: MP4, MOV, AVI, MKV, old film formats, and more</p>
         <button className='upload-input-btn' onClick={() => inputRef.current?.click()}>Choose File</button>
           <input
             type="file"
@@ -414,7 +416,7 @@ reader.readAsDataURL(file);
       checked={conversionFormat === 'Full Side by Side'}
       readOnly
     />
-    <label>Full Side by Side <span>(compatible with YouTube 3D)</span></label>
+    <label>Full Side by Side <span>(compatible with Meta Quest and YouTube 3D)</span></label>
   </div>
   <div
     className={`format-option ${conversionFormat === 'MV-HEVC' ? 'selected' : ''}`}
@@ -426,7 +428,7 @@ reader.readAsDataURL(file);
       checked={conversionFormat === 'MV-HEVC'}
       readOnly
     />
-    <label>MV-HEVC <span>(Meta Quest & Apple Vision Pro)</span></label>
+    <label>Spatial Video <span>(MV-HEVC format compatible with Apple Vision Pro)</span></label>
   </div>
 
 </div>
@@ -455,11 +457,14 @@ reader.readAsDataURL(file);
 
      
 
-      {!isLoggedIn && <center><div className="free-minute">🎁 Get 1 minute of free conversion after registration</div></center>}
+      {!isLoggedIn && <center><div className="free-minute">🎁 Get 1 minute of free conversion after registration
+      <br /><span>Newsletter signup required • Excludes 8K content</span>
+      </div></center>}
 {/* {isLoggedIn && <center><Credits /></center>} */}
     <PricingSectionInPricing />
     <Whycloud />
     <CustomerTestimonials />
+    <ImmersiveThreeD />
     <Whatexpect />
     <NewsletterSignup />
     </div>

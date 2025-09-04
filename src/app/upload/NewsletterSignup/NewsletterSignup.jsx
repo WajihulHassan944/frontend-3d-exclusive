@@ -62,7 +62,7 @@ const NewsletterSignup = () => {
             className="newsletter-button"
             disabled={loading}
           >
-            {loading ? 'Submitting...' : 'Keep me up to date'}
+            {loading ? 'Submitting...' : 'Unlock 3D tips & exclusive offers'}
           </button>
         </form>
         <p className="newsletter-note">

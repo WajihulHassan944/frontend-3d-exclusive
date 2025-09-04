@@ -1,0 +1,33 @@
+.payment-options-container {
+  text-align: center;
+  margin: 50px 0;
+}
+
+.payment-options-title {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  font-weight: 700;
+  margin-bottom: 40px;
+  color: #fff; /* adjust if dark background */
+}
+
+.payment-logos {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.payment-logos img {
+  height: 60px; /* keep logos consistent */
+  object-fit: contain;
+  transition: transform 0.2s ease-in-out;
+}
+
+.payment-logos img:last-of-type{
+    height: 81px;
+    margin-top: -11.5px;
+}
+.payment-logos img:hover {
+  transform: scale(1.05);
+}
