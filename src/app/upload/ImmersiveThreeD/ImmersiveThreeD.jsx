@@ -52,7 +52,7 @@ const ImmersiveThreeD = () => {
       >
         <img
           ref={imageRef}
-          src="/immersive/whale-3d-demo.jpg"
+          src="/Immersive/whale-3d-demo.jpg"
           alt="3D Whale Demo"
           className="immersive-image"
         />
@@ -80,7 +80,7 @@ const ImmersiveThreeD = () => {
       <center>
         <div className="vr-box">
         <div className="vr-image">
-          <img src="/immersive/vr.png" alt="VR Experience" />
+          <img src="/Immersive/vr.png" alt="VR Experience" />
         </div>
         <div className="vr-text">
           <h3>Compatible with VR Headsets</h3>
