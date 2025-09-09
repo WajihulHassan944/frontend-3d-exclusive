@@ -8,14 +8,14 @@
   background: #fbf9fa;
 }
 
-.stats-grid {
+.dashboard .stats-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 15px;
   margin-bottom: 20px;
 }
 
-.stat-card {
+.dashboard .stat-card {
   border-radius: 12px;
   padding: 25px;
   background: #f9fafb;
@@ -23,7 +23,7 @@
   box-shadow: 0 1px 3px #0000001a, 0 1px 2px -1px #0000001a;
 }
 
-.stat-header {
+.dashboard .stat-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -31,37 +31,37 @@
   margin-bottom: 35px;
 }
 
-.stat-header h3 {
+.dashboard .stat-header h3 {
   font-size: 14px;
   font-weight: 500;
   color: #4b5563;
 }
 
-.stat-icon {
+.dashboard .stat-icon {
   width: 17px;
   height: 17px;
   color: #4b5563;
 }
 
-.stat-value {
+.dashboard .stat-value {
   font-size: 24px;
   font-weight: 700;
   margin: 8px 0 4px 0;
   color: #4b5563;
 }
 
-.stat-change {
+.dashboard .stat-change {
   font-size: 13px;
   font-weight: 400;
   margin-top: 8px;
 
 }
 
-.stat-change .positive {
+.dashboard .stat-change .positive {
   color: #22c55e;
 }
 
-.stat-change .negative {
+.dashboard .stat-change .negative {
   color: oklch(57.7% .245 27.325);
 }
 

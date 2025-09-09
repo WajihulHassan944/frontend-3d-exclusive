@@ -47,14 +47,14 @@
 }
 
 /* Stats Grid */
-.stats-grid {
+.coupon-stats .stats-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 16px;
   margin: 30px 0;
 }
 
-.stat-card {
+.coupon-stats .stat-card {
   background: #f9fafb;
   border-radius: 10px;
   border:1px solid #e5e7eb;
@@ -68,13 +68,13 @@
   text-shadow: 0 1px 3px 0 #0000001a,0 1px 2px -1px #0000001a;
 }
 
-.stat-card h3 {
+.coupon-stats .stat-card h3 {
   font-size: 25px;
   margin: 0;
   color: #4b5563;
 }
 
-.stat-card p {
+.coupon-stats .stat-card p {
   font-size: 13.5px;
   color: #000;
   margin: 0;
@@ -82,14 +82,14 @@
 }
 
 /* Icon colors */
-.icon {
+.coupon-stats .icon {
   width: 24px;
   height: 24px;
 }
-.icon.tag { color: #2563eb; }
-.icon.calendar { color: #22c55e; }
-.icon.dollar { color: #dc2626; }
-.icon.percent { color: #9333ea; }
+.coupon-stats .icon.tag { color: #2563eb; }
+.coupon-stats .icon.calendar { color: #22c55e; }
+.coupon-stats .icon.dollar { color: #dc2626; }
+.coupon-stats .icon.percent { color: #9333ea; }
 
 /* Search */
 .search-bar {
@@ -188,3 +188,4 @@ td {
 .action-icon.delete:hover {
   color: #b91c1c;
 }
+

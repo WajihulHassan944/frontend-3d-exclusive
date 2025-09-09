@@ -1,44 +1,69 @@
-'use client';
-import React, { useEffect, useState } from 'react';
-import { Elements } from '@stripe/react-stripe-js';
-import { loadStripe } from '@stripe/stripe-js';
-import BillingMethods from './BillingMethods';
-import "./TopupCredit.css";
-const stripePromise = loadStripe("pk_live_51RvNstHpow7HoYZURyGWZHskSTYGsl0zHWJVvK9ItweHZgvmo1eMyyDrbESgcorVsb7EHjv6CvTaQSwKjXfFoWGp0066SXf4lT");
-import { baseUrl } from '@/const';
-const Page = () => {
-    const [clientSecret, setClientSecret] = useState('');
-  
-    useEffect(() => {
-    const fetchClientSecret = async () => {
-      const res = await fetch(`${baseUrl}/wallet/create-setup-intent`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include', // if using cookies/auth
-      });
-      const data = await res.json();
-      setClientSecret(data.clientSecret);
-    };
+import React, { Suspense } from "react";
+import AddBilling from "./AddBilling";
 
-    fetchClientSecret();
-  }, []);
-  
- const options = {
-    clientSecret,
-    appearance: {
-      theme: 'stripe',
-    },
-  };
-
-  return (
-    <>
-      {clientSecret && (
-        <Elements stripe={stripePromise} options={options}>
-          <BillingMethods />
-        </Elements>
-      )}
-    </>
-  );
+const billingSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "@id": "https://xclusive3d.com/add-billing",
+  url: "https://xclusive3d.com/add-billing",
+  name: "Billing & Payment Methods | Xclusive 3D",
+  description:
+    "Manage your billing details and securely add payment methods with Stripe to top up your Xclusive 3D credits for 2D to 3D video conversion.",
+  isPartOf: {
+    "@type": "WebSite",
+    url: "https://xclusive3d.com/",
+    name: "Xclusive 3D",
+  },
+  potentialAction: {
+    "@type": "PayAction",
+    target: "https://xclusive3d.com/add-billing",
+    name: "Manage Billing and Payments",
+  },
 };
 
-export default Page;
+export const metadata = {
+  title: "Billing & Payment Methods | Xclusive 3D Video Conversion",
+  description:
+    "Add and manage payment methods securely with Stripe. Easily top up your credits for 2D to 3D video conversion on Xclusive 3D.",
+  alternates: {
+    canonical: "https://xclusive3d.com/add-billing",
+  },
+  openGraph: {
+    title: "Billing & Payment Methods | Xclusive 3D",
+    description:
+      "Manage your billing details and securely add payment methods with Stripe for Xclusive 3D.",
+    url: "https://xclusive3d.com/add-billing",
+    siteName: "Xclusive 3D",
+    images: [
+      {
+        url: "https://www.xclusive3d.com/assets/billing-preview.png",
+        width: 600,
+        height: 400,
+        alt: "Xclusive 3D Billing Dashboard",
+      },
+    ],
+    type: "website",
+  },
+  twitter: {
+    card: "summary",
+    title: "Billing & Payment Methods | Xclusive 3D",
+    description:
+      "Securely manage billing and add payment methods with Stripe to top up your Xclusive 3D credits.",
+    images: ["https://www.xclusive3d.com/assets/billing-preview.png"],
+  },
+};
+
+export default function Page() {
+  return (
+    <>
+      {/* ✅ JSON-LD Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(billingSchema) }}
+      />
+      <Suspense fallback={<div>Loading...</div>}>
+        <AddBilling />
+      </Suspense>
+    </>
+  );
+}

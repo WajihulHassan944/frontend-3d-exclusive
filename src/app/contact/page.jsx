@@ -1,165 +1,87 @@
-'use client';
+import Contact from "./Contact";
 
-import React, { useState } from 'react';
-import ReCAPTCHA from "react-google-recaptcha";
-import './contact.css';
-import { FaEnvelope, FaPhoneAlt, FaMapMarkerAlt } from 'react-icons/fa';
-import { baseUrl } from '@/const';
-import toast from 'react-hot-toast';
-import { useRouter } from 'next/navigation';
-const ContactForm = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    subject: '',
-    message: '',
-  });
-const [captchaToken, setCaptchaToken] = useState("");
-const router = useRouter();
-  const [loading, setLoading] = useState(false);
-  const [successMsg, setSuccessMsg] = useState('');
-  const [errorMsg, setErrorMsg] = useState('');
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setSuccessMsg('');
-    setErrorMsg('');
-
-  if (!captchaToken) {
-  toast.error("Please complete the CAPTCHA.");
-  setLoading(false);
-  return;
-}
-
-try {
-  const res = await fetch(`${baseUrl}/users/contact`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ ...formData, captcha: captchaToken }), // send token
-   });
-
-      const data = await res.json();
-      if (data.success) {
-        setSuccessMsg('Message sent successfully!');
-             toast.success('Message sent successfully!');
-        setFormData({ name: '', email: '', subject: '', message: '' });
-        router.push('/contact-response');
-      } else {
-        setErrorMsg('Failed to send message. Please try again.');
-             toast.error('Failed to send message. Please try again.');
-      }
-    } catch (err) {
-      setErrorMsg('Something went wrong.');
-           toast.error('Something went wrong.');
-    }
-
-    setLoading(false);
-  };
-
-  return (
-    <div className="contact-container">
-     
-      <h2 className="contact-title">Contact Us</h2>
-     <center> <p className='contact-subtitle'>Have questions about our 3D video conversion service? We're here to help!</p></center>
-      
-
-
-  <div className="contact-sec-outer">
-    <div className="contact-sec-wrapper">
-      
-      {/* Left: Contact Form */}
-      <div className="contact-sec-form-box">
-        <h2 className="contact-sec-heading">Send us a message</h2>
-        <form onSubmit={handleSubmit} className="contact-sec-form">
-          <div className="contact-sec-input-row">
-            <div className="contact-sec-input-group">
-              <label>Name *</label>
-              <input
-                type="text"
-                name="name"
-                placeholder="Your name"
-                value={formData.name}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className="contact-sec-input-group">
-              <label>Email *</label>
-              <input
-                type="email"
-                name="email"
-                placeholder="your.email@example.com"
-                value={formData.email}
-                onChange={handleChange}
-                required
-              />
-            </div>
-          </div>
-
-          <div className="contact-sec-input-group">
-            <label>Subject *</label>
-            <input
-              type="text"
-              name="subject"
-              placeholder="What's this about?"
-              value={formData.subject}
-              onChange={handleChange}
-              required
-            />
-          </div>
-
-          <div className="contact-sec-input-group">
-            <label>Message *</label>
-            <textarea
-              name="message"
-              placeholder="Tell us more about how we can help you…"
-              value={formData.message}
-              onChange={handleChange}
-              required
-            ></textarea>
-          </div>
-<ReCAPTCHA
-  sitekey="6LeP9LIrAAAAALThS9pOb4I_aLiSA-3n1kNTzL09" // replace with real key
-  onChange={(token) => setCaptchaToken(token)}
-/>
-          <button type="submit" className="contact-sec-send-btn" disabled={loading}>
-            {loading ? <div className="spinner white"></div> : 'Send Message'}
-          </button>
-        </form>
-      </div>
-
-      {/* Right: Contact Info and Response Time */}
-      <div className="contact-sec-info-wrapper">
-       
-
-        {/* Response Time */}
-        <div className="contact-sec-response-box">
-          <h2 className="contact-sec-response-title">Response Time</h2>
-          <p className="contact-sec-response-text">
-            We typically respond to all inquiries within 24 hours during business days.
-          </p>
-          <p className="contact-sec-response-hours">
-            Business hours: Monday - Friday, 9:00 AM - 6:00 PM CEST
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-      
-
-
-
-
-
-
-    </div>
-  );
+const contactSchema = {
+  "@context": "https://schema.org",
+  "@type": "ContactPage",
+  "@id": "https://xclusive3d.com/contact",
+  url: "https://xclusive3d.com/contact",
+  name: "Contact | Xclusive 3D",
+  description:
+    "Have questions about our 3D video conversion service? Contact Xclusive 3D — we typically respond within 24 hours during business days.",
+  isPartOf: {
+    "@type": "WebSite",
+    url: "https://xclusive3d.com/",
+    name: "Xclusive 3D",
+  },
+  mainEntity: {
+    "@type": "Organization",
+    name: "Xclusive 3D",
+    url: "https://xclusive3d.com/",
+    logo: "https://www.xclusive3d.com/assets/logo.png",
+    contactPoint: {
+      "@type": "ContactPoint",
+      contactType: "customer support",
+      availableLanguage: ["English"],
+      hoursAvailable: [
+        {
+          "@type": "OpeningHoursSpecification",
+          dayOfWeek: [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday"
+          ],
+          opens: "09:00",
+          closes: "18:00",
+        },
+      ],
+    },
+  },
 };
 
-export default ContactForm;
+// ✅ Page-level metadata
+export const metadata = {
+  title: "Contact | Xclusive 3D Video Conversion Service",
+  description:
+    "Have questions about our 3D video conversion service? Contact Xclusive 3D today. We typically respond within 24 hours during business days.",
+  alternates: {
+    canonical: "https://xclusive3d.com/contact",
+  },
+  openGraph: {
+    title: "Contact | Xclusive 3D",
+    description:
+      "Need help or have questions about 2D to 3D video conversion? Reach out to Xclusive 3D and our support team will assist you.",
+    url: "https://xclusive3d.com/contact",
+    siteName: "Xclusive 3D",
+    images: [
+      {
+        url: "https://www.xclusive3d.com/assets/logo.png",
+        width: 500,
+        height: 500,
+        alt: "Xclusive 3D Logo",
+      },
+    ],
+    type: "website",
+  },
+  twitter: {
+    card: "summary",
+    title: "Contact | Xclusive 3D Video Conversion",
+    description:
+      "Have questions about 3D video conversion? Contact Xclusive 3D and we’ll get back to you within 24 hours.",
+    images: ["https://www.xclusive3d.com/assets/logo.png"],
+  },
+};
+
+export default function Page() {
+  return (
+    <>
+      {/* ✅ Structured data (SSR) */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(contactSchema) }}
+      />
+      <Contact />
+    </>
+  );
+}

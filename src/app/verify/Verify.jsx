@@ -8,7 +8,7 @@ import { FaCheckCircle } from 'react-icons/fa';
 import '../status/thank.css';
 import toast from 'react-hot-toast';
 
-export default function Status() {
+export default function Verify() {
   const router = useRouter();
   const [email, setEmail] = useState('');
 

@@ -1,76 +1,61 @@
-'use client';
+import ForgotPassword from "./ForgotPassword";
 
-import React, { useState } from 'react';
-import './forgot.css';
-import Image from 'next/image';
-import { baseUrl } from '@/const'; // ✅ make sure this path is correct
-import toast from 'react-hot-toast';
-const Forgot = () => {
-  const [email, setEmail] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError('');
-    setSuccess('');
-
-    try {
-      const response = await fetch(`${baseUrl}/users/reset-password`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        setSuccess(data.message || 'Reset link sent to your email.');
-        toast.success(data.message);
-      } else {
-        setError(data.message || 'Something went wrong.');
-        toast.error(data.message);
-      }
-    } catch (err) {
-      setError('Failed to send reset link. Please try again later.');
-      toast.error(data.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return (
-    <div className="forgot-container">
-      <Image
-        src="/logo.png"
-        alt="Xclusive 3D Logo"
-        width={160}
-        height={120}
-        className="forgot-logo"
-      />
-
-      <h2 className="forgot-title">Forgot Password</h2>
-      <form className="forgot-form" onSubmit={handleSubmit}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <button type="submit" className="forgot-btn" disabled={loading}>
-          {loading ? 'Sending...' : 'Send Reset Link'}
-        </button>
-      </form>
-
-      {error && <p className="forgot-error">{error}</p>}
-      {success && <p className="forgot-success">{success}</p>}
-    </div>
-  );
+const forgotSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "@id": "https://xclusive3d.com/forgot-password",
+  url: "https://xclusive3d.com/forgot-password",
+  name: "Forgot Password | Xclusive 3D",
+  description:
+    "Reset your Xclusive 3D account password. Request a secure email link to recover access and continue converting your 2D videos into immersive 3D.",
+  isPartOf: {
+    "@type": "WebSite",
+    url: "https://xclusive3d.com/",
+    name: "Xclusive 3D",
+  },
 };
 
-export default Forgot;
+export const metadata = {
+  title: "Forgot Password | Xclusive 3D Video Conversion",
+  description:
+    "Easily reset your password and regain access to your Xclusive 3D account. Request a secure password reset link via email.",
+  alternates: {
+    canonical: "https://xclusive3d.com/forgot-password",
+  },
+  openGraph: {
+    title: "Forgot Password | Xclusive 3D",
+    description:
+      "Request a password reset link to securely recover your Xclusive 3D account and continue converting 2D videos into immersive 3D.",
+    url: "https://xclusive3d.com/forgot-password",
+    siteName: "Xclusive 3D",
+    images: [
+      {
+        url: "https://www.xclusive3d.com/assets/logo.png",
+        width: 500,
+        height: 500,
+        alt: "Xclusive 3D Logo",
+      },
+    ],
+    type: "website",
+  },
+  twitter: {
+    card: "summary",
+    title: "Forgot Password | Xclusive 3D",
+    description:
+      "Reset your Xclusive 3D account password securely via email link.",
+    images: ["https://www.xclusive3d.com/assets/logo.png"],
+  },
+};
+
+export default function Page() {
+  return (
+    <>
+      {/* ✅ Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(forgotSchema) }}
+      />
+      <ForgotPassword />
+    </>
+  );
+}

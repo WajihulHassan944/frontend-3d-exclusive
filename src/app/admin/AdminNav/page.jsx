@@ -1,4 +1,7 @@
+"use client";
 import React from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   Menu,
   LayoutDashboard,
@@ -6,6 +9,7 @@ import {
   Image,
   Users,
   ShoppingCart,
+  Tag,
   Search,
   Settings,
   X,
@@ -14,6 +18,19 @@ import "./adminSideNav.css";
 
 const AdminSideNav = ({ isOpen, setIsOpen }) => {
   const toggleNav = () => setIsOpen(!isOpen);
+  const pathname = usePathname();
+
+  const navItems = [
+    { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
+    { href: "/admin/posts", label: "Posts", icon: FileText },
+    { href: "/admin/media", label: "Media", icon: Image },
+    { href: "/admin/pages", label: "Pages", icon: FileText },
+    { href: "/admin/users", label: "Users", icon: Users },
+    { href: "/admin/orders", label: "Orders", icon: ShoppingCart },
+    { href: "/admin/coupons", label: "Coupons", icon: Tag },
+    { href: "/admin/seo", label: "SEO", icon: Search },
+    { href: "/admin/settings", label: "Settings", icon: Settings },
+  ];
 
   return (
     <div className={`side-nav ${isOpen ? "open" : "collapsed"}`}>
@@ -30,40 +47,30 @@ const AdminSideNav = ({ isOpen, setIsOpen }) => {
       </div>
 
       {/* Menu */}
-      <ul className="side-nav-menu">
-        <li>
-          <LayoutDashboard className="side-nav-icon" />
-          {isOpen && <span>Dashboard</span>}
+    <ul className="side-nav-menu">
+  {navItems.map(({ href, label, icon: Icon }) => {
+    let isActive = false;
+
+    if (href === "/admin") {
+      // Dashboard should only be active on exact match
+      isActive = pathname === "/admin";
+    } else {
+      // Other items: active if exact or sub-route
+      isActive = pathname === href || pathname.startsWith(href + "/");
+    }
+
+    return (
+      <Link href={href} key={href}>
+        <li className={isActive ? "active" : ""}>
+          <Icon className="side-nav-icon" />
+          {isOpen && <span>{label}</span>}
         </li>
-        <li>
-          <FileText className="side-nav-icon" />
-          {isOpen && <span>Posts</span>}
-        </li>
-        <li>
-          <Image className="side-nav-icon" />
-          {isOpen && <span>Media</span>}
-        </li>
-        <li>
-          <FileText className="side-nav-icon" />
-          {isOpen && <span>Pages</span>}
-        </li>
-        <li>
-          <Users className="side-nav-icon" />
-          {isOpen && <span>Users</span>}
-        </li>
-        <li>
-          <ShoppingCart className="side-nav-icon" />
-          {isOpen && <span>Orders</span>}
-        </li>
-        <li>
-          <Search className="side-nav-icon" />
-          {isOpen && <span>SEO</span>}
-        </li>
-        <li>
-          <Settings className="side-nav-icon" />
-          {isOpen && <span>Settings</span>}
-        </li>
-      </ul>
+      </Link>
+    );
+  })}
+</ul>
+
+
     </div>
   );
 };

@@ -13,7 +13,7 @@ import Credits from './credits';
 import Whycloud from './Whycloud/Whycloud';
 import Whatexpect from './Whatexpect/Whatexpect';
 import { FiCheckCircle } from "react-icons/fi";
-import PricingSection from '../pricing/page';
+import PricingSection from '../pricing/Pricing';
 import PricingSectionInPricing from '../pricing/PricingSection/PricingSection';
 import CustomerTestimonials from './CustomerTestimonials/CustomerTestimonials';
 import NewsletterSignup from './NewsletterSignup/NewsletterSignup';

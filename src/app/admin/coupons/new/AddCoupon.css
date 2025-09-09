@@ -26,7 +26,7 @@
     font-weight: 500;
     margin-left: 5px;
 }
-.header-left div{
+.header-left div, .backLink{
     display: flex;
     align-items: center;
     gap: 5px;
@@ -266,4 +266,8 @@ flex:1;
 }
 .specialInput{
     font-family: "GeistMono",ui-monospace,SFMono-Regular,Roboto Mono,Menlo,Monaco,Liberation Mono,DejaVu Sans Mono,Courier New,monospace;
+}
+
+.coupon-preview-only{
+  max-width: 500px;
 }

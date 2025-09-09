@@ -1,135 +1,69 @@
-'use client';
+import React, { Suspense } from "react";
+import Dashboard from "./Dashboard";
 
-import Image from 'next/image';
-import Link from 'next/link';
-import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import Pusher from 'pusher-js';
-import { FiDownload, FiUploadCloud, FiLoader } from 'react-icons/fi';
-import './dashboard.css';
+const dashboardSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "@id": "https://xclusive3d.com/dashboard",
+  url: "https://xclusive3d.com/dashboard",
+  name: "User Dashboard | Xclusive 3D",
+  description:
+    "Access your Xclusive 3D dashboard. Track video uploads, monitor processing statuses, download completed conversions, and manage your credit balance.",
+  isPartOf: {
+    "@type": "WebSite",
+    url: "https://xclusive3d.com/",
+    name: "Xclusive 3D",
+  },
+  potentialAction: {
+    "@type": "ViewAction",
+    target: "https://xclusive3d.com/dashboard",
+    name: "View Dashboard",
+  },
+};
 
-export default function Dashboard() {
-  const user = useSelector((state) => state.user);
-  const { wallet, videos: initialVideos = [] } = user;
-  const [videos, setVideos] = useState([]);
+export const metadata = {
+  title: "Dashboard | Xclusive 3D Video Conversion",
+  description:
+    "Monitor your uploaded videos, track processing progress, download completed files, and manage your credits in the Xclusive 3D dashboard.",
+  alternates: {
+    canonical: "https://xclusive3d.com/dashboard",
+  },
+  openGraph: {
+    title: "User Dashboard | Xclusive 3D",
+    description:
+      "Track and manage your video uploads and credits in the Xclusive 3D dashboard.",
+    url: "https://xclusive3d.com/dashboard",
+    siteName: "Xclusive 3D",
+    images: [
+      {
+        url: "https://www.xclusive3d.com/assets/dashboard-preview.png",
+        width: 600,
+        height: 400,
+        alt: "Xclusive 3D Dashboard Preview",
+      },
+    ],
+    type: "website",
+  },
+  twitter: {
+    card: "summary",
+    title: "User Dashboard | Xclusive 3D",
+    description:
+      "Track your video conversions and credits in your Xclusive 3D dashboard.",
+    images: ["https://www.xclusive3d.com/assets/dashboard-preview.png"],
+  },
+};
 
-useEffect(() => {
-  // Load videos from Redux if available
-  if (user?.videos?.length) {
-    setVideos(user.videos);
-  } else {
-    // Fallback to fetch from backend on refresh
-    fetch('/api/videos')
-      .then(res => res.json())
-      .then(data => {
-        if (data?.videos) setVideos(data.videos);
-      })
-      .catch(err => console.error('❌ Failed to fetch videos:', err));
-  }
-
-  // Setup Pusher
-  const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY, {
-    cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER,
-  });
-
-  const channel = pusher.subscribe('exclusive');
-
-  channel.bind('status-update', (data) => {
-    if (!data || !data.status || !data.videoId) return;
-
-    setVideos((prev) =>
-      prev.map((v) =>
-        v._id === data.videoId
-          ? {
-              ...v,
-              status: data.status,
-              ...(data.signedUrl ? { convertedUrl: data.signedUrl } : {}),
-            }
-          : v
-      )
-    );
-  });
-
-  return () => {
-    channel.unbind_all();
-    channel.unsubscribe();
-  };
-}, [user]);
-
-  const totalVideos = videos.length;
-  const processing = videos.filter((v) => (v.status === 'processing' || v.status === 'pending' || v.status === 'uploaded')).length;
-  const completed = videos.filter((v) => v.status === 'completed').length;
-  const failed = videos.filter((v) => v.status === 'failed').length;
-
+export default function Page() {
   return (
-    <main className="dashboard">
-      <Image
-        src="/logo.png"
-        alt="Xclusive 3D Logo"
-        width={160}
-        height={100}
-        className="dashboard-logo"
+    <>
+      {/* ✅ JSON-LD Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(dashboardSchema) }}
       />
-
-      <h2 className="title">Dashboard</h2>
-
-      {/* Videos Table */}
-      <section className="card-1">
-        <header className="row row-head">
-          <span>Sr.</span>
-          <span>Video</span>
-          <span>Status</span>
-          <span>Download</span>
-        </header>
-
-        {videos.length === 0 ? (
-          <p className="no-videos">
-            <em>No videos uploaded yet.</em>
-          </p>
-        ) : (
-          videos.map((v, index) => (
-            <div key={v._id} className="row row-body">
-              <span>{index + 1}</span>
-              <span>{v.originalFileName}</span>
-              <span
-                className={`pill ${v.status.toLowerCase().replace(/\s/g, '-')}`}
-              >
-                {v.status}
-              </span>
-              <span className="download">
-                {v.status === 'completed' ? (
-                  <Link href={v.convertedUrl} target="_blank">
-                    <FiDownload size={20} title="Download" />
-                  </Link>
-                ) : v.status === 'processing' || v.status === 'pending' ? (
-                  <FiLoader size={20} title="Processing" className="spinning" />
-                ) : (
-                  <FiUploadCloud size={20} title="Uploaded" />
-                )}
-              </span>
-            </div>
-          ))
-        )}
-      </section>
-
-      {/* Credits + Profile Cards */}
-      <div className="row-2cards">
-        <section className="card-1 credits-card">
-          <h3>Credits</h3>
-          <p className="count">Credits: {wallet?.balance ?? 0}</p>
-          <Link href="/pricing" className="topup-btn">
-            Top Up
-          </Link>
-        </section>
-
-        <section className="card-1 profile-card">
-          <h3>Your Profile</h3>
-          <p>Total Videos: {totalVideos}</p>
-          <p>Processing: {processing}</p>
-          <p>Completed: {completed}</p>
-          <p>Failed: {failed}</p>
-        </section>
-      </div>
-    </main>
+      <Suspense fallback={<div>Loading...</div>}>
+        <Dashboard />
+      </Suspense>
+    </>
   );
 }

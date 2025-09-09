@@ -2,35 +2,37 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import './Footer.css';          // move this import to app/layout.js if you’re using the App Router
+import './Footer.css';
 
 export default function Footer() {
   return (
-    <footer className="site-footer">
+    <footer className="site-footer" role="contentinfo">
       <div className="footer-inner">
         {/* ─── Logo ─────────────────────────────────── */}
-        <Link href="/" className="footer-logo">
+        <Link href="/" className="footer-logo" aria-label="Xclusive 3D Homepage">
           <Image
-            src="/logo.png"   /* use the white version you just generated */
-            alt="Xclusive 3D"
+            src="/logo.png"
+            alt="Xclusive 3D company logo"
             width={150}
             height={95}
-            style={{objectFit:'contain'}}
+            style={{ objectFit: 'contain' }}
             priority
           />
         </Link>
 
         {/* ─── Footer links ─────────────────────────── */}
-        <nav className="footer-links">
-          <Link href="/termsandconditions">Terms &amp; Conditions</Link>
-          <Link href="/privacypolicy">Privacy Policy</Link>
-           <Link href="/cookies">Cookies</Link>
+        <nav className="footer-links" aria-label="Footer navigation">
+          <Link href="/termsandconditions">Terms &amp; Conditions</Link>
+          <Link href="/privacypolicy">Privacy Policy</Link>
+          <Link href="/cookies">Cookies</Link>
           <Link href="/contact">Contact</Link>
         </nav>
       </div>
 
       <div className="footer-copy">
-        © {new Date().getFullYear()} Xclusive 3D — All rights reserved.
+        <p>
+          © {new Date().getFullYear()} <strong>Xclusive 3D</strong> — All rights reserved.
+        </p>
       </div>
     </footer>
   );

@@ -77,13 +77,13 @@
 }
 
 /* Active item example (Dashboard) */
-.side-nav-menu li:first-child {
+.side-nav-menu li.active {
   background: #1e2939; /* blue highlight */
-  border-radius: 6px;
-
+ border-radius: 6px;
 }
 .side-nav-menu li:first-child:hover {
   background: #2563eb;
+   border-radius: 6px;
 }
 .side-nav-icon{
   width: 17px;

@@ -1,9 +1,5 @@
-'use client';
+import FaqClient from "./FaqClient";
 
-import { useState } from 'react';
-import './faq.css';
-import { FiChevronUp, FiChevronDown } from 'react-icons/fi';
-import Link from 'next/link';
 const faqs = [
   {
     q: 'What is Xclusive3D.com?',
@@ -70,58 +66,61 @@ Benefits:
   },
 ];
 
-export default function Faq() {
-  const [openIdx, setOpenIdx] = useState(null);
+// ✅ generate schema server-side
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((item) => ({
+    "@type": "Question",
+    name: item.q,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: item.a,
+    },
+  })),
+};
 
-  const toggle = (idx) => {
-    setOpenIdx(openIdx === idx ? null : idx);
-  };
+export const metadata = {
+  title: "FAQs | Xclusive 3D Video Conversion Service",
+  description:
+    "Find answers to frequently asked questions about Xclusive 3D. Learn how to convert 2D videos into immersive 3D formats for Meta Quest, Apple Vision Pro, and YouTube 3D.",
+  alternates: {
+    canonical: "https://xclusive3d.com/faq",
+  },
+  openGraph: {
+    title: "FAQs | Xclusive 3D",
+    description:
+      "Got questions about 3D video conversion? Explore our FAQs to learn about formats, supported devices, pricing, and more.",
+    url: "https://xclusive3d.com/faq",
+    siteName: "Xclusive 3D",
+    images: [
+      {
+        url: "https://www.xclusive3d.com/assets/logo.png",
+        width: 1200,
+        height: 630,
+        alt: "Xclusive 3D Logo",
+      },
+    ],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "FAQs | Xclusive 3D Video Conversion Service",
+    description:
+      "Find answers to FAQs about Xclusive 3D’s AI-powered 2D to 3D video conversion service for Meta Quest, Apple Vision Pro, and YouTube 3D.",
+    images: ["https://www.xclusive3d.com/assets/logo.png"],
+  },
+};
 
+export default function Page() {
   return (
-    <section className="faq-section">
-      <div className="faq-header">
-        <h2 className="faq-title">Frequently Asked Questions</h2>
-        <center>
-          <p className='faq-subtitle'>
-            Find answers to common questions about our 3D video conversion service
-          </p>
-        </center>
-      </div>
-
-      <ul className="faq-list">
-        {faqs.map(({ q, a }, idx) => (
-          <li key={idx} className="faq-item">
-            <button
-              className="faq-question"
-              onClick={() => toggle(idx)}
-              aria-expanded={openIdx === idx}
-            >
-              <span>{q}</span>
-              {openIdx === idx ? (
-                <FiChevronUp className="chevron-icon" />
-              ) : (
-                <FiChevronDown className="chevron-icon" />
-              )}
-            </button>
-            <div className={`faq-answer ${openIdx === idx ? 'show' : ''}`}>
-              {a.split('\n').map((line, i) => (
-                <p key={i}>{line}</p>
-              ))}
-            </div>
-          </li>
-        ))}
-      </ul>
-            {/* Contact Section Below FAQ */}
-    <div className="faq-contact-section">
-  <h3 className="faq-contact-title">Still have questions?</h3>
-  <p className="faq-contact-subtitle">
-    Can&apos;t find what you&apos;re looking for? We&apos;d love to help you out.
-  </p>
-  <Link href="/contact" className="faq-contact-btn">
-    Contact Us
-  </Link>
-</div>
-
-    </section>
+    <>
+      {/* ✅ schema injected server-side */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <FaqClient faqs={faqs} />
+    </>
   );
 }

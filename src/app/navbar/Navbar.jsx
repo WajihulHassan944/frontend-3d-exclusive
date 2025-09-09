@@ -14,9 +14,9 @@ export default function Navbar() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
   const user = useSelector((state) => state.user);
-  
   const isLoggedIn = useSelector((state) => state.user.isAuthenticated);
   const logout = useLogout();
+
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : '';
   }, [open]);
@@ -34,29 +34,31 @@ export default function Navbar() {
 
   return (
     <header className="nav-wrapper">
-      <nav className="nav">
-         <Link href="/" className="logo">
-            <div className="logo-box">
-              <img
-                src="/logo.png"
-                alt="Brand logo"
-                className="brand-logo"
-              />
-            </div>
-            <p>XCLUSIVE 3D</p>
-          </Link>
+      <nav className="nav" role="navigation" aria-label="Main navigation">
+        
+        {/* ─── Logo ─────────────────────────────────── */}
+        <Link href="/" className="logo" aria-label="Xclusive 3D Homepage">
+          <div className="logo-box">
+            <img
+              src="/logo.png"
+              alt="Xclusive 3D company logo"
+              className="brand-logo"
+            />
+          </div>
+          <p>XCLUSIVE 3D</p>
+        </Link>
 
+        {/* ─── Nav Links ───────────────────────────── */}
         <div className="logo-div">
-         
           <ul className="nav-links">
             {isLoggedIn ? (
-             <> <li><Link href="/dashboard">Dashboard</Link></li>
-              <li><Link href="/upload">Convert to 3D</Link></li>
-              <li><Link href="/pricing">Pricing</Link></li>
-               <li><Link href="/faq">FAQ</Link></li>
-               <li><Link href="/add-billing">Billing</Link></li>
-              
-                 </>
+              <>
+                <li><Link href="/dashboard">Dashboard</Link></li>
+                <li><Link href="/upload">Convert to 3D</Link></li>
+                <li><Link href="/pricing">Pricing</Link></li>
+                <li><Link href="/faq">FAQ</Link></li>
+                <li><Link href="/add-billing">Billing</Link></li>
+              </>
             ) : (
               <>
                 <li><Link href="/">Home</Link></li>
@@ -69,34 +71,42 @@ export default function Navbar() {
           </ul>
         </div>
 
-        {/* Right section */}
+        {/* ─── Right Section (Auth / User) ─────────── */}
         <div className="auth">
           {isLoggedIn ? (
             <div className="user-section" ref={dropdownRef}>
-             <Link href="/cart" className="relative-cart-icon-wrap">
-      <FiShoppingCart size={22} className="cart-icon" />
-      {user.cart.credits.length > 0 && (
-      <span className="cart-badge">{user.cart.credits.length}</span>
-      ) }
-    </Link>
+              
+              {/* Cart Icon with label */}
+              <Link href="/cart" className="relative-cart-icon-wrap" aria-label="Shopping cart">
+                <FiShoppingCart size={22} className="cart-icon" />
+                {user.cart.credits.length > 0 && (
+                  <span className="cart-badge" aria-label={`${user.cart.credits.length} items in cart`}>
+                    {user.cart.credits.length}
+                  </span>
+                )}
+              </Link>
 
-              <div
+              {/* User Dropdown */}
+              <button
                 className="user-profile"
                 onClick={() => setDropdownOpen((prev) => !prev)}
+                aria-haspopup="true"
+                aria-expanded={dropdownOpen}
+                aria-label="User menu"
               >
                 <Image
                   src={user?.profileUrl || '/assets/user.png'}
-                  alt="User"
+                  alt={`${user.firstName || 'User'} profile picture`}
                   width={34}
                   height={34}
                   className="user-img"
                 />
                 <span className="user-name">{user.firstName}</span>
                 <IoMdArrowDropdown size={18} className="cart-icon" />
-              </div>
+              </button>
 
               {dropdownOpen && (
-                <div className="user-dropdown">
+                <div className="user-dropdown" role="menu">
                   <Link href="/profile" onClick={() => setDropdownOpen(false)}>Profile</Link>
                   <Link href="/profilesettings" onClick={() => setDropdownOpen(false)}>Settings</Link>
                   <button onClick={() => logout(() => setDropdownOpen(false))}>Logout</button>
@@ -111,11 +121,13 @@ export default function Navbar() {
           )}
         </div>
 
-        {/* Hamburger */}
+        {/* ─── Hamburger ───────────────────────────── */}
         <button
-          aria-label="Toggle menu"
+          aria-label="Toggle mobile menu"
           className={`hamburger ${open ? 'active' : ''}`}
           onClick={() => setOpen(!open)}
+          aria-expanded={open}
+          aria-controls="mobile-menu"
         >
           <span />
           <span />
@@ -123,11 +135,16 @@ export default function Navbar() {
         </button>
       </nav>
 
-      {/* Mobile Menu */}
-      <div className={`mobile-menu ${open ? 'show' : ''}`}>
+      {/* ─── Mobile Menu ──────────────────────────── */}
+      <div
+        id="mobile-menu"
+        className={`mobile-menu ${open ? 'show' : ''}`}
+        role="dialog"
+        aria-label="Mobile navigation menu"
+      >
         <button
           className="close-btn"
-          aria-label="Close menu"
+          aria-label="Close mobile menu"
           onClick={() => setOpen(false)}
         >
           &times;
