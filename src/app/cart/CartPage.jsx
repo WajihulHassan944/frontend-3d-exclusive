@@ -20,7 +20,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useRouter, useSearchParams } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { baseUrl } from '@/const';
-import { useCurrencyByUserCountry, useCurrencySymbolByUserCountry } from '@/utils/getCurrencySymbolByCountry';
+import { useCurrencyByUserCountry} from '@/utils/getCurrencySymbolByCountry';
 import { handleBuyCredits } from '@/utils/cart/handleBuyCredits';
 import ShoppingCart from './cart';
 import { handleCheckout } from '@/utils/cart/handleCheckout';
@@ -51,7 +51,6 @@ const [billingData, setBillingData] = useState({
 
 
 const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null); 
-const [cardSubmitting, setCardSubmitting] = useState(false);
 const [page, setPage] = useState(1);
 const [stripeRedirectSuccess, setStripeRedirectSuccess] = useState(null);
 
@@ -143,8 +142,7 @@ const isBillingComplete = billingData.name &&
   billingData.postalCode;
   useEffect(() => {
         if (!currency?.code || !currency?.symbol) {
-      // ⚡ Don't fetch until currency is loaded
-      return;
+        return;
     }
     const pendingCredits = localStorage.getItem('pendingCredits');
 
