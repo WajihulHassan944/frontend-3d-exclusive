@@ -303,7 +303,7 @@ padding-top: 0;
 /* Responsive */
 @media screen and (max-width: 768px) {
 .upload-box{
-  height: 340px;
+  height: 480px;
 }
 .dropHeading{
   font-size: 1.4rem;
