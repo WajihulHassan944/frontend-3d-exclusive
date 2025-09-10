@@ -79,7 +79,7 @@ export default function Navbar() {
               {/* Cart Icon with label */}
               <Link href="/cart" className="relative-cart-icon-wrap" aria-label="Shopping cart">
                 <FiShoppingCart size={22} className="cart-icon" />
-                {user.cart.credits.length > 0 && (
+                {user?.cart?.credits?.length > 0 && (
                   <span className="cart-badge" aria-label={`${user.cart.credits.length} items in cart`}>
                     {user.cart.credits.length}
                   </span>
