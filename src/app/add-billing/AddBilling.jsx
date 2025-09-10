@@ -6,6 +6,7 @@ import BillingMethods from './BillingMethods';
 import "./TopupCredit.css";
 const stripePromise = loadStripe("pk_live_51RvNstHpow7HoYZURyGWZHskSTYGsl0zHWJVvK9ItweHZgvmo1eMyyDrbESgcorVsb7EHjv6CvTaQSwKjXfFoWGp0066SXf4lT");
 import { baseUrl } from '@/const';
+import withAuth from '@/hooks/withAuth';
 const AddBilling = () => {
     const [clientSecret, setClientSecret] = useState('');
   
@@ -41,4 +42,4 @@ const AddBilling = () => {
   );
 };
 
-export default AddBilling;
+export default withAuth(AddBilling);

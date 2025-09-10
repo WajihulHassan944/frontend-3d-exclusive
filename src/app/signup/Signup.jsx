@@ -8,6 +8,7 @@ import { baseUrl } from '@/const';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { FiCheck } from 'react-icons/fi';
+import withoutAuth from '@/hooks/withoutAuth';
 const SignupForm = () => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -270,4 +271,4 @@ return (
 );
 };
 
-export default SignupForm;
+export default withoutAuth(SignupForm);

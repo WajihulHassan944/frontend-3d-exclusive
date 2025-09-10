@@ -10,6 +10,7 @@ import { baseUrl } from '@/const';
 import { loginUser } from '@/redux/features/userSlice';
 import toast from 'react-hot-toast';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import withoutAuth from '@/hooks/withoutAuth';
 
 const LoginForm = () => {
   const router = useRouter();
@@ -262,4 +263,4 @@ return (
 
 };
 
-export default LoginForm;
+export default withoutAuth(LoginForm);

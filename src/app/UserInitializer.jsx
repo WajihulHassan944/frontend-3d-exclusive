@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   loginUser,
+  setHydrated,
 } from '@/redux/features/userSlice';
 import { baseUrl } from '@/const';
 
@@ -11,8 +12,9 @@ const UserInitializer = () => {
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
 
   useEffect(() => {
-
+ dispatch(setHydrated(true));
     const fetchUser = async () => {
+
       if (!isLoggedIn) {
         try {
           const res = await fetch(`${baseUrl}/users/userdetails`, {

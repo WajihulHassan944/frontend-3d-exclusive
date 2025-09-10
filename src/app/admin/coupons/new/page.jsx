@@ -1,5 +1,7 @@
+'use client';
 import React, { Suspense } from "react";
 import NewCoupon from "./NewCoupon";
+import withAdminAuth from "@/hooks/withAdminAuth";
 
 const Page = () => {
   return (
@@ -11,4 +13,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default withAdminAuth(Page);

@@ -271,3 +271,97 @@ flex:1;
 .coupon-preview-only{
   max-width: 500px;
 }
+
+
+@media (max-width: 768px) {
+  .add-coupon-container {
+    padding: 20px;
+    padding-top: 90px; /* requested */
+  }
+
+  /* Header */
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+
+  .header-left {
+    margin-left: 0;
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-start;
+  }
+
+  .page-title {
+    font-size: 22px;
+    margin-top: 10px;
+  }
+
+  .page-subtitle {
+    font-size: 13px;
+    margin-bottom: 10px;
+  }
+
+  .header-actions {
+    width: 100%;
+    justify-content: flex-start;
+    gap: 8px;
+  }
+
+  .preview-btn,
+  .save-btn {
+    font-size: 13px;
+    padding: 8px 12px;
+  }
+
+  /* Layout collapses into single column */
+  .coupon-layout {
+    flex-direction: column;
+  }
+
+  .left-section,
+  .right-section {
+    flex: none;
+    width: 100%;
+  }
+
+  /* Card padding reduced */
+  .card {
+    padding: 18px;
+  }
+
+  .card-title {
+    font-size: 15px;
+    margin-bottom: 18px;
+  }
+
+  .form-group label {
+    font-size: 13px;
+  }
+
+  .form-group input,
+  .form-group textarea {
+    font-size: 13px;
+    padding: 8px;
+  }
+
+  .discount-types {
+    flex-direction: column;
+  }
+
+  .discount-types button {
+    width: 100%;
+    font-size: 13px;
+  }
+
+  /* Preview only card centered */
+  .coupon-preview-only {
+    max-width: 100%;
+  }
+  
+.flexedDiv .form-group{
+    width:100px;
+}
+}

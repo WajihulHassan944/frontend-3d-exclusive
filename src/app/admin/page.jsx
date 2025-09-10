@@ -1,3 +1,4 @@
+'use client';
 import React from "react";
 
 import {
@@ -5,17 +6,16 @@ import {
   Users,
   LineChart,
   DollarSign,
-  Loader
-} from "lucide-react";
-import {
-  Loader2,
-  Clock,
+  Loader,
+   Clock,
   CheckCircle,
   XCircle,
+
 } from "lucide-react";
 import { FaArrowTrendUp, FaArrowTrendDown } from "react-icons/fa6";
 import { GeistSans } from "geist/font/sans";
 import "./admin.css";
+import withAdminAuth from "@/hooks/withAdminAuth";
 
 const Dashboard = () => {
   return (
@@ -154,4 +154,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default withAdminAuth(Dashboard);

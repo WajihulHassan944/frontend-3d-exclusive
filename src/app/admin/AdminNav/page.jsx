@@ -15,6 +15,7 @@ import {
   X,
 } from "lucide-react";
 import "./adminSideNav.css";
+import TopNavRight from "./TopNav/TopNavRight/TopNavRight";
 
 const AdminSideNav = ({ isOpen, setIsOpen }) => {
   const toggleNav = () => setIsOpen(!isOpen);
@@ -33,46 +34,53 @@ const AdminSideNav = ({ isOpen, setIsOpen }) => {
   ];
 
   return (
+  <>
+    {/* Mobile Hamburger (only visible ≤768px via CSS) */}
+    <div className="mobile-hamburger">
+      <Menu className="toggle-icon" onClick={toggleNav} />
+    </div>
+
+<div className="topNavHeaderMobile">
+  <TopNavRight />
+</div>
+
+
+    {/* Sidebar */}
     <div className={`side-nav ${isOpen ? "open" : "collapsed"}`}>
       {/* Header */}
       <div className="side-nav-header">
-        {isOpen ? (
-          <>
-            <h2>Admin Panel</h2>
-            <X className="toggle-icon" onClick={toggleNav} />
-          </>
-        ) : (
-          <Menu className="toggle-icon collapsed-toggle" onClick={toggleNav} />
-        )}
+       {isOpen ? ( <> <h2>Admin Panel</h2> <X className="toggle-icon" onClick={toggleNav} /> </> ) : ( <Menu className="toggle-icon collapsed-toggle" onClick={toggleNav} /> )}
       </div>
 
       {/* Menu */}
-    <ul className="side-nav-menu">
-  {navItems.map(({ href, label, icon: Icon }) => {
-    let isActive = false;
+      <ul className="side-nav-menu">
+        {navItems.map(({ href, label, icon: Icon }) => {
+          let isActive = false;
 
-    if (href === "/admin") {
-      // Dashboard should only be active on exact match
-      isActive = pathname === "/admin";
-    } else {
-      // Other items: active if exact or sub-route
-      isActive = pathname === href || pathname.startsWith(href + "/");
+          if (href === "/admin") {
+            isActive = pathname === "/admin";
+          } else {
+            isActive = pathname === href || pathname.startsWith(href + "/");
+          }
+
+          return (
+            <Link href={href} key={href} onClick={() => {
+    if (window.innerWidth <= 768) {
+      setIsOpen(false);
     }
-
-    return (
-      <Link href={href} key={href}>
-        <li className={isActive ? "active" : ""}>
-          <Icon className="side-nav-icon" />
-          {isOpen && <span>{label}</span>}
-        </li>
-      </Link>
-    );
-  })}
-</ul>
-
-
+  }}>
+              <li className={isActive ? "active" : ""}>
+                <Icon className="side-nav-icon" />
+                {isOpen && <span>{label}</span>}
+              </li>
+            </Link>
+          );
+        })}
+      </ul>
     </div>
-  );
+  </>
+);
+
 };
 
 export default AdminSideNav;

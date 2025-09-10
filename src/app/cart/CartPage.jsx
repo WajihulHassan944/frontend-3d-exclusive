@@ -24,11 +24,12 @@ import { useCurrencyByUserCountry} from '@/utils/getCurrencySymbolByCountry';
 import { handleBuyCredits } from '@/utils/cart/handleBuyCredits';
 import ShoppingCart from './cart';
 import { handleCheckout } from '@/utils/cart/handleCheckout';
+import withAuth from '@/hooks/withAuth';
 
 const stripePromise = loadStripe(
   'pk_live_51RvNstHpow7HoYZURyGWZHskSTYGsl0zHWJVvK9ItweHZgvmo1eMyyDrbESgcorVsb7EHjv6CvTaQSwKjXfFoWGp0066SXf4lT'
 );
-export default function CartPage() {
+const CartPage = () => {
 
 const currency = useCurrencyByUserCountry(); // ✅ get currency
 const currencySymbol = currency.symbol;
@@ -446,3 +447,4 @@ const fetchClientSecret = async () => {
     </div>
   );
 }
+export default withAuth(CartPage);

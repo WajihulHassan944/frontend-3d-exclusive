@@ -7,8 +7,9 @@ import { useSelector } from 'react-redux';
 import Pusher from 'pusher-js';
 import { FiDownload, FiUploadCloud, FiLoader } from 'react-icons/fi';
 import './dashboard.css';
+import withAuth from '@/hooks/withAuth';
 
-export default function Dashboard() {
+const Dashboard = () => {
   const user = useSelector((state) => state.user);
   const { wallet, videos: initialVideos = [] } = user;
   const [videos, setVideos] = useState([]);
@@ -133,3 +134,4 @@ useEffect(() => {
     </main>
   );
 }
+export default withAuth(Dashboard);

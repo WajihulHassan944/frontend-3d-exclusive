@@ -33,6 +33,10 @@ background: linear-gradient(135deg, hsl(225 100% 45%) 0%, hsl(235 95% 40%) 20%, 
 
 background: linear-gradient(135deg, hsl(240 100% 6%) 0%, hsl(250 95% 10%) 20%, hsl(260 90% 14%) 40%, hsl(270 85% 18%) 60%, hsl(280 80% 22%) 80%, hsl(290 75% 26%) 100%);
 background-image: linear-gradient(135deg, hsl(225 100% 45%) 0%, hsl(235 95% 40%) 20%, hsl(245 90% 35%) 40%, hsl(250 85% 30%) 60%, hsl(235 80% 28%) 80%, hsl(220 75% 26%) 100%);
+background-repeat: no-repeat;
+background-size: cover;
+background-position: top;
+min-height: 100vh;
 }
 
 * {
@@ -59,6 +63,7 @@ background: linear-gradient(135deg, #0700d3 0%, #0700d3 100%);
 
   }
 }
+
 /* Admin main layout */
 .admin-main {
   transition: margin-left 0.3s ease, width 0.3s ease;
@@ -75,5 +80,44 @@ background: linear-gradient(135deg, #0700d3 0%, #0700d3 100%);
 .admin-main.full {
   margin-left: 60px; /* collapsed sidebar width */
   width: calc(100% - 60px);
+}
+@media (max-width: 768px) {
+  .admin-main {
+    margin-left: 0 !important;
+    width: 100% !important;
+    transition: none !important;
+  }
+
+  .admin-main.shifted,
+  .admin-main.full {
+    margin-left: 0 !important;
+    width: 100% !important;
+  }
+}
+
+
+
+
+.auth-spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80vh; /* Full screen center */
+  width: 100%;
+}
+
+.auth-spinner {
+  border: 6px solid #e0e7ff; /* Light blue background ring */
+  border-top: 6px solid #2563eb; /* Blue spinning part */
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 1s linear infinite;
+  box-shadow: 0 0 15px rgba(37, 99, 235, 0.4);
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 

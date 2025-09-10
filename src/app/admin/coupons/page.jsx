@@ -5,6 +5,7 @@ import { GeistSans } from "geist/font/sans";
 import CouponsStats from "./home/CouponsStats";
 import CouponsTable from "./home/CouponsTable";
 import Link from "next/link";
+import withAdminAuth from "@/hooks/withAdminAuth";
 
 const Coupons = () => {
 const [refreshKey, setRefreshKey] = useState(0);
@@ -32,4 +33,4 @@ const [refreshKey, setRefreshKey] = useState(0);
   );
 };
 
-export default Coupons;
+export default withAdminAuth(Coupons);

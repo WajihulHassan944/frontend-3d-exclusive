@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { baseUrl } from '@/const';
 import { loginUser } from '@/redux/features/userSlice';
 import NewsletterToggle from './NewsletterToggle/NewsletterToggle';
+import withAuth from '@/hooks/withAuth';
 
 const ProfileSettings = () => {
   const dispatch = useDispatch();
@@ -243,4 +244,4 @@ const ProfileSettings = () => {
   );
 };
 
-export default ProfileSettings;
+export default withAuth(ProfileSettings);

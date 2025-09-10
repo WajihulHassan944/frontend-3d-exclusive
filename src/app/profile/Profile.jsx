@@ -5,6 +5,7 @@ import './profile.css';
 import { useSelector } from 'react-redux';
 import { FaInfoCircle, FaTimes } from 'react-icons/fa';
 import { differenceInDays, addYears, parseISO, isBefore } from 'date-fns';
+import withAuth from '@/hooks/withAuth';
 
 const Profile = () => {
   const user = useSelector((state) => state.user);
@@ -90,4 +91,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default withAuth(Profile);
