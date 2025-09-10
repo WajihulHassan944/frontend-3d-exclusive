@@ -118,3 +118,43 @@
     transform: rotate(360deg);
   }
 }
+@media (max-width: 768px) {
+  .login-container-admin {
+    padding: 20px;
+  }
+
+  .login-container-admin .login-card {
+    width: 100%;       /* take full width */
+    max-width: 100%;   /* prevent overflow */
+    padding:25px 20px;     /* reduce padding */
+   }
+
+  .login-container-admin .login-title {
+    font-size: 20px; /* slightly smaller */
+  }
+
+  .login-container-admin .login-form label {
+    font-size: 13px;
+  }
+
+  .login-container-admin .login-form input[type="text"],
+  .login-container-admin .login-form input[type="password"] {
+    font-size: 13px;
+    padding: 8px;
+  }
+
+  .login-container-admin .login-options {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .login-container-admin .login-button {
+    width: 100%; /* full-width button for mobile */
+    font-size: 15px;
+  }
+
+  .login-container-admin .login-footer {
+    font-size: 13px;
+  }
+}
