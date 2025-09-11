@@ -36,7 +36,7 @@ export const metadata = {
     siteName: "Xclusive 3D",
     images: [
       {
-        url: "https://www.xclusive3d.com/assets/logo.png",
+        url: "https://www.xclusive3d.com/assets/terms-and-conditions.png",
         width: 500,
         height: 500,
         alt: "Xclusive 3D Logo",
@@ -49,7 +49,7 @@ export const metadata = {
     title: "Terms of Service | Xclusive 3D",
     description:
       "Read Xclusive 3D’s Terms of Service (v2.0) to learn about usage rights, responsibilities, and service limitations.",
-    images: ["https://www.xclusive3d.com/assets/logo.png"],
+    images: ["https://www.xclusive3d.com/assets/terms-and-conditions.png"],
   },
 };
 

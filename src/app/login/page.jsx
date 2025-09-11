@@ -31,7 +31,7 @@ export const metadata = {
     siteName: "Xclusive 3D",
     images: [
       {
-        url: "https://www.xclusive3d.com/assets/logo.png",
+        url: "https://www.xclusive3d.com/assets/signin.png",
         width: 500,
         height: 500,
         alt: "Xclusive 3D Logo",
@@ -44,7 +44,7 @@ export const metadata = {
     title: "Login | Xclusive 3D Video Conversion",
     description:
       "Sign in to Xclusive 3D to start converting your 2D videos into immersive 3D.",
-    images: ["https://www.xclusive3d.com/assets/logo.png"],
+    images: ["https://www.xclusive3d.com/assets/signin.png"],
   },
 };
 

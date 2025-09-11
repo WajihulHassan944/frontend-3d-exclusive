@@ -95,7 +95,7 @@ export const metadata = {
     siteName: "Xclusive 3D",
     images: [
       {
-        url: "https://www.xclusive3d.com/assets/logo.png",
+        url: "https://www.xclusive3d.com/assets/faqs.png",
         width: 1200,
         height: 630,
         alt: "Xclusive 3D Logo",
@@ -108,7 +108,7 @@ export const metadata = {
     title: "FAQs | Xclusive 3D Video Conversion Service",
     description:
       "Find answers to FAQs about Xclusive 3D’s AI-powered 2D to 3D video conversion service for Meta Quest, Apple Vision Pro, and YouTube 3D.",
-    images: ["https://www.xclusive3d.com/assets/logo.png"],
+    images: ["https://www.xclusive3d.com/assets/faqs.png"],
   },
 };
 

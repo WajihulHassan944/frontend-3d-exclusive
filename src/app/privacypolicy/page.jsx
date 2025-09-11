@@ -36,7 +36,7 @@ export const metadata = {
     siteName: "Xclusive 3D",
     images: [
       {
-        url: "https://www.xclusive3d.com/assets/logo.png",
+        url: "https://www.xclusive3d.com/assets/privacy-policy.png",
         width: 500,
         height: 500,
         alt: "Xclusive 3D Logo",
@@ -49,7 +49,7 @@ export const metadata = {
     title: "Privacy Policy | Xclusive 3D",
     description:
       "Review Xclusive 3D’s Privacy Policy to see how your personal data is protected under GDPR and other privacy laws.",
-    images: ["https://www.xclusive3d.com/assets/logo.png"],
+    images: ["https://www.xclusive3d.com/assets/privacy-policy.png"],
   },
 };
 

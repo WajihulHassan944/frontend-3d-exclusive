@@ -35,7 +35,7 @@ export const metadata = {
     siteName: "Xclusive 3D",
     images: [
       {
-        url: "https://www.xclusive3d.com/assets/blogs-preview.png",
+        url: "https://www.xclusive3d.com/assets/blogs.png",
         width: 1200,
         height: 630,
         alt: "Xclusive 3D Blog - VR 3D Content",
@@ -48,7 +48,7 @@ export const metadata = {
     title: "VR 3D Content Blog | Xclusive 3D",
     description:
       "Guides, tutorials, and insights about immersive 3D video conversion for VR headsets.",
-    images: ["https://www.xclusive3d.com/assets/blogs-preview.png"],
+    images: ["https://www.xclusive3d.com/assets/blogs.png"],
   },
 };
 
