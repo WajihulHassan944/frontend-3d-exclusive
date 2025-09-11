@@ -27,7 +27,7 @@ import { handleCheckout } from '@/utils/cart/handleCheckout';
 import withAuth from '@/hooks/withAuth';
 
 const stripePromise = loadStripe(
-  'pk_live_51RvNstHpow7HoYZURyGWZHskSTYGsl0zHWJVvK9ItweHZgvmo1eMyyDrbESgcorVsb7EHjv6CvTaQSwKjXfFoWGp0066SXf4lT'
+  'pk_test_51RvNstHpow7HoYZUY8RVBmICJzKPjKo4syjNfAi0l8VKntIqABVgpemRKlkjthFOmN4gfAqLAJPKlGoSZD0N6vt000DBZMHq3k'
 );
 const CartPage = () => {
 
