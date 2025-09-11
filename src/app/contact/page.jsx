@@ -56,7 +56,7 @@ export const metadata = {
     siteName: "Xclusive 3D",
     images: [
       {
-        url: "https://www.xclusive3d.com/assets/logo.png",
+        url: "https://www.xclusive3d.com/assets/contact.png",
         width: 500,
         height: 500,
         alt: "Xclusive 3D Logo",
@@ -69,7 +69,7 @@ export const metadata = {
     title: "Contact | Xclusive 3D Video Conversion",
     description:
       "Have questions about 3D video conversion? Contact Xclusive 3D and we’ll get back to you within 24 hours.",
-    images: ["https://www.xclusive3d.com/assets/logo.png"],
+    images: ["https://www.xclusive3d.com/assets/contact.png"],
   },
 };
 
