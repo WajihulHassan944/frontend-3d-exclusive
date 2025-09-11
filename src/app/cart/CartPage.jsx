@@ -24,7 +24,6 @@ import { useCurrencyByUserCountry} from '@/utils/getCurrencySymbolByCountry';
 import { handleBuyCredits } from '@/utils/cart/handleBuyCredits';
 import ShoppingCart from './cart';
 import { handleCheckout } from '@/utils/cart/handleCheckout';
-import withAuth from '@/hooks/withAuth';
 
 const stripePromise = loadStripe(
   'pk_test_51RvNstHpow7HoYZUY8RVBmICJzKPjKo4syjNfAi0l8VKntIqABVgpemRKlkjthFOmN4gfAqLAJPKlGoSZD0N6vt000DBZMHq3k'
@@ -447,4 +446,4 @@ const fetchClientSecret = async () => {
     </div>
   );
 }
-export default withAuth(CartPage);
+export default CartPage;
