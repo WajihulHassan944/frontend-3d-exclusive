@@ -3,6 +3,7 @@ import { loginUser } from '@/redux/features/userSlice';
 import { baseUrl } from '@/const';
 
 export const refreshAndDispatchUser = async (dispatch) => {
+  console.log("refresh called");
   try {
     const res = await fetch(`${baseUrl}/users/userdetails`, {
       method: 'GET',

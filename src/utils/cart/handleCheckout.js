@@ -62,9 +62,10 @@ export const handleCheckout = async ({
       localStorage.removeItem('billingData');
       localStorage.removeItem('selectedLocalPaymentMethod');
 
-      await refreshAndDispatchUser(dispatch);
       toast.success('Top-up successful!');
       await clearCart();
+      await refreshAndDispatchUser(dispatch);
+      
       router.push('/thankyou-for-purchase');
     } else {
       toast.error(data.message || 'Top-up failed');
