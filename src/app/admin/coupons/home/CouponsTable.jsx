@@ -100,12 +100,8 @@ const CouponsTable = ({ onDeleted }) => {
                     <td>{c.code}</td>
                     <td>{c.type}</td>
                     <td>
-                      {c.type === "percentage"
-                        ? `${c.amount}%`
-                        : c.type === "shipping"
-                        ? "Free Shipping"
-                        : `$${c.amount}`}
-                    </td>
+                        {c.amount}%
+                      </td>
                     <td>{c.description}</td>
                     <td>
                       {c.usageCount}/{c.usageLimit || "∞"}

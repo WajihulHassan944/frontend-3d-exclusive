@@ -162,7 +162,16 @@ const lastInvoice = user?.invoices
       <td> </td>
       <td>{lastInvoice.currency} {lastInvoice.amount.toFixed(2).replace('.', ',')}</td>
     </tr>
-
+{lastInvoice.discountAmount > 0 && (
+  <tr>
+    <td></td>
+    <td>Discount ({lastInvoice.couponCode || ""})</td>
+    <td>
+      -{lastInvoice.currency}{" "}
+      {lastInvoice.discountAmount.toFixed(2).replace(".", ",")}
+    </td>
+  </tr>
+)}
     {/* VAT Row */}
     {(lastInvoice.vat > 0 || lastInvoice.vatRate > 0) && (
       <tr>

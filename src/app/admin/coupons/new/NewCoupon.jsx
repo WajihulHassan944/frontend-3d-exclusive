@@ -21,6 +21,7 @@ const NewCoupon = () => {
   const [showPreview, setShowPreview] = useState(false);
   const [formData, setFormData] = useState({
     code: "",
+    status:"active",
     amount: 0,
     description: "",
     discountType: "percentage", // maps to backend "type"
@@ -32,6 +33,8 @@ const NewCoupon = () => {
     excludeSale: false,
     limitPerCoupon: "",
     limitPerUser: "",
+    productRestriction: [],   // ✅ added
+  cartMinItems: ""          // ✅ added
   });
 
   // 👉 Fetch coupon if editing
@@ -46,6 +49,7 @@ const NewCoupon = () => {
             const c = data.data;
             setFormData({
               code: c.code || "",
+              status: c.status || "",
               amount: c.amount || 0,
               description: c.description || "",
               discountType: c.type || "percentage",
@@ -57,6 +61,8 @@ const NewCoupon = () => {
               excludeSale: c.excludeSaleItems || false,
               limitPerCoupon: c.usageLimit || "",
               limitPerUser: c.limitPerUser || "",
+              productRestriction: c.productRestriction || [],   // ✅ added
+  cartMinItems: c.cartMinItems || ""                // ✅ added
             });
           }
         } catch (err) {
@@ -72,8 +78,16 @@ const NewCoupon = () => {
   // 👉 Handle create/update
   const handleSave = async () => {
     try {
+     
       setLoading(true);
-
+  if (formData.discountType === "fixed_product" && formData.productRestriction.length === 0) {
+      toast.error("Please select a product restriction (Basic, Standard, Premium).");
+      return;
+    }
+    if (formData.discountType === "fixed_cart" && !formData.cartMinItems) {
+      toast.error("Please enter minimum cart items required.");
+      return;
+    }
       // Map frontend formData → backend payload
       const payload = {
         code: formData.code,
@@ -86,10 +100,12 @@ const NewCoupon = () => {
         excludeSaleItems: formData.excludeSale,
         freeShipping: formData.freeShipping,
         // optional
-        status: "active",
+        status: formData.status,
         minCartTotal: 0,
         maxCartTotal: null,
-        productRestriction: [],
+         productRestriction: formData.discountType === "fixed_product" ? formData.productRestriction : [],
+  cartMinItems: formData.discountType === "fixed_cart" ? formData.cartMinItems : null,
+  
       };
 
       const url = id

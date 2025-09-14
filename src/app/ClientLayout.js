@@ -12,6 +12,7 @@ import { Toaster } from 'react-hot-toast';
 import AdminSideNav from './admin/AdminNav/page';
 import TopNav from './admin/AdminNav/TopNav/TopNav';
 import Navbar from './navbar/Navbar';
+import CouponBanner from '../../components/Coupons/CouponBanner';
 
 export default function ClientLayout({ children }) {
   const pathname = usePathname();
@@ -33,6 +34,7 @@ const isAdminRoot = pathname === '/admin';
     <GoogleOAuthProvider clientId="852917251115-oi5pepl5cf67u06d0f9gvpomce2hjbl5.apps.googleusercontent.com">
       <Provider store={store}>
         <UserInitializer />
+{!isAdminRoute && !isAdminLogin && <CouponBanner />}
 
         {/* Admin vs Client layout switching */}
         {isAdminRoute && (

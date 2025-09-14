@@ -15,10 +15,19 @@ export const handleCheckout = async ({
   // ✅ Get billingData from localStorage
   const storedBillingData = localStorage.getItem('billingData');
   const billingData = storedBillingData ? JSON.parse(storedBillingData) : {};
+const storedCouponData = localStorage.getItem('couponData');
+const couponData = storedCouponData ? JSON.parse(storedCouponData) : null;
 
-  console.log('📝 Billing Data from localStorage:', billingData);
+const storedPriceBeforeDiscount = localStorage.getItem('priceBeforeDiscount');
 
-  const total = credits.reduce((sum, credit) => sum + credit.amount, 0);
+const storedDiscountAmount = localStorage.getItem('discountAmount');
+const discountAmount = storedDiscountAmount ? Number(storedDiscountAmount) : 0;
+
+  
+const total = credits.reduce((sum, credit) => sum + credit.amount, 0);
+  
+const priceBeforeDiscount = storedPriceBeforeDiscount ? Number(storedPriceBeforeDiscount) : total;
+
   const primaryCard = user?.wallet?.cards?.find(card => card.isPrimary);
 
   if (!billingData.street || !billingData.postalCode || !billingData.country) {
@@ -52,15 +61,20 @@ export const handleCheckout = async ({
         billingInfo: billingData,
         usePrimaryCard: selectedPaymentMethod === 'card',
         stripeCard: false,
-        localPaymentMethod // ✅ send to backend
+        localPaymentMethod, // ✅ send to backend
+        coupon: couponData || null,
+        priceBeforeDiscount:priceBeforeDiscount,
+        discountAmount:discountAmount
       }),
     });
 
     const data = await res.json();
     if (data.success) {
       // ✅ Clear billingData & localPaymentMethod after success
-      localStorage.removeItem('billingData');
-      localStorage.removeItem('selectedLocalPaymentMethod');
+     localStorage.removeItem('billingData');
+  localStorage.removeItem('selectedLocalPaymentMethod');
+  localStorage.removeItem('priceBeforeDiscount');
+  localStorage.removeItem('couponData');
 
       toast.success('Top-up successful!');
       await clearCart();

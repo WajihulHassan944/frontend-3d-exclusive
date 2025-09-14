@@ -24,6 +24,7 @@ import { useCurrencyByUserCountry} from '@/utils/getCurrencySymbolByCountry';
 import { handleBuyCredits } from '@/utils/cart/handleBuyCredits';
 import ShoppingCart from './cart';
 import { handleCheckout } from '@/utils/cart/handleCheckout';
+import CouponInput from './CouponInput/CouponInput';
 
 const stripePromise = loadStripe(
   'pk_test_51RvNstHpow7HoYZUY8RVBmICJzKPjKo4syjNfAi0l8VKntIqABVgpemRKlkjthFOmN4gfAqLAJPKlGoSZD0N6vt000DBZMHq3k'
@@ -39,6 +40,9 @@ const currencySymbol = currency.symbol;
     const [paymentMethods, setPaymentMethods] = useState([]);
 const [loadingPaymentIntent, setLoadingPaymentIntent] = useState(false);
 const [checkoutLoading, setCheckoutLoading] = useState(false);
+const [priceBeforeDiscount, setPriceBeforeDiscount] = useState(0);
+const [couponData, setCouponData] = useState(null);
+const [couponMessage, setCouponMessage] = useState(null); 
 const [billingData, setBillingData] = useState({
   name:'',
   street: '',
@@ -103,7 +107,7 @@ const [vatNote, setVatNote] = useState('');
 
 const [credits, setCredits] = useState([]);
   const [loading, setLoading] = useState(true);
-useEffect(() => {
+
   const checkVAT = async () => {
     console.log("vat called");
     const { vatNumber, country } = billingData;
@@ -124,6 +128,7 @@ console.log(country);
 setVatNote(data.vatNote || '');
 
         setVatPercent(data.vatRate * 100);
+        setPriceBeforeDiscount(final);
         setFinalPrice(final);
       }
     } catch (err) {
@@ -131,6 +136,8 @@ setVatNote(data.vatNote || '');
     }
   };
 
+
+  useEffect(() => {  
   checkVAT();
 }, [billingData.country, billingData.vatNumber, credits]);
 
@@ -214,7 +221,76 @@ const fetchClientSecret = async () => {
     },
   };
 
+const handleCouponValidate = (coupon) => {
+  console.log("Valid coupon data:", coupon);
+  setCouponData(coupon);
 
+  if (!coupon) {
+    setFinalPrice(priceBeforeDiscount);
+    // ❌ clear old values if no coupon
+    localStorage.removeItem("couponData");
+    localStorage.removeItem("priceBeforeDiscount");
+    localStorage.removeItem("discountAmount");
+    return;
+  }
+
+  let discountedPrice = priceBeforeDiscount;
+  let discountAmount = 0;
+  let message = { type: "success", text: "Coupon applied successfully 🎉" };
+
+  switch (coupon.type) {
+    case "percentage": {
+      discountAmount = (priceBeforeDiscount * coupon.amount) / 100;
+      discountedPrice -= discountAmount;
+      break;
+    }
+
+    case "fixed_cart": {
+      if (coupon.cartMinItems && credits.length >= coupon.cartMinItems) {
+        discountAmount = (priceBeforeDiscount * coupon.amount) / 100;
+        discountedPrice -= discountAmount;
+      } else {
+        message = {
+          type: "error",
+          text: `This coupon requires at least ${coupon.cartMinItems} items in your cart.`,
+        };
+      }
+      break;
+    }
+
+    case "fixed_product": {
+      if (coupon.productRestriction?.length) {
+        const eligible = credits.some((c) =>
+          coupon.productRestriction.includes(Number(c.credits))
+        );
+        if (eligible) {
+          discountAmount = (priceBeforeDiscount * coupon.amount) / 100;
+          discountedPrice -= discountAmount;
+        } else {
+          message = {
+            type: "error",
+            text: `You need to purchase either Basic, Standard, or Premium (${coupon.productRestriction.join(
+              ", "
+            )} credits) to use this coupon.`,
+          };
+        }
+      }
+      break;
+    }
+
+    default:
+      message = { type: "error", text: "Unknown coupon type." };
+  }
+
+  setCouponMessage(message);
+  setFinalPrice(Math.max(discountedPrice, 0));
+
+  // ✅ Save to localStorage
+  localStorage.setItem("couponData", JSON.stringify(coupon));
+  localStorage.setItem("priceBeforeDiscount", priceBeforeDiscount);
+  localStorage.setItem("discountAmount", discountAmount);
+  checkVAT();
+};
   return (
     <div className="cart-container-page">
      <h2 className="cart-title">Shopping Cart</h2>
@@ -326,6 +402,19 @@ const fetchClientSecret = async () => {
       value={billingData.vatNumber}
       onChange={(e) => setBillingData({ ...billingData, vatNumber: e.target.value })}
     />
+<CouponInput onValidate={handleCouponValidate} />
+{couponMessage && (
+  <p
+    className={
+      couponMessage.type === "error"
+        ? "coupon-msg error"
+        : "coupon-msg success"
+    }
+  >
+    {couponMessage.text}
+  </p>
+)}
+
   </div>
 
 {credits.length > 0 && (
@@ -334,12 +423,24 @@ const fetchClientSecret = async () => {
       <p className="subtotal-line">
   <span className='colored'>Subtotal:</span>  {currencySymbol} {credits.reduce((sum, c) => sum + c.amount, 0).toFixed(2)}
 </p>
-
 {vatPercent !== null && (
   <p className="vat-total-line">
-   Total incl. <span>VAT ({vatPercent}%):</span> {currencySymbol} {finalPrice.toFixed(2)}
+    Total incl. <span>VAT ({vatPercent}%):</span>{" "}
+    {priceBeforeDiscount !== finalPrice ? (
+      <>
+        <span className="old-price">
+          {currencySymbol} {priceBeforeDiscount.toFixed(2)}
+        </span>{" "}
+        <span className="discounted-price">
+          {currencySymbol} {finalPrice.toFixed(2)}
+        </span>
+      </>
+    ) : (
+      <span>{currencySymbol} {finalPrice.toFixed(2)}</span>
+    )}
   </p>
 )}
+
 
     </div>
   </>

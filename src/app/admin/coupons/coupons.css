@@ -169,7 +169,10 @@ td {
   background: #dcfce7;
   color: #16a34a;
 }
-
+.status.inactive {
+  background: #fee2e2; /* light red */
+  color: #dc2626;      /* red text */
+}
 .actions {
   display: flex;
   gap: 10px;

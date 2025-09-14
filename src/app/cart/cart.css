@@ -233,6 +233,17 @@
   color: #ff672f;
   font-weight: 600;
 }
+.old-price {
+  text-decoration: line-through;
+  opacity: 0.7;
+  margin-right: 6px;
+}
+
+.discounted-price {
+  color: #4ade80; /* green for clarity, adjust as needed */
+  font-weight: 600;
+}
+
 .payment-option {
   border: 2px solid transparent;
   border-radius: 8px;
@@ -268,4 +279,18 @@
   background-color: #ffe6e6;
   color: #b30000;
   border: 1px solid #ffb3b3;
+}
+
+.coupon-msg {
+  font-size: 0.85rem;
+  margin-top: 4px;
+}
+
+.coupon-msg.error {
+  color: #ff4d4f; /* red */
+}
+
+.coupon-msg.success {
+  color: #22c55e; /* green */
+  font-weight: 600;
 }
