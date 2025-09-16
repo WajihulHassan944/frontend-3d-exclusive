@@ -28,7 +28,7 @@ const [hoveredIndex, setHoveredIndex] = useState(null);
 
     return {
       credits,
-      price: `${currencySymbol} ${price}`,
+      price: `${currencySymbol} ${Math.round(price)}`,
       rate: credits === 15
           ? 'Good to explore'
           : credits === 50
@@ -66,7 +66,7 @@ const [hoveredIndex, setHoveredIndex] = useState(null);
     }
 
     setLoadingAmount(credits);
-    const amount = localizedPricing[currencyCode][credits];
+    const amount = Math.round(localizedPricing[currencyCode][credits]);
 
     try {
       const res = await fetch(`${baseUrl}/cart/add`, {

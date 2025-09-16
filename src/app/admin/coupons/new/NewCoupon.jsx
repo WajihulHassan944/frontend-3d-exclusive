@@ -30,6 +30,7 @@ const NewCoupon = () => {
     restrictionCode: "",
     restrictionAmount: 0,
     individualUse: false,
+    userEmail: "",
     excludeSale: false,
     limitPerCoupon: "",
     limitPerUser: "",
@@ -58,6 +59,7 @@ const NewCoupon = () => {
               restrictionCode: c.restrictionCode || "",
               restrictionAmount: c.restrictionAmount || 0,
               individualUse: c.allowCombine === false, // invert logic
+              userEmail: c.usageRestriction?.userEmail || "",
               excludeSale: c.excludeSaleItems || false,
               limitPerCoupon: c.usageLimit || "",
               limitPerUser: c.limitPerUser || "",
@@ -90,23 +92,30 @@ const NewCoupon = () => {
     }
       // Map frontend formData → backend payload
       const payload = {
-        code: formData.code,
-        type: formData.discountType,
-        amount: formData.amount,
-        description: formData.description,
-        usageLimit: formData.limitPerCoupon,
-        expiryDate: formData.expiryDate,
-        allowCombine: !formData.individualUse,
-        excludeSaleItems: formData.excludeSale,
-        freeShipping: formData.freeShipping,
-        // optional
-        status: formData.status,
-        minCartTotal: 0,
-        maxCartTotal: null,
-         productRestriction: formData.discountType === "fixed_product" ? formData.productRestriction : [],
+  code: formData.code,
+  type: formData.discountType,
+  amount: formData.amount,
+  description: formData.description,
+  usageLimit: formData.limitPerCoupon,
+  expiryDate: formData.expiryDate,
+  allowCombine: !formData.individualUse,
+  excludeSaleItems: formData.excludeSale,
+  freeShipping: formData.freeShipping,
+  status: formData.status,
+  minCartTotal: 0,
+  maxCartTotal: null,
+  productRestriction: formData.discountType === "fixed_product" ? formData.productRestriction : [],
   cartMinItems: formData.discountType === "fixed_cart" ? formData.cartMinItems : null,
-  
-      };
+
+  // ✅ usageRestriction object
+  usageRestriction: {
+    restrictionCode: formData.restrictionCode,
+    restrictionAmount: formData.restrictionAmount,
+    individualUseOnly: formData.individualUse,
+    userEmail: formData.userEmail
+  }
+};
+
 
       const url = id
         ? `${baseUrl}/coupons/update/${id}`

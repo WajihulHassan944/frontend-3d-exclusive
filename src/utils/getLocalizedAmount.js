@@ -13,9 +13,12 @@ export const getLocalizedAmount = async (credits) => {
     }
 
     const pricing = localizedPricing[currency] || localizedPricing['EUR'];
-    return pricing[credits] ?? localizedPricing['EUR'][credits];
+    const amount = pricing[credits] ?? localizedPricing['EUR'][credits];
+
+    // ✅ round to nearest integer
+    return Math.round(amount);
   } catch (err) {
     console.error('Failed to get localized amount:', err);
-    return localizedPricing['EUR'][credits];
+    return Math.round(localizedPricing['EUR'][credits]);
   }
 };

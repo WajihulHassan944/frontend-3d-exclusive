@@ -23,7 +23,7 @@ console.log("currency received from prop", currency);
 
         return {
           ...item,
-          amount,
+         amount: Math.round(amount),
           currency: curr.code,
           symbol: curr.symbol,
         };

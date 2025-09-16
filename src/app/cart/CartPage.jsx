@@ -109,32 +109,54 @@ const [credits, setCredits] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const checkVAT = async () => {
-    console.log("vat called");
-    const { vatNumber, country } = billingData;
-    if (!country) return;
-console.log(country);
-    try {
-      const res = await fetch(`${baseUrl}/wallet/checkVat`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ vatNumber, country }),
+  console.log("vat called");
+  const { vatNumber, country } = billingData;
+  if (!country) return;
+  console.log(country);
+
+  try {
+    const res = await fetch(`${baseUrl}/wallet/checkVat`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ vatNumber, country }),
+    });
+
+    const data = await res.json();
+    if (data.success) {
+      // ✅ Always start with cart base total
+      const baseTotal = credits.reduce((sum, c) => sum + c.amount, 0);
+
+      // ✅ Read discount info from localStorage
+      const storedDiscount = parseFloat(localStorage.getItem("discountAmount")) || 0;
+      const discountedTotal = Math.max(baseTotal - storedDiscount, 0);
+
+      // ✅ VAT on discounted total (instead of raw cart)
+      const vatAmount = discountedTotal * data.vatRate;
+      const final = discountedTotal + vatAmount;
+
+      // update VAT UI
+      setVatNote(data.vatNote || "");
+      setVatPercent(data.vatRate * 100);
+
+      // ✅ keep original subtotal as reference
+      setPriceBeforeDiscount(baseTotal);
+
+      // ✅ final price = discountedTotal + VAT
+      setFinalPrice(final);
+
+      console.log("Applied VAT with discount logic:", {
+        baseTotal,
+        storedDiscount,
+        discountedTotal,
+        vatRate: data.vatRate,
+        vatAmount,
+        final,
       });
-
-      const data = await res.json();
-      if (data.success) {
-        const baseTotal = credits.reduce((sum, c) => sum + c.amount, 0);
-        const vatAmount = baseTotal * data.vatRate;
-        const final = baseTotal + vatAmount;
-setVatNote(data.vatNote || '');
-
-        setVatPercent(data.vatRate * 100);
-        setPriceBeforeDiscount(final);
-        setFinalPrice(final);
-      }
-    } catch (err) {
-      console.error('VAT check error:', err);
     }
-  };
+  } catch (err) {
+    console.error("VAT check error:", err);
+  }
+};
 
 
   useEffect(() => {  
@@ -426,17 +448,19 @@ const handleCouponValidate = (coupon) => {
 {vatPercent !== null && (
   <p className="vat-total-line">
     Total incl. <span>VAT ({vatPercent}%):</span>{" "}
-    {priceBeforeDiscount !== finalPrice ? (
+    {Number(localStorage.getItem("discountAmount") || 0) > 0 ? (
       <>
         <span className="old-price">
-          {currencySymbol} {priceBeforeDiscount.toFixed(2)}
+          {currencySymbol} {(priceBeforeDiscount * (1 + vatPercent / 100)).toFixed(2)}
         </span>{" "}
         <span className="discounted-price">
           {currencySymbol} {finalPrice.toFixed(2)}
         </span>
       </>
     ) : (
-      <span>{currencySymbol} {finalPrice.toFixed(2)}</span>
+      <span>
+        {currencySymbol} {finalPrice.toFixed(2)}
+      </span>
     )}
   </p>
 )}

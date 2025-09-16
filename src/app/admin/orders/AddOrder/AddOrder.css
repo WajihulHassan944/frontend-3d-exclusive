@@ -1,0 +1,14 @@
+/* Reuse modal-overlay-credits base styles */
+
+/* Form rows */
+.modal-body .form-row {
+  display: flex;
+  gap: 12px;
+}
+
+.modal-body .form-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}

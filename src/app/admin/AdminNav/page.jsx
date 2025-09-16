@@ -13,6 +13,8 @@ import {
   Search,
   Settings,
   X,
+  CreditCard,
+  RefreshCcw
 } from "lucide-react";
 import "./adminSideNav.css";
 import TopNavRight from "./TopNav/TopNavRight/TopNavRight";
@@ -28,6 +30,8 @@ const AdminSideNav = ({ isOpen, setIsOpen }) => {
     { href: "/admin/pages", label: "Pages", icon: FileText },
     { href: "/admin/users", label: "Users", icon: Users },
     { href: "/admin/orders", label: "Orders", icon: ShoppingCart },
+     { href: "/admin/credits", label: "Credits", icon: CreditCard },
+       { href: "/admin/conversions", label: "Conversions", icon: RefreshCcw },
     { href: "/admin/coupons", label: "Coupons", icon: Tag },
     { href: "/admin/seo", label: "SEO", icon: Search },
     { href: "/admin/settings", label: "Settings", icon: Settings },

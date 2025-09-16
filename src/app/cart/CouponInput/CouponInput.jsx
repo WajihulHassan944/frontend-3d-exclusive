@@ -17,6 +17,7 @@ const handleApply = async () => {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ code: coupon }),
+      credentials: 'include',
     });
 
     const data = await res.json();
