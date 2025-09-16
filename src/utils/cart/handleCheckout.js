@@ -70,11 +70,11 @@ const priceBeforeDiscount = storedPriceBeforeDiscount ? Number(storedPriceBefore
 
     const data = await res.json();
     if (data.success) {
-      // ✅ Clear billingData & localPaymentMethod after success
-     localStorage.removeItem('billingData');
+  localStorage.removeItem('billingData');
   localStorage.removeItem('selectedLocalPaymentMethod');
   localStorage.removeItem('priceBeforeDiscount');
   localStorage.removeItem('couponData');
+  localStorage.removeItem('discountAmount');
 
       toast.success('Top-up successful!');
       await clearCart();
