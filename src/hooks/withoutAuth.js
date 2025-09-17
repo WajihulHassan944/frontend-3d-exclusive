@@ -22,7 +22,12 @@ function WithoutAuthInner({ Component, props }) {
         if (redirect) {
           router.replace(redirect);
         } else {
+           const hasPendingCredits = localStorage.getItem("pendingCredits");
+        if (hasPendingCredits) {
+          router.push("/cart");
+        } else {
           router.replace("/upload");
+        }
         } 
       }
     }
