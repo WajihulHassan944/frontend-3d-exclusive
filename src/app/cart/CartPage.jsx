@@ -78,26 +78,31 @@ useEffect(() => {
 
 
 
-
 useEffect(() => {
   if (user?.invoices?.length) {
-    const latestInvoice = user.invoices[0]; // first = latest
-    const info = latestInvoice.billingInfo;
-
-    // Match the country for dropdown (still using user.country)
-    const matched = countryOptions.find(
-      (opt) => opt.label === user.country || opt.value === user.country
+    // Find the first invoice that actually has billingInfo
+    const invoiceWithBilling = user.invoices.find(
+      (inv) => inv.billingInfo && Object.keys(inv.billingInfo).length > 0
     );
 
-    setBillingData({
-      name: info.name || '',
-      street: info.street || '',
-      postalCode: info.postalCode || '',
-      city: info.city || '',
-      companyName: info.companyName || '',
-      vatNumber: info.vatNumber || '',
-      country: matched?.label || ''
-    });
+    if (invoiceWithBilling) {
+      const info = invoiceWithBilling.billingInfo;
+
+      // Match the country for dropdown (still using user.country)
+      const matched = countryOptions.find(
+        (opt) => opt.label === user.country || opt.value === user.country
+      );
+
+      setBillingData({
+        name: info.name || '',
+        street: info.street || '',
+        postalCode: info.postalCode || '',
+        city: info.city || '',
+        companyName: info.companyName || '',
+        vatNumber: info.vatNumber || '',
+        country: matched?.label || ''
+      });
+    }
   }
 }, [user?.invoices, user?.country]);
 
