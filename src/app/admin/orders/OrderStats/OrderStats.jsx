@@ -85,7 +85,7 @@ const OrderStats = ({refreshKey}) => {
               {loading ? (
                 <span className="skeleton-loader" />
               ) : (
-                100
+                stats?.totalOrders || 0
               )}
             </p>
             <p className="stat-subtext">
