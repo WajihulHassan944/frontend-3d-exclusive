@@ -9,6 +9,11 @@ import AddOrder from "./AddOrder/AddOrder";
 
 const Orders = () => {
 const [showAddOrder, setShowAddOrder] = useState(false);
+const [refreshKey, setRefreshKey] = useState(0);
+  const handleRefresh = () => {
+    setRefreshKey((prev) => prev + 1);
+  };
+
 
   return (
     <div className={`orders-container ${GeistSans.className}`}>
@@ -23,11 +28,11 @@ const [showAddOrder, setShowAddOrder] = useState(false);
       </div>
 
 
-<OrderStats />
-<OrderTable />
+<OrderStats refreshKey={refreshKey} />
+<OrderTable refreshKey={refreshKey} />
 
 
-{showAddOrder && <AddOrder onClose={() => setShowAddOrder(false)} />}
+{showAddOrder && <AddOrder onClose={() => setShowAddOrder(false)} onPlaced={handleRefresh} />}
     </div>
   );
 };

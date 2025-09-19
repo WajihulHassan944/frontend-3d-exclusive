@@ -1,14 +1,47 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Search, MoreHorizontal } from "lucide-react";
 import "./OrderTable.css";
+import { baseUrl } from "@/const";
 
-const OrderTable = () => {
+const OrderTable = ({refreshKey}) => {
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
+
+  const fetchOrders = async () => {
+      try {
+        const res = await fetch(`${baseUrl}/wallet/orders/all`);
+        const data = await res.json();
+        setOrders(data || []);
+      } catch (err) {
+        console.error("Error fetching orders:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+  useEffect(() => {
+     setLoading(true);
+    fetchOrders();
+  }, [refreshKey]);
+
+  const filteredOrders = orders.filter((order) =>
+    [order.orderId, order.customer, order.email, order.company]
+      .join(" ")
+      .toLowerCase()
+      .includes(search.toLowerCase())
+  );
+
   return (
     <div>
       {/* Search */}
       <div className="search-bar">
         <Search className="search-icon" size={18} />
-        <input type="text" placeholder="Search order" />
+        <input
+          type="text"
+          placeholder="Search order"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
       </div>
 
       {/* Orders Table */}
@@ -29,68 +62,51 @@ const OrderTable = () => {
               <th>Actions</th>
             </tr>
           </thead>
-          <tbody>
-            <tr>
-              <td>ORD-001</td>
-              <td>
-                <div className="customer">
-                  <span className="customer-name">John Doe</span>
-                  <span className="customer-email">john@example.com</span>
-                </div>
-              </td>
-              <td>Acme Corp</td>
-              <td>€299.99</td>
-              <td>1,000</td>
-              <td>
-                <span className="status completed">completed</span>
-              </td>
-              <td>2024-01-15</td>
-              <td>
-                <MoreHorizontal className="action-menu" size={18} />
-              </td>
-            </tr>
-
-            <tr>
-              <td>ORD-002</td>
-              <td>
-                <div className="customer">
-                  <span className="customer-name">Jane Smith</span>
-                  <span className="customer-email">jane@techstart.com</span>
-                </div>
-              </td>
-              <td>TechStart Ltd</td>
-              <td>€599.99</td>
-              <td>2,500</td>
-              <td>
-                <span className="status pending">pending</span>
-              </td>
-              <td>2024-01-14</td>
-              <td>
-                <MoreHorizontal className="action-menu" size={18} />
-              </td>
-            </tr>
-
-            <tr>
-              <td>ORD-003</td>
-              <td>
-                <div className="customer">
-                  <span className="customer-name">Mike Johnson</span>
-                  <span className="customer-email">mike@designco.nl</span>
-                </div>
-              </td>
-              <td>Design Co</td>
-              <td>€149.99</td>
-              <td>500</td>
-              <td>
-                <span className="status processing">processing</span>
-              </td>
-              <td>2024-01-13</td>
-              <td>
-                <MoreHorizontal className="action-menu" size={18} />
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <tbody>
+  {loading
+    ? Array.from({ length: 5 }).map((_, idx) => (
+        <tr key={idx}>
+          {Array.from({ length: 8 }).map((_, colIdx) => (
+            <td key={colIdx}>
+              <span className="skeleton-loader" />
+            </td>
+          ))}
+        </tr>
+      ))
+    : filteredOrders.map((order, idx) => (
+        <tr key={idx}>
+          <td>{order.orderId}</td>
+          <td>
+            <div className="customer">
+              <span className="customer-name">{order.customer}</span>
+              <span className="customer-email">{order.email}</span>
+            </div>
+          </td>
+          <td>{order.company || "—"}</td>
+          <td>
+            {order.currency === "CREDITS" && order.amount === "0.00" ? (
+              <span className="admin-added">Added by Admin</span>
+            ) : (
+              <>
+                {order.currency} {' '}
+                {Number(order.amount).toFixed(2)}
+              </>
+            )}
+          </td>
+          <td>{order.credits}</td>
+          <td>
+            <span className={`status ${order.status.toLowerCase()}`}>
+              {order.status}
+            </span>
+          </td>
+          <td>{order.date}</td>
+          <td>
+            <MoreHorizontal className="action-menu" size={18} />
+          </td>
+        </tr>
+      ))}
+</tbody>
+</table>
       </div>
     </div>
   );

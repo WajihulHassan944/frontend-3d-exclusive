@@ -153,3 +153,7 @@ td {
     gap: 6px;
   }
 }
+.admin-added {
+  font-style: italic;
+  color: #6b7280; /* gray-500 */
+}

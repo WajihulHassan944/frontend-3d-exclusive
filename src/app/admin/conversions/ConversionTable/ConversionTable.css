@@ -201,11 +201,11 @@ td {
   background: #e0e7ff;
   color: #4338ca;
 }
-.status.queued {
+.status.queued, .status.pending, .status.uploaded  {
   background: #fef9c3;
   color: #b45309;
 }
-.status.error {
+.status.error, .status.failed {
   background: #fee2e2;
   color: #b91c1c;
 }

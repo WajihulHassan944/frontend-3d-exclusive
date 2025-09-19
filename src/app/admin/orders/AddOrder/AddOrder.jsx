@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-import { X } from "lucide-react";
+import { X, Loader2 } from "lucide-react";
 import "./AddOrder.css";
 import "../../credits/CreditsTable/AddRemoveCredits/AddRemoveCredits.css";
-const AddOrder = ({ onClose }) => {
+import { baseUrl } from "@/const";
+import toast from "react-hot-toast";
+const AddOrder = ({ onClose, onPlaced }) => {
   const [formData, setFormData] = useState({
     customerName: "",
     email: "",
@@ -13,16 +15,43 @@ const AddOrder = ({ onClose }) => {
     amount: 0,
     credits: 0,
   });
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = () => {
-    console.log("Order Created:", formData);
-    onClose();
-  };
+const handleSubmit = async () => {
+    if (!formData.customerName || !formData.email) return;
 
+    try {
+      setLoading(true);
+
+      const res = await fetch(`${baseUrl}/wallet/orders/manual-order`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+
+      if (res.ok && data.success) {
+        toast.success(data.message || "Manual order created successfully.");
+
+        if (onPlaced) onPlaced();
+        onClose();
+      } else {
+        toast.error(data.error || "Failed to create order");
+      }
+    } catch (error) {
+      console.error("Error creating order:", error);
+      toast.error("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <div className="modal-overlay-credits" onClick={onClose}>
       <div className="modal modal-add-order" onClick={(e) => e.stopPropagation()}>
@@ -121,15 +150,15 @@ const AddOrder = ({ onClose }) => {
 
         {/* Footer */}
         <div className="modal-footer">
-          <button className="btn cancel" onClick={onClose}>
+          <button className="btn cancel" onClick={onClose} disabled={loading}>
             Cancel
           </button>
           <button
             className="btn confirm"
             onClick={handleSubmit}
-            disabled={!formData.customerName || !formData.email}
+            disabled={!formData.customerName || !formData.email || loading}
           >
-            Create Order
+            {loading ? <Loader2 className="animate-spin" size={16} /> : "Create Order"}
           </button>
         </div>
       </div>
