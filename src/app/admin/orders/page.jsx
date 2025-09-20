@@ -29,7 +29,7 @@ const [refreshKey, setRefreshKey] = useState(0);
 
 
 <OrderStats refreshKey={refreshKey} />
-<OrderTable refreshKey={refreshKey} />
+<OrderTable refreshKey={refreshKey} onDeleted={handleRefresh} />
 
 
 {showAddOrder && <AddOrder onClose={() => setShowAddOrder(false)} onPlaced={handleRefresh} />}

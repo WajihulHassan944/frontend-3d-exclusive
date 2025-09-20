@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react";
 import { Search, MoreHorizontal } from "lucide-react";
 import "./OrderTable.css";
 import { baseUrl } from "@/const";
+import toast from "react-hot-toast";
 
-const OrderTable = ({refreshKey}) => {
+const OrderTable = ({refreshKey, onDeleted}) => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
-
+  const [openMenu, setOpenMenu] = useState(null);
+ 
   const fetchOrders = async () => {
       try {
         const res = await fetch(`${baseUrl}/wallet/orders/all`);
@@ -23,6 +25,15 @@ const OrderTable = ({refreshKey}) => {
      setLoading(true);
     fetchOrders();
   }, [refreshKey]);
+useEffect(() => {
+  const handleClickOutside = (e) => {
+    if (!e.target.closest(".action-menu") && !e.target.closest(".dropdown-menu-table")) {
+      setOpenMenu(null);
+    }
+  };
+  document.addEventListener("click", handleClickOutside);
+  return () => document.removeEventListener("click", handleClickOutside);
+}, []);
 
   const filteredOrders = orders.filter((order) =>
     [order.orderId, order.customer, order.email, order.company]
@@ -30,6 +41,28 @@ const OrderTable = ({refreshKey}) => {
       .toLowerCase()
       .includes(search.toLowerCase())
   );
+
+const handleDelete = async (id) => {
+  if (!window.confirm("Are you sure you want to delete this order?")) return;
+
+  try {
+    const res = await fetch(`${baseUrl}/wallet/order/${id}`, { method: "DELETE" });
+
+    if (!res.ok) {
+      throw new Error(`Delete failed: ${res.status}`);
+    }
+
+    if(onDeleted) onDeleted();
+    toast.success("Order deleted successfully");
+  } catch (err) {
+    console.error("Error deleting order:", err);
+    toast.error("Failed to delete order");
+  } finally {
+    setOpenMenu(null);
+  }
+};
+
+
 
   return (
     <div>
@@ -100,9 +133,19 @@ const OrderTable = ({refreshKey}) => {
             </span>
           </td>
           <td>{order.date}</td>
-          <td>
-            <MoreHorizontal className="action-menu" size={18} />
-          </td>
+        <td className="relative">
+  <MoreHorizontal
+    className="action-menu"
+    size={18}
+    onClick={() => setOpenMenu(openMenu === idx ? null : idx)}
+  />
+  {openMenu === idx && (
+    <div className="dropdown-menu-table">
+      <button onClick={() => handleDelete(order._id)}>Delete</button>
+    </div>
+  )}
+</td>
+
         </tr>
       ))}
 </tbody>

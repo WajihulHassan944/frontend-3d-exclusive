@@ -15,6 +15,8 @@ const ConversionTable = ({ onUpdated, refreshKey }) => {
   const [loading, setLoading] = useState(true);
   const [selectedError, setSelectedError] = useState(null);
   const [activeTab, setActiveTab] = useState("all");
+  const [retryingId, setRetryingId] = useState(null);
+
   const [search, setSearch] = useState("");
 const fetchConversions = async () => {
       try {
@@ -35,31 +37,31 @@ const fetchConversions = async () => {
     fetchConversions();
   }, [refreshKey]);
 
-// Retry conversion
 const handleRetry = async (id) => {
+  setRetryingId(id); // start animation
   try {
     const res = await fetch(`${baseUrl}/b2/videos/update`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_KEY}`, 
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_KEY}`,
       },
-      body: JSON.stringify({videoId: id, status: "queued" }),
+      body: JSON.stringify({ videoId: id, status: "queued" }),
     });
 
     const result = await res.json();
+    if (!res.ok) throw new Error(result.message || "Retry failed");
 
-    if (!res.ok) {
-      throw new Error(result.message || "Retry failed");
-    }
     setConversions((prev) =>
       prev.map((c) => (c.id === id ? { ...c, status: "queued" } : c))
     );
     setSelectedError(null);
   } catch (err) {
     console.error("❌ Retry failed:", err);
+  } finally {
+    setRetryingId(null); // stop animation
   }
-   if (onUpdated) onUpdated();
+  if (onUpdated) onUpdated();
 };
 
 // Filter conversions by search + tab
@@ -236,18 +238,23 @@ const filteredConversions = conversions.filter((c) => {
         <td>{c.credits || 0}</td>
         <td>{c.duration || "-"}</td>
         <td>
-          {(c.status === "error" || c.status === "failed") && (
-            <button
-              className="btn retry"
-              onClick={(e) => {
-                e.stopPropagation();
-                handleRetry(c.id);
-              }}
-            >
-              <RefreshCcw size={12} /> Retry
-            </button>
-          )}
-        </td>
+  {(c.status === "error" || c.status === "failed") && (
+    <button
+      className="btn retry"
+      onClick={(e) => {
+        e.stopPropagation();
+        handleRetry(c.id);
+      }}
+    >
+      <RefreshCcw
+        size={12}
+        className={retryingId === c.id ? "spin" : ""}
+      />
+      {retryingId === c.id ? " Retrying..." : " Retry"}
+    </button>
+  )}
+</td>
+
       </tr>
     ))
   ) : (

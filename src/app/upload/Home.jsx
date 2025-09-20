@@ -189,6 +189,13 @@ setTimeout(() => {
       reject(new Error('Failed to load video metadata'));
     };
   });
+  function formatFileSize(bytes) {
+  if (bytes === 0) return "0 Bytes";
+  const sizes = ["Bytes", "KB", "MB", "GB", "TB"];
+  const i = Math.floor(Math.log(bytes) / Math.log(1024));
+  return parseFloat((bytes / Math.pow(1024, i)).toFixed(2)) + " " + sizes[i];
+}
+
 const handleUpload = async () => {
   if (!videoFile) return;
 
@@ -263,7 +270,9 @@ const isUsingFreeMinute = hasFreeMinute && durationMinutes <= 1;
         key,
         quality,
         lengthInSeconds: Math.round(duration),
-         conversionFormat,
+        conversionFormat,
+        fileSize: formatFileSize(videoFile.size), 
+        creditsUsed: isUsingFreeMinute ? 0 : cost, 
       }),
     });
 
