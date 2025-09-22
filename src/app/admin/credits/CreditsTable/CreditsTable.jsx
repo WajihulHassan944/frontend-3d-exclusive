@@ -123,9 +123,11 @@ const CreditsTable = ({onUpdated}) => {
             </tr>
           ) : (
             filtered.map((cust) => {
-              const [used, total, percentRaw] = cust.creditsUsage
-                .match(/(\d+) \/ (\d+) \((\d+)%\)/)
-                .slice(1);
+               const match = cust.creditsUsage?.match(/(\d+)\s*\/\s*(\d+)\s*\((\d+)%\)/);
+  if (!match) {
+    return null; // or handle gracefully
+  }
+  const [used, total, percentRaw] = match.slice(1);
               const percent = parseInt(percentRaw, 10);
 
               // Expiry logic
