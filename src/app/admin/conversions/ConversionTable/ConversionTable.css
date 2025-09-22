@@ -215,13 +215,24 @@ td {
 }
 
 /* Retry button */
-.btn.retry {
+.btn.retry, .btn.download {
   padding: 4px 10px;
-  border: 1px solid #d1d5db;
+  /* border: 1px solid #d1d5db; */
+  border: none;
   border-radius: 6px;
   font-size: 13px;
   cursor: pointer;
   background: #fff;
+   display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+
+.btn.download.disabled {
+  opacity: 0.5 !important;
+  cursor: not-allowed !important;
+  pointer-events: none !important; /* prevents hover effects */
 }
 
 /* Error Details */
@@ -271,4 +282,33 @@ td {
   100% {
     transform: rotate(360deg);
   }
+}
+
+
+.relative{
+  position: relative;
+}
+.action-menu{
+  cursor: pointer;
+}
+
+.relative .dropdown-menu-table {
+  position: absolute;
+  top: 34px;
+  right: 65%;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+  width: 120px;
+  animation: fadeIn 0.15s ease-in-out;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
 }
