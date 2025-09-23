@@ -6,20 +6,32 @@ import {
   Users,
   BarChart3,
 } from "lucide-react";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import "./OrderStats.css";
 import { baseUrl } from "@/const";
 
-const OrderStats = ({refreshKey}) => {
+const OrderStats = ({ refreshKey }) => {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [period, setPeriod] = useState("thisWeek"); // default
+  const [period, setPeriod] = useState("thisWeek");
   const [error, setError] = useState(null);
 
-  const fetchStats = async (selectedPeriod) => {
+  // For custom range
+  const [customStart, setCustomStart] = useState(null);
+  const [customEnd, setCustomEnd] = useState(null);
+
+  const fetchStats = async (selectedPeriod, start, end) => {
     try {
       setLoading(true);
       setError(null);
-      const res = await fetch(`${baseUrl}/wallet/orders-stats?period=${selectedPeriod}`);
+
+      let url = `${baseUrl}/wallet/orders-stats?period=${selectedPeriod}`;
+      if (selectedPeriod === "custom" && start && end) {
+        url += `&customStart=${start.toISOString()}&customEnd=${end.toISOString()}`;
+      }
+
+      const res = await fetch(url);
       const data = await res.json();
 
       if (!res.ok) throw new Error(data.error || "Failed to load stats");
@@ -34,8 +46,14 @@ const OrderStats = ({refreshKey}) => {
   };
 
   useEffect(() => {
-    fetchStats(period);
-  }, [period, refreshKey]);
+    if (period === "custom") {
+      if (customStart && customEnd) {
+        fetchStats("custom", customStart, customEnd);
+      }
+    } else {
+      fetchStats(period);
+    }
+  }, [period, refreshKey, customStart, customEnd]);
 
   return (
     <div className="order-stats-container">
@@ -46,15 +64,42 @@ const OrderStats = ({refreshKey}) => {
           </h2>
           <p>Track performance across different time periods</p>
         </div>
-        <select
-          className="order-stats-select"
-          value={period}
-          onChange={(e) => setPeriod(e.target.value)}
-        >
-          <option value="thisWeek">This Week</option>
-          <option value="lastWeek">Last Week</option>
-          <option value="thisMonth">This Month</option>
-        </select>
+        <div className="order-stats-controls">
+          <select
+            className="order-stats-select"
+            value={period}
+            onChange={(e) => setPeriod(e.target.value)}
+          >
+            <option value="thisWeek">This Week</option>
+            <option value="lastWeek">Last Week</option>
+            <option value="lastMonth">Last Month</option>
+            <option value="thisYear">This Year</option>
+            <option value="custom">Custom Range</option>
+          </select>
+
+          {period === "custom" && (
+            <div className="custom-date-range">
+              <DatePicker
+                selected={customStart}
+                onChange={(date) => setCustomStart(date)}
+                selectsStart
+                startDate={customStart}
+                endDate={customEnd}
+                placeholderText="Start Date"
+              />
+              <span>to</span>
+              <DatePicker
+                selected={customEnd}
+                onChange={(date) => setCustomEnd(date)}
+                selectsEnd
+                startDate={customStart}
+                endDate={customEnd}
+                minDate={customStart}
+                placeholderText="End Date"
+              />
+            </div>
+          )}
+        </div>
       </div>
 
       {error ? (
@@ -102,15 +147,16 @@ const OrderStats = ({refreshKey}) => {
               <h3>Total Revenue</h3>
               <CreditCard className="stat-icon" />
             </div>
-         <p className="stat-value">
-  {loading ? (
-    <span className="skeleton-loader" />
-  ) : (
-    `€${Number(stats?.totalRevenue || 0).toFixed(2)}`
-  )}
-</p>
-
-            <p className="stat-subtext">{period.replace(/([A-Z])/g, " $1")} revenue</p>
+            <p className="stat-value">
+              {loading ? (
+                <span className="skeleton-loader" />
+              ) : (
+                `€${Number(stats?.totalRevenue || 0).toFixed(2)}`
+              )}
+            </p>
+            <p className="stat-subtext">
+              {period.replace(/([A-Z])/g, " $1")} revenue
+            </p>
           </div>
 
           <div className="stat-card">
@@ -118,13 +164,13 @@ const OrderStats = ({refreshKey}) => {
               <h3>Avg Order Value</h3>
               <Users className="stat-icon" />
             </div>
-          <p className="stat-value">
-  {loading ? (
-    <span className="skeleton-loader" />
-  ) : (
-    `€${Number(stats?.avgOrderValue || 0).toFixed(2)}`
-  )}
-</p>
+            <p className="stat-value">
+              {loading ? (
+                <span className="skeleton-loader" />
+              ) : (
+                `€${Number(stats?.avgOrderValue || 0).toFixed(2)}`
+              )}
+            </p>
             <p className="stat-subtext">Average per order</p>
           </div>
         </div>

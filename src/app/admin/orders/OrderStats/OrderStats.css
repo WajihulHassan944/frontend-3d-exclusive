@@ -28,7 +28,13 @@
   color: #333;
   margin-top: 4px;
 }
-
+.order-stats-controls{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: flex-end;
+  align-items: flex-end;
+}
 .order-stats-select {
   padding: 6px 10px;
   border: 1px solid #e5e7eb;
@@ -36,8 +42,31 @@
   font-size: 13px;
   background: #f9fafb;
   cursor: pointer;
+  width: fit-content;
 }
 
+.react-datepicker__input-container input {
+  padding: 6px 10px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 13px;
+  background: #f9fafb;
+  cursor: pointer;
+  outline: none;
+  width: 120px; /* keeps inputs compact */
+}
+
+/* Place them neatly next to each other */
+.custom-date-range {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.custom-date-range span {
+  font-size: 13px;
+  color: #6b7280; /* gray-500 */
+}
 
 .order-stats-grid {
   display: grid;

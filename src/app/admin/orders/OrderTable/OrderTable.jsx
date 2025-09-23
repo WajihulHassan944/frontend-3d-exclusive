@@ -3,12 +3,18 @@ import { Search, MoreHorizontal } from "lucide-react";
 import "./OrderTable.css";
 import { baseUrl } from "@/const";
 import toast from "react-hot-toast";
+import AddOrder from "../AddOrder/AddOrder";
+import InvoiceModal from "../InvoiceModal/InvoiceModal";
 
 const OrderTable = ({refreshKey, onDeleted}) => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [openMenu, setOpenMenu] = useState(null);
+    const [showModal, setShowModal] = useState(null);
+    const [selectedOrder, setSelectedOrder] = useState(null);
+    const [showInvoice, setShowInvoice] = useState(null);
+    
  
   const fetchOrders = async () => {
       try {
@@ -107,49 +113,95 @@ const handleDelete = async (id) => {
         </tr>
       ))
     : filteredOrders.map((order, idx) => (
-        <tr key={idx}>
-          <td>{order.orderId}</td>
-          <td>
-            <div className="customer">
-              <span className="customer-name">{order.customer}</span>
-              <span className="customer-email">{order.email}</span>
-            </div>
-          </td>
-          <td>{order.company || "—"}</td>
-          <td>
-            {order.currency === "CREDITS" && order.amount === "0.00" ? (
-              <span className="admin-added">Added by Admin</span>
-            ) : (
-              <>
-                {order.currency} {' '}
-                {Number(order.amount).toFixed(2)}
-              </>
-            )}
-          </td>
-          <td>{order.credits}</td>
-          <td>
-            <span className={`status ${order.status.toLowerCase()}`}>
-              {order.status}
-            </span>
-          </td>
-          <td>{order.date}</td>
-        <td className="relative">
-  <MoreHorizontal
-    className="action-menu"
-    size={18}
-    onClick={() => setOpenMenu(openMenu === idx ? null : idx)}
-  />
-  {openMenu === idx && (
-    <div className="dropdown-menu-table">
-      <button onClick={() => handleDelete(order._id)}>Delete</button>
-    </div>
-  )}
-</td>
+        <React.Fragment key={idx}>
+          <tr>
+            <td>{order.orderId}</td>
+            <td>
+              <div className="customer">
+                <span className="customer-name">{order.customer}</span>
+                <span className="customer-email">{order.email}</span>
+              </div>
+            </td>
+            <td>{order.company || "—"}</td>
+            <td>
+              {order.currency === "CREDITS" && Number(order.amount) === 0 ? (
+                <span className="admin-added">Added by Admin</span>
+              ) : (
+                <>
+                  {order.currency} {Number(order.amount).toFixed(2)}
+                </>
+              )}
+            </td>
+            <td>{order.credits}</td>
+            <td>
+              <span className={`status ${order.status.toLowerCase()}`}>
+                {order.status}
+              </span>
+            </td>
+            <td className="order-date-cell">
+              <div className="order-date-wrapper">
+                <span className="order-date">{order.date}</span>
+                <span className="order-time">{order.time}</span>
+              </div>
+            </td>
+            <td className="relative">
+              <MoreHorizontal
+                className="action-menu"
+                size={18}
+                onClick={() =>
+                  setOpenMenu(openMenu === idx ? null : idx)
+                }
+              />
+              {openMenu === idx && (
+                <div className="dropdown-menu-table">
+                  <button onClick={() => handleDelete(order._id)}>Delete</button>
+                  <button
+                    onClick={() => {
+                      setSelectedOrder(order);
+                      setShowModal(true);
+                    }}
+                  >
+                    Update
+                  </button>
+                  <button
+                    onClick={() => {
+                      setSelectedOrder(order);
+                      setShowInvoice(idx); // 👈 track row index instead of true/false
+                      setOpenMenu(null);
+                    }}
+                  >
+                    Invoice
+                  </button>
+                </div>
+              )}
+            </td>
+          </tr>
 
-        </tr>
+          {/* Inline invoice row */}
+          {showInvoice === idx && selectedOrder?._id === order._id && (
+            <tr>
+              <td colSpan={8}>
+                <InvoiceModal
+                  orderId={order._id}
+                  onClose={() => setShowInvoice(null)}
+                />
+              </td>
+            </tr>
+          )}
+        </React.Fragment>
       ))}
 </tbody>
+
 </table>
+{showModal && (
+  <AddOrder
+    order={selectedOrder}   // 👈 pass order if editing
+    onClose={() => setShowModal(false)}
+    onPlaced={onDeleted}
+  />
+)}
+
+
       </div>
     </div>
   );

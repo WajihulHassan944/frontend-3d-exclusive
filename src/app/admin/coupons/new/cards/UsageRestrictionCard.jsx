@@ -37,9 +37,9 @@ const UsageRestrictionCard = ({ formData, setFormData }) => {
       <div className="form-check">
         <div className="form-text">
           <label htmlFor="individualUse">
-            Individual use only <br />
+            Show in Homepage Banner? <br />
             <span>
-              This coupon can only be used by a specific user.
+              Coupon visibility on homepage.
             </span>
           </label>
         </div>
@@ -58,7 +58,7 @@ const UsageRestrictionCard = ({ formData, setFormData }) => {
       </div>
 
       {/* Render email input only when individualUse is true */}
-      {formData.individualUse && (
+      {!formData.individualUse && (
         <div className="form-group mt-2">
           <label>User Email</label>
           <input

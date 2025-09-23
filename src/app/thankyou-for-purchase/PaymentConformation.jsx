@@ -47,12 +47,6 @@ const lastInvoice = user?.invoices
  
   };
 
-  // useEffect(() => {
-  //   if (lastInvoice) {
-  //     setTimeout(downloadPDF, 500); // Download and preview on mount
-  //   }
-  // }, [lastInvoice]);
-
   return (
     <div className="verify-container thankscont">
       <div className="verify-box">

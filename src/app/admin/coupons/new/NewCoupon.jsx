@@ -29,7 +29,7 @@ const NewCoupon = () => {
     expiryDate: "",
     restrictionCode: "",
     restrictionAmount: 0,
-    individualUse: false,
+    individualUse: true,
     userEmail: "",
     excludeSale: false,
     limitPerCoupon: "",
@@ -90,6 +90,10 @@ const NewCoupon = () => {
       toast.error("Please enter minimum cart items required.");
       return;
     }
+     if (!formData.individualUse && !formData.userEmail) {
+      toast.error("Please enter a user email when Show in homepage is disabled.");
+      return;
+    }
       // Map frontend formData → backend payload
       const payload = {
   code: formData.code,
@@ -111,7 +115,7 @@ const NewCoupon = () => {
   usageRestriction: {
     restrictionCode: formData.restrictionCode,
     restrictionAmount: formData.restrictionAmount,
-    individualUseOnly: formData.individualUse,
+    individualUseOnly: !formData.individualUse,
     userEmail: formData.userEmail
   }
 };

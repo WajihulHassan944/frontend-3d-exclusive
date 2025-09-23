@@ -4,60 +4,70 @@ import "./AddOrder.css";
 import "../../credits/CreditsTable/AddRemoveCredits/AddRemoveCredits.css";
 import { baseUrl } from "@/const";
 import toast from "react-hot-toast";
-const AddOrder = ({ onClose, onPlaced }) => {
-  const [formData, setFormData] = useState({
-    customerName: "",
-    email: "",
-    companyName: "",
-    vatNumber: "",
-    address: "",
-    country: "",
-    amount: 0,
-    credits: 0,
-  });
+const AddOrder = ({order, onClose, onPlaced }) => {
+  const isEdit = !!order;
+    const [formData, setFormData] = useState({
+  customerName: order?.customer || "",
+  email: order?.email || "",
+  companyName: order?.company || "",
+  vatNumber: order?.vatNumber || "",   // might not exist in list response
+  address: order?.address || "",       // same here
+  country: order?.country || "",       // same here
+  amount: order?.amount ? Number(order.amount) : 0,
+  credits: order?.credits || 0,
+});
+
+
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-const handleSubmit = async () => {
+
+  const handleSubmit = async () => {
     if (!formData.customerName || !formData.email) return;
 
     try {
       setLoading(true);
 
-      const res = await fetch(`${baseUrl}/wallet/orders/manual-order`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+      const url = isEdit
+        ? `${baseUrl}/wallet/orders/manual-order/${order._id}`
+        : `${baseUrl}/wallet/orders/manual-order`;
+
+      const res = await fetch(url, {
+        method: isEdit ? "PUT" : "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
 
       const data = await res.json();
 
       if (res.ok && data.success) {
-        toast.success(data.message || "Manual order created successfully.");
+        toast.success(
+          data.message || (isEdit ? "Manual order updated." : "Manual order created.")
+        );
 
         if (onPlaced) onPlaced();
         onClose();
       } else {
-        toast.error(data.error || "Failed to create order");
+        toast.error(data.error || "Failed to save order");
       }
     } catch (error) {
-      console.error("Error creating order:", error);
+      console.error("Error saving order:", error);
       toast.error("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }
   };
+
+
   return (
     <div className="modal-overlay-credits" onClick={onClose}>
       <div className="modal modal-add-order" onClick={(e) => e.stopPropagation()}>
         {/* Header */}
         <div className="modal-header">
-          <h3>Add New Order</h3>
+         <h3>{isEdit ? "Update Order" : "Add New Order"}</h3>
           <button className="close-btn-popup" onClick={onClose}>
             <X size={17} />
           </button>
@@ -153,12 +163,18 @@ const handleSubmit = async () => {
           <button className="btn cancel" onClick={onClose} disabled={loading}>
             Cancel
           </button>
-          <button
+           <button
             className="btn confirm"
             onClick={handleSubmit}
             disabled={!formData.customerName || !formData.email || loading}
           >
-            {loading ? <Loader2 className="animate-spin" size={16} /> : "Create Order"}
+            {loading ? (
+              <Loader2 className="animate-spin" size={16} />
+            ) : isEdit ? (
+              "Update Order"
+            ) : (
+              "Create Order"
+            )}
           </button>
         </div>
       </div>
