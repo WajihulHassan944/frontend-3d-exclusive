@@ -74,7 +74,7 @@ try {
       
       {/* Left: Contact Form */}
       <div className="contact-sec-form-box">
-        <h2 className="contact-sec-heading">Send us a message</h2>
+        <h2 className="contact-sec-heading">Send us a <span className='highlight'>message</span></h2>
         <form onSubmit={handleSubmit} className="contact-sec-form">
           <div className="contact-sec-input-row">
             <div className="contact-sec-input-group">

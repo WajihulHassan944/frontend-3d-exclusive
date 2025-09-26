@@ -22,6 +22,8 @@
   overflow: hidden;
   animation: fadeInScale 0.2s ease;
   padding: 10px;
+  max-height: 95vh;
+  overflow: auto;
 }
 .modal-overlay-credits .modal-add-order{
   max-width: 590px;
@@ -67,6 +69,7 @@
 }
 
 .modal-overlay-credits .modal-body input,
+.modal-overlay-credits .modal-body select,
 .modal-overlay-credits .modal-body textarea {
   width: 100%;
   padding: 8px 12px;

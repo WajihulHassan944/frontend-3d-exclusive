@@ -46,7 +46,7 @@ const priceBeforeDiscount = storedPriceBeforeDiscount ? Number(storedPriceBefore
   // ✅ Get the selected local payment method from localStorage
   const localPaymentMethod = localStorage.getItem('selectedLocalPaymentMethod') || null;
   console.log('💳 Local Payment Method from localStorage:', localPaymentMethod);
-
+  const paymentIntentId = localStorage.getItem('paymentIntentId');
   setCheckoutLoading(true);
   try {
     const res = await fetch(`${baseUrl}/wallet/add-funds`, {
@@ -64,7 +64,8 @@ const priceBeforeDiscount = storedPriceBeforeDiscount ? Number(storedPriceBefore
         localPaymentMethod, // ✅ send to backend
         coupon: couponData || null,
         priceBeforeDiscount:priceBeforeDiscount,
-        discountAmount:discountAmount
+        discountAmount:discountAmount,
+        paymentIntentId,
       }),
     });
 
@@ -75,7 +76,7 @@ const priceBeforeDiscount = storedPriceBeforeDiscount ? Number(storedPriceBefore
   localStorage.removeItem('priceBeforeDiscount');
   localStorage.removeItem('couponData');
   localStorage.removeItem('discountAmount');
-
+ localStorage.removeItem('paymentIntentId'); 
       toast.success('Top-up successful!');
       await clearCart();
       await refreshAndDispatchUser(dispatch);

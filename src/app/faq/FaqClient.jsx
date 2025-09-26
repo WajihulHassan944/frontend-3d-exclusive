@@ -18,7 +18,7 @@ export default function FaqClient({faqs}) {
     <>
       <section className="faq-section">
         <div className="faq-header">
-          <h1 className="faq-title">Frequently Asked Questions</h1>
+          <h1 className="faq-title">Frequently Asked <span className='highlight'>Questions</span></h1>
          <center> <p className="faq-subtitle">
             Find answers to common questions about our 3D video conversion service
           </p></center>

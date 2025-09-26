@@ -7,13 +7,8 @@
 .blog-title {
   font-size: 3.6rem;
   margin-top: 30px;
-
+color: #fff;
   font-weight: 700;
-  background-image: linear-gradient(to right, #ff8a3d, #ff6a00);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  text-fill-color: transparent;
   margin-bottom: 20px;
 }
 

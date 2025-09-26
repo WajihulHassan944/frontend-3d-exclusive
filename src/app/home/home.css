@@ -25,11 +25,9 @@
         line-height: 1.1;
         max-width: 1200px;
   font-weight: 700;
-  margin-bottom: 1.5rem;
   color: #ffffff;
-  text-shadow: 0 2px 4px rgba(255, 255, 255, 0.15), 0 0 20px rgba(160, 0, 255, 0.25);
 }.animatedh1 {
-  background: linear-gradient(to right, #c084fc, #ec4899, #22d3ee); /* purple-400, pink-500, cyan-400 */
+  background: linear-gradient(to right,#c084fc , #ec4899 , #60a5fa);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -47,30 +45,10 @@
 }
 
 .hero-content p {
-  font-size: 1.5rem;
         line-height: 2rem;
-  max-width: 890px;
-  margin-bottom: 30px;
-  color: #d1d5db;
-  font-weight: 300;
-  text-shadow: 0 1px 3px rgba(255, 255, 255, 0.12), 0 0 12px rgba(0, 112, 255, 0.2);
-}
-
-.get-started-btn {
-  background-color: #ff4b0e;
-  color: white;
-  border: none;
-  padding: 14px 30px;
-  border-radius: 8px;
-  font-size: 20px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  text-shadow: 0 2px 6px rgba(255, 255, 255, 0.2);
-}
-
-.get-started-btn:hover {
-  background-color: #e6431f;
+  color: #fff;
+  font-weight: 200;
+margin-top: 0;
 }
 
 /* Responsive Design */
@@ -79,10 +57,6 @@
   height: 70vh;
   }
 
-.hero-content .banner-logo{
-  width: 140px;
-  margin-bottom: 50px;
-}
   .hero-content h1 {
     font-size: 48px;
     line-height: 1.3;
@@ -93,8 +67,4 @@
     font-size: 16px;
   }
 
-  .get-started-btn {
-    font-size: 16px;
-    padding: 12px 24px;
-  }
 }

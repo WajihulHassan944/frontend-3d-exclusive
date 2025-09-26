@@ -20,19 +20,20 @@ body {
 
 body {
   color: var(--foreground);
-  background: var(--background);
    font-family: 'Inter', sans-serif;
 
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: linear-gradient(to bottom, #000b8a, #000064);
-  background: linear-gradient(135deg, #0000ff, #5f00ff, #a000ff);
-background: linear-gradient(135deg, #00005d 0%, #0700d3 50%, #a000ff 100%);
-background-attachment: fixed;
-background: linear-gradient(135deg, hsl(225 100% 45%) 0%, hsl(235 95% 40%) 20%, hsl(245 90% 35%) 40%, hsl(255 85% 30%) 60%, hsl(265 80% 28%) 80%, hsl(275 75% 26%) 100%);
+  
 
-background: linear-gradient(135deg, hsl(240 100% 6%) 0%, hsl(250 95% 10%) 20%, hsl(260 90% 14%) 40%, hsl(270 85% 18%) 60%, hsl(280 80% 22%) 80%, hsl(290 75% 26%) 100%);
-background-image: linear-gradient(135deg, hsl(225 100% 45%) 0%, hsl(235 95% 40%) 20%, hsl(245 90% 35%) 40%, hsl(250 85% 30%) 60%, hsl(235 80% 28%) 80%, hsl(220 75% 26%) 100%);
+background-attachment: fixed;
+/* background-image: 
+  linear-gradient(rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.045)), 
+  radial-gradient(at 50% 30%, rgb(5, 36, 97) 0%, rgb(6, 23, 75) 20%, rgb(6, 14, 55) 50%, rgb(6, 10, 45) 80%, rgb(6, 6, 35) 100%),
+  linear-gradient(to right, rgba(36, 64, 142, 0.4), rgba(45, 74, 170, 0.9))
+  ; */
+background-image: url(/assets/background.png);
+
 background-repeat: no-repeat;
 background-size: cover;
 background-position: top;
@@ -149,4 +150,17 @@ background: linear-gradient(135deg, #0700d3 0%, #0700d3 100%);
   100% {
     transform: rotate(360deg);
   }
+}
+
+
+
+.highlight{
+   background: linear-gradient(to right, #c084fc , #ec4899 , #60a5fa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
+.orange{
+  color: #fa8938;
 }

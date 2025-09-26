@@ -5,6 +5,7 @@ import { baseUrl } from "@/const";
 import toast from "react-hot-toast";
 import AddOrder from "../AddOrder/AddOrder";
 import InvoiceModal from "../InvoiceModal/InvoiceModal";
+import CancelOrder from "../CancelOrder/CancelOrder";
 
 const OrderTable = ({refreshKey, onDeleted}) => {
   const [orders, setOrders] = useState([]);
@@ -14,6 +15,7 @@ const OrderTable = ({refreshKey, onDeleted}) => {
     const [showModal, setShowModal] = useState(null);
     const [selectedOrder, setSelectedOrder] = useState(null);
     const [showInvoice, setShowInvoice] = useState(null);
+    const [cancelModal, setCancelModal] = useState(null);
     
  
   const fetchOrders = async () => {
@@ -154,15 +156,29 @@ const handleDelete = async (id) => {
               />
               {openMenu === idx && (
                 <div className="dropdown-menu-table">
-                  <button onClick={() => handleDelete(order._id)}>Delete</button>
+                  <button onClick={() => handleDelete(order._id)} className="delete-btn">Delete</button>
                   <button
-                    onClick={() => {
-                      setSelectedOrder(order);
-                      setShowModal(true);
-                    }}
-                  >
-                    Update
-                  </button>
+  className={`action-btn ${order.status === "cancelled" ? "disabled" : ""}`}
+  onClick={() => {
+    setSelectedOrder(order);
+    setCancelModal(true);
+  }}
+  disabled={order.status === "cancelled"}
+>
+  Cancel
+</button>
+
+<button
+  className={`action-btn ${order.status === "cancelled" ? "disabled" : ""}`}
+  onClick={() => {
+    setSelectedOrder(order);
+    setShowModal(true);
+  }}
+  disabled={order.status === "cancelled"}
+>
+  Update
+</button>
+
                   <button
                     onClick={() => {
                       setSelectedOrder(order);
@@ -198,6 +214,14 @@ const handleDelete = async (id) => {
     order={selectedOrder}   // 👈 pass order if editing
     onClose={() => setShowModal(false)}
     onPlaced={onDeleted}
+  />
+)}
+
+{cancelModal && (
+  <CancelOrder
+    order={selectedOrder}   // 👈 pass order if editing
+    onClose={() => setCancelModal(false)}
+    onCancelled={onDeleted}
   />
 )}
 

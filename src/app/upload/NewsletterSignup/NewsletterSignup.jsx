@@ -42,7 +42,7 @@ const NewsletterSignup = () => {
 
   return (
     <div className="newsletter-section">
-      <h2 className="newsletter-heading">Stay up to date</h2>
+      <h2 className="newsletter-heading">Stay<span className='highlight'> up to date</span></h2>
       <p className="newsletter-subheading">
         Get the latest updates about 3D video technology and exclusive offers
       </p>

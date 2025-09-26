@@ -6,15 +6,19 @@ import { baseUrl } from "@/const";
 import toast from "react-hot-toast";
 const AddOrder = ({order, onClose, onPlaced }) => {
   const isEdit = !!order;
-    const [formData, setFormData] = useState({
+const [formData, setFormData] = useState({
   customerName: order?.customer || "",
   email: order?.email || "",
   companyName: order?.company || "",
-  vatNumber: order?.vatNumber || "",   // might not exist in list response
-  address: order?.address || "",       // same here
-  country: order?.country || "",       // same here
+  vatNumber: order?.vatNumber || "",
+  street: order?.street || "",
+  postalCode: order?.postalCode || "",
+  country: order?.country || "",
   amount: order?.amount ? Number(order.amount) : 0,
   credits: order?.credits || 0,
+  status: order?.status || "completed",       // ✅ new
+  method: order?.method || "Manual order",  // ✅ new
+  notes: order?.notes || "",                // ✅ new
 });
 
 
@@ -25,42 +29,57 @@ const AddOrder = ({order, onClose, onPlaced }) => {
   };
 
 
-  const handleSubmit = async () => {
-    if (!formData.customerName || !formData.email) return;
+const handleSubmit = async () => {
+  const requiredFields = [
+    { key: "customerName", label: "Name" },
+    { key: "email", label: "Email" },
+    { key: "street", label: "Street" },
+    { key: "postalCode", label: "Postal Code" },
+    { key: "country", label: "Country" },
+    { key: "amount", label: "Amount" },
+    { key: "credits", label: "Credits" },
+  ];
 
-    try {
-      setLoading(true);
-
-      const url = isEdit
-        ? `${baseUrl}/wallet/orders/manual-order/${order._id}`
-        : `${baseUrl}/wallet/orders/manual-order`;
-
-      const res = await fetch(url, {
-        method: isEdit ? "PUT" : "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-
-      const data = await res.json();
-
-      if (res.ok && data.success) {
-        toast.success(
-          data.message || (isEdit ? "Manual order updated." : "Manual order created.")
-        );
-
-        if (onPlaced) onPlaced();
-        onClose();
-      } else {
-        toast.error(data.error || "Failed to save order");
-      }
-    } catch (error) {
-      console.error("Error saving order:", error);
-      toast.error("Something went wrong. Please try again.");
-    } finally {
-      setLoading(false);
+  for (const field of requiredFields) {
+    if (!formData[field.key] || formData[field.key].toString().trim() === "") {
+      toast.error(`${field.label} is required`);
+      return;
     }
-  };
+  }
 
+  try {
+    setLoading(true);
+
+    const url = isEdit
+      ? `${baseUrl}/wallet/orders/manual-order/${order._id}`
+      : `${baseUrl}/wallet/orders/manual-order`;
+
+    const res = await fetch(url, {
+      method: isEdit ? "PUT" : "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    });
+
+    const data = await res.json();
+
+    if (res.ok && data.success) {
+      toast.success(
+        data.message ||
+          (isEdit ? "Manual order updated." : "Manual order created.")
+      );
+
+      if (onPlaced) onPlaced();
+      onClose();
+    } else {
+      toast.error(data.error || "Failed to save order");
+    }
+  } catch (error) {
+    console.error("Error saving order:", error);
+    toast.error("Something went wrong. Please try again.");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="modal-overlay-credits" onClick={onClose}>
@@ -117,15 +136,27 @@ const AddOrder = ({order, onClose, onPlaced }) => {
             </div>
           </div>
 
-          <div className="form-group">
-            <label>Address</label>
-            <input
-              type="text"
-              name="address"
-              value={formData.address}
-              onChange={handleChange}
-            />
-          </div>
+         <div className="form-row">
+  <div className="form-group">
+    <label>Street</label>
+    <input
+      type="text"
+      name="street"
+      value={formData.street}
+      onChange={handleChange}
+    />
+  </div>
+  <div className="form-group">
+    <label>Postal Code</label>
+    <input
+      type="text"
+      name="postalCode"
+      value={formData.postalCode}
+      onChange={handleChange}
+    />
+  </div>
+</div>
+
 
           <div className="form-row">
             <div className="form-group">
@@ -137,25 +168,71 @@ const AddOrder = ({order, onClose, onPlaced }) => {
                 onChange={handleChange}
               />
             </div>
-            <div className="form-group">
-              <label>Amount (€) *</label>
-              <input
-                type="number"
-                name="amount"
-                value={formData.amount}
-                onChange={handleChange}
-              />
-            </div>
-            <div className="form-group">
-              <label>Credits *</label>
-              <input
-                type="number"
-                name="credits"
-                value={formData.credits}
-                onChange={handleChange}
-              />
-            </div>
+<div className="form-group">
+  <label className={isEdit ? "text-gray-400" : ""}>Amount (€) *</label>
+  <input
+    type="number"
+    name="amount"
+    value={formData.amount}
+    onChange={handleChange}
+    disabled={isEdit}
+  />
+</div>
+
+<div className="form-group">
+  <label className={isEdit ? "text-gray-400" : ""}>Credits *</label>
+  <input
+    type="number"
+    name="credits"
+    value={formData.credits}
+    onChange={handleChange}
+    disabled={isEdit}
+  />
+</div>
+
           </div>
+
+
+          <div className="form-row">
+  <div className="form-group">
+    <label>Status</label>
+    <select name="status" value={formData.status} onChange={handleChange}>
+      <option value="pending">Pending</option>
+      <option value="paid">Paid</option>
+      <option value="completed">Completed</option>
+    </select>
+  </div>
+  <div className="form-group">
+    <label>Payment Method</label>
+    <input
+      type="text"
+      name="method"
+      value={formData.method}
+      onChange={handleChange}
+    />
+  </div>
+</div>
+
+<div className="form-row">
+  <div className="form-group note-field">
+    <label>Notes</label>
+    <textarea
+      name="notes"
+      value={formData.notes}
+      onChange={handleChange}
+      rows="3"
+    />
+    {formData.notes && (
+      <div className="note-preview">
+        <strong>Notes:</strong> {formData.notes}
+      </div>
+    )}
+  </div>
+</div>
+
+
+
+
         </div>
 
         {/* Footer */}

@@ -3,7 +3,8 @@
   align-items: center;
   justify-content: center;
   gap: 10px;
-  background-image: linear-gradient(to right, #1e3a8a , #581c87 , #1e40af);
+  background-image: linear-gradient(to right,rgb(30 58 138 / .8) , rgb(30 64 175 / .8));
+
   color: #fff;
   padding: 10px 16px;
   padding-right: 60px;

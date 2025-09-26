@@ -2,7 +2,7 @@
   text-align: center;
   padding: 60px 20px;
   color: #fff;
-  background-image: url(/Immersive/background.png);
+    background-image: linear-gradient(to bottom, hsl(220 90% 12%) , hsl(220 90% 12% / .5));
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -15,16 +15,7 @@
   margin-bottom: 10px;
   margin-top: 20px;
 height: 60px;
-  /* Gradient text */
-  background-image: linear-gradient(
-    to right,
-    hsl(25 95% 60%),
-    hsl(240 30% 15%)
-  );
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text; /* fallback for non-webkit browsers */
-  color: transparent;
+color: #fff;
 }
 
 .immersive-subtitle {

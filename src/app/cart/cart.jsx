@@ -31,7 +31,7 @@ export default function ShoppingCart({ billingData, setPage, selectedPaymentMeth
   };
 
   return (
-    
+    <>
       <div className="billing-form">
         <h3 className="billing-title">Billing Information</h3>
   <div className="backArrowIconWrap">
@@ -81,7 +81,7 @@ export default function ShoppingCart({ billingData, setPage, selectedPaymentMeth
               onChange={() => setSelectedPaymentMethod('element')}
             />
             <div className="stripe-element-box">
-              <h4>Or use another payment method</h4>
+              <h4>Choose payment method</h4>
               <div className="stripe-box">
                 {elementsLoading && <div className="spinner-cart" />} {/* Spinner while loading */}
                 <PaymentElement
@@ -125,7 +125,13 @@ export default function ShoppingCart({ billingData, setPage, selectedPaymentMeth
             {cardSubmitting ? <div className="spinner-cart" /> : 'Submit'}
           </button>
         )}
+        
       </div>
     
+<div class="security-note">
+  <img src="/assets/ssl-Photoroom.png" alt="SSL Secured" class="ssl-icon" />
+  <p>All transactions are SSL-encrypted to keep your details safe.</p>
+</div>
+</>
   );
 }

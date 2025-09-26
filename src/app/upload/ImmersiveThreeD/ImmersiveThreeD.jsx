@@ -37,7 +37,7 @@ const ImmersiveThreeD = () => {
   return (
     <div className="immersive-section">
       {/* Title */}
-      <h2 className="immersive-title">Experience 3D Video Magic</h2>
+      <h2 className="immersive-title"><span className='highlight'>Experience</span> 3D Video <span className="orange">Magic</span></h2>
       <p className="immersive-subtitle">
         Move your mouse over the image below to see how we transform flat 2D videos
         into immersive 3D experiences. This is what your content will look like after
@@ -83,7 +83,7 @@ const ImmersiveThreeD = () => {
           <img src="/Immersive/vr.png" alt="VR Experience" />
         </div>
         <div className="vr-text">
-          <h3>Compatible with VR Headsets</h3>
+          <h3><span className='highlight'>Compatible</span> with VR Headsets</h3>
           <p>
             View your converted 3D videos with these VR headsets for the ultimate immersive
             experience:

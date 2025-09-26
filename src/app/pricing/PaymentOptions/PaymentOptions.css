@@ -9,6 +9,10 @@
   font-weight: 700;
   margin-bottom: 40px;
   color: #fff; /* adjust if dark background */
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
 }
 
 .payment-logos {
@@ -30,4 +34,7 @@
 }
 .payment-logos img:hover {
   transform: scale(1.05);
+}
+.lock-icon{
+  color: #4ade80;
 }

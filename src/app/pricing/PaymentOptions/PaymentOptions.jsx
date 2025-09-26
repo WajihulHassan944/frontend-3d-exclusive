@@ -1,11 +1,13 @@
 import React from "react";
 import "./PaymentOptions.css";
+import { Lock } from "lucide-react";
 
 const PaymentOptions = () => {
   return (
     <div className="payment-options-container">
       <h1 className="payment-options-title">
-        Secure payments powered by Stripe
+       <Lock className="lock-icon" />
+ Secure and encrypted payments powered by Stripe
       </h1>
       <div className="payment-logos">
         <img src="/logos/visa.svg" alt="Visa" />

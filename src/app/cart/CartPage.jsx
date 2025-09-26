@@ -194,6 +194,8 @@ const isBillingComplete = billingData.name &&
       fetchCart(setCredits, setLoading, currency); // ✅ use it here
     }
   }, [currency]);
+
+
 const fetchClientSecret = async () => {
   try {
     setLoadingPaymentIntent(true); // start spinner
@@ -218,6 +220,8 @@ const fetchClientSecret = async () => {
     if (data?.clientSecret) {
       setClientSecret(data.clientSecret);
       setPaymentMethods(data.paymentMethods || []);
+      localStorage.removeItem("paymentIntentId");
+      localStorage.setItem("paymentIntentId", data.paymentIntentId);
     }
   } catch (error) {
     console.error('❌ Error fetching client secret:', error);

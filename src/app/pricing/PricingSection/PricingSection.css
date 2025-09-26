@@ -7,7 +7,7 @@
 }
 
 .pricing-card {
-  background: linear-gradient(to bottom right, #0c043d, #0e0a53);
+  background:#0006;
   border-radius: 18px;
   padding: 30px 25px;
   width: 330px;
@@ -23,17 +23,12 @@
   transform-origin: bottom;
 }
 
-.pricing-card:nth-of-type(1),
-.pricing-card:nth-of-type(3){
-    background: rgba(0, 0, 0, 0.35);
-}
-
 .pricing-card-popular {
-  border: 2px solid #ff7a1f;
+   border: 2px solid #fff3; 
 }
 .pricing-card:hover{
-  border: 2px solid #ff7a1f;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+   border: 2px solid #1fad7e; 
+  box-shadow: 0 25px 50px -12px hsl(160 70% 40% / .2);
   transform: scale(1.05);
 }
 .pricing-card-label {
@@ -112,7 +107,7 @@
 }
 
 .pricing-get-started-btn {
-background: #f97316;
+background: #1fad7e;
   border: none;
   color: white;
   padding: 12px 20px;
@@ -125,12 +120,12 @@ background: #f97316;
 }
 
 .pricing-get-started-btn:hover {
-background-color: rgba(250, 131, 42, 1);
-    box-shadow: 0 10px 15px -3px rgb(251 146 60 / .5), 0 4px 6px -4px rgb(251 146 60 / .5);
+ background-color: #1fad7ee6;
+ box-shadow: 0 0 40px #fa893866;
   }
 
 .button-dull {
-  background: #b55328; /* Dull background */
+  /* background: #b55328; */
 }
 
 .pricing-card h5{

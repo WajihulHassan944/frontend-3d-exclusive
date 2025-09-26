@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './CustomerTestimonials.css';
 import { FaStar } from 'react-icons/fa';
+import { motion } from 'framer-motion';
 
 const testimonials = [
   {
@@ -9,7 +10,7 @@ const testimonials = [
     name: 'Michael Johnson',
     role: 'Travel Content Creator',
     quote:
-      'Incredible quality! My travel videos look absolutely stunning on my Quest 3. The depth perception makes viewers feel like they\'re actually there with me.',
+      "Incredible quality! My travel videos look absolutely stunning on my Quest 3. The depth perception makes viewers feel like they're actually there with me.",
   },
   {
     img: '/testimonials/sarah.jpg',
@@ -27,24 +28,18 @@ const testimonials = [
   },
 ];
 
-// Counter component with fixed duration, supports decimals
+// Counter component (unchanged)
 const Counter = ({ start = 0, target, suffix = '', duration = 2000, decimals = 0 }) => {
   const [count, setCount] = useState(start);
 
   useEffect(() => {
     const startTime = performance.now();
-
     const step = (currentTime) => {
       const progress = Math.min((currentTime - startTime) / duration, 1);
       const value = start + (target - start) * progress;
-
       setCount(Number(value.toFixed(decimals)));
-
-      if (progress < 1) {
-        requestAnimationFrame(step);
-      }
+      if (progress < 1) requestAnimationFrame(step);
     };
-
     requestAnimationFrame(step);
   }, [start, target, duration, decimals]);
 
@@ -57,6 +52,22 @@ const Counter = ({ start = 0, target, suffix = '', duration = 2000, decimals = 0
       {suffix}
     </span>
   );
+};
+
+// Motion variants
+const containerVariants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.25, // delay between cards
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 40 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } },
 };
 
 const CustomerTestimonials = () => {
@@ -73,22 +84,46 @@ const CustomerTestimonials = () => {
       },
       { threshold: 0.3 }
     );
-
     if (statsRef.current) observer.observe(statsRef.current);
     return () => observer.disconnect();
   }, []);
-
+const fadeUp = {
+  hidden: { opacity: 0, y: 30 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
+};
   return (
     <div className="testimonial-wrapper">
       <div className="testimonails-main">
-        <h2 className="testimonial-title">What our customers say</h2>
-        <p className="testimonial-subtitle">
-          Join thousands of creators who transformed their content
-        </p>
+         <motion.h2
+          className="testimonial-title"
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.2 }}
+        >
+          What our <span className="highlight">customers</span> say
+        </motion.h2>
 
-        <div className="testimonial-cards">
+        <motion.p
+          className="testimonial-subtitle"
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.2 }}
+        >
+          Join thousands of creators who transformed their content
+        </motion.p>
+
+        {/* Animated testimonials */}
+        <motion.div
+          className="testimonial-cards"
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.2 }}
+        >
           {testimonials.map((t, i) => (
-            <div key={i} className="testimonial-card">
+            <motion.div key={i} className="testimonial-card" variants={itemVariants}>
               <div className="stars">
                 {[...Array(5)].map((_, idx) => (
                   <FaStar key={idx} color="#FFD700" size={16} />
@@ -104,9 +139,9 @@ const CustomerTestimonials = () => {
                   <div className="role">{t.role}</div>
                 </div>
               </div>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
 
         {/* Stats Section with Counter Animation */}
         <div className="stats-bar" ref={statsRef}>

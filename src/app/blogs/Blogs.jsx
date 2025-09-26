@@ -62,7 +62,7 @@ const Blogs = () => {
 
   return (
     <div className="blog-section">
-      <h1 className="blog-title">VR 3D Content Blog</h1>
+      <h1 className="blog-title">Learn more about <span className='highlight'>3D video</span></h1>
      <center> <p className="blog-subtitle">
         Discover everything about 3D content for Meta Quest and Apple Vision Pro. From conversion to implementation.
       </p></center>

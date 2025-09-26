@@ -294,3 +294,28 @@
   color: #22c55e; /* green */
   font-weight: 600;
 }
+.stripe-element-box h4{
+  color: #6c6767;
+  margin: 10px 0;
+  font-weight: 400;
+  cursor: text !important;
+  
+}
+.security-note {
+  display: flex;
+  align-items: center;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  padding: 0 10px;
+  border-radius: 8px;
+  margin-top: 20px;
+  font-size: 14px;
+  color: #374151; /* neutral gray */
+}
+
+.security-note .ssl-icon {
+  width: 75px;
+  height: 85px;
+  object-fit: cover;
+}
+
