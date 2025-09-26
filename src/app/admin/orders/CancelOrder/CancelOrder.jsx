@@ -96,29 +96,29 @@ return (
     </div>
   )}
 
-  {result.refund !== undefined && (
+  {result.refund && (
     <div className="result-item">
       <span className="label">Refund:</span>
       <div className="refund-details">
         <div>
           <span className="label">Amount:</span>
           <span className="value">
-            {result.refund.amount / 100} {result.refund.currency?.toUpperCase()}
+            {result.refund?.amount / 100} {result.refund?.currency?.toUpperCase()}
           </span>
         </div>
         <div>
           <span className="label">Status:</span>
-          <span className="value">{result.refund.status}</span>
+          <span className="value">{result.refund?.status}</span>
         </div>
         <div>
           <span className="label">Created:</span>
           <span className="value">
-            {new Date(result.refund.created * 1000).toLocaleString()}
+            {new Date(result.refund?.created * 1000).toLocaleString()}
           </span>
         </div>
         <div>
           <span className="label">Refund ID:</span>
-          <span className="value">{result.refund.id}</span>
+          <span className="value">{result.refund?.id}</span>
         </div>
       </div>
     </div>
