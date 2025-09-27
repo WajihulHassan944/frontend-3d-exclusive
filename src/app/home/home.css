@@ -9,6 +9,7 @@
   padding: 20px 5%;
   position: relative;
   text-align: center;
+  overflow: hidden;
 }
 
 .hero-content {
@@ -20,7 +21,6 @@
 }
 .hero-content h1 {
          font-size: 6rem;
-         margin-top: 30px;
          letter-spacing: -.025em;
         line-height: 1.1;
         max-width: 1200px;
@@ -45,10 +45,12 @@
 }
 
 .hero-content p {
+      font-size: 1.5rem;
         line-height: 2rem;
-  color: #fff;
+  color: #fff !important;
   font-weight: 200;
 margin-top: 0;
+transition: opacity 0.3s ease-out; 
 }
 
 /* Responsive Design */

@@ -15,12 +15,10 @@ const Pricing = () => {
 
       <h2 className="pricing-title highlight">Pricing</h2>
       <p className='pricingSubTitle'>Choose the perfect plan for your 3D video conversion needs</p>
-     
-     {!isLoggedIn &&  <div className="free-minute-pricing">🎁 Get 1 minute of free conversion after registration
-     <br /><span>Newsletter signup required • Excludes 8K content</span></div>}
       
       
       <PricingSectionInPricing />
+     
 <PaymentOptions />
 
 

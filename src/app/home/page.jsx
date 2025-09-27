@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useRef } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import './home.css';
 
 const HeroSection = () => {
@@ -12,10 +12,15 @@ const HeroSection = () => {
     offset: ['start end', 'end start'],
   });
 
-  // transform directly to MotionValues (strings for font/margin so units are preserved)
-  const pY = useTransform(scrollYProgress, [0, 1], [0, 5]);           // 0px -> 20px
-  const pFontSize = useTransform(scrollYProgress, [0, 1], ['1.8rem', '1.0rem']); // 1.5rem -> 1.0rem
-  const pMarginTop = useTransform(scrollYProgress, [0, 1], ['0px', '100px']);   // 0px -> 100px
+  const fontSize = useTransform(scrollYProgress, [0, 1], ['1.8rem', '1rem']);
+
+  const y = useSpring(
+    useTransform(scrollYProgress, [0, 1], [0, 110]),
+    { stiffness: 60, damping: 30, restDelta: 0.001, restSpeed: 0.001 }
+  );
+
+  // keep linear for opacity so it starts at 1.0
+  const opacity = useTransform(scrollYProgress, [0, 1], [2, 0.1]);
 
   return (
     <section className="hero-section" ref={ref}>
@@ -26,10 +31,10 @@ const HeroSection = () => {
 
         <motion.p
           style={{
-            y: pY,
-            fontSize: pFontSize,
-            marginTop: pMarginTop,
-            willChange: 'transform, font-size, margin-top',
+            y,
+            opacity,
+            fontSize,
+            willChange: 'transform, opacity, font-size',
           }}
         >
           Transform your 2D videos into stunning 3D content for Meta Quest and Apple <br />Vision Pro

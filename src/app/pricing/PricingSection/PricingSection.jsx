@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { FaCheck } from 'react-icons/fa';
 import './PricingSection.css';
 import { useSelector, useDispatch } from 'react-redux';
@@ -17,6 +17,8 @@ const PricingSectionInPricing = () => {
   const isLoggedIn = useSelector((state) => state.user.isAuthenticated);
   const [loadingAmount, setLoadingAmount] = useState(null);
 const [hoveredIndex, setHoveredIndex] = useState(null);
+const pathname = usePathname();
+
   // ✅ Get currency directly from reusable hook
   const { code: currencyCode, symbol: currencySymbol } = useCurrencyByUserCountry();
 
@@ -130,7 +132,10 @@ const [hoveredIndex, setHoveredIndex] = useState(null);
           </div>
         </div>
       </div>
-
+ 
+     {pathname === '/pricing' && !isLoggedIn &&  <div className="free-minute-pricing">🎁 Get 1 minute of free conversion after registration
+     <br /><span>Newsletter signup required • Excludes 8K content</span></div>}
+     
       <h1 className="buy-credit-title">Buy your <span className='highlight'> credits</span></h1>
       <div className="pricing-card-wrapper">
         {plans.map((plan, index) => (

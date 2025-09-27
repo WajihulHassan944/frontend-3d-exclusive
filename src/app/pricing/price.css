@@ -13,13 +13,13 @@ padding-top: 3rem;
 
 
 .pricing-title {
-  font-size: 70px !important;
+  font-size: 72px !important;
   margin-top: 30px;
   font-weight: bold;
   margin-bottom: 1.1rem;
 }
 .pricingSubTitle{
-  margin-bottom: 80px;
+  margin-bottom: 110px;
   font-size: 24px;
   font-weight: 300;
   color: #d1d5db;
@@ -27,7 +27,7 @@ padding-top: 3rem;
 
 .free-minute-pricing {
   margin-top: 60px;
-  margin-bottom: 100px;
+  margin-bottom: 50px;
   font-weight: 500;
   color: #fa8938;
   background: #fa893833;
