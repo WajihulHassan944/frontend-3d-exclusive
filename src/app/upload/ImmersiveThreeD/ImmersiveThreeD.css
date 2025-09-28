@@ -255,7 +255,8 @@ font-size: 1.5rem;
   }
 
   .immersive-title {
-    font-size: 2rem;
+   font-size: 2.25rem;
+    line-height: 2.5rem;
     height: 80px; /* remove fixed height so text wraps nicely */
   }
 
@@ -300,6 +301,7 @@ font-size: 1.5rem;
     padding: 1.25rem;
     gap: 20px;
     text-align: center;
+    width: 100%;
   }
 
   .vr-image {
@@ -328,11 +330,13 @@ font-size: 1.5rem;
 
   .vr-cards {
     justify-content: center;
+    flex-direction: column;
+    padding: 0 10px;
   }
 
   .vr-card {
-    max-width: 45%;
-    flex: 1 1 45%;
+    max-width: 100%;
+    flex: 1;
     padding: 12px;
   }
 
