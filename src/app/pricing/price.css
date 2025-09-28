@@ -25,27 +25,6 @@ padding-top: 3rem;
   color: #d1d5db;
 }
 
-.free-minute-pricing {
-  margin-top: 60px;
-  margin-bottom: 50px;
-  font-weight: 500;
-  color: #fa8938;
-  background: #fa893833;
-  padding: 17px 30px;
-  border-radius: 50px;
-  border:1px solid #fa89384d;
-  width: fit-content;
-    display: flex;
-  flex-direction: column;
-
-}
-.free-minute-pricing span{
-  color: #9ca3af;
-  margin-top: 8px;
-  font-size: .75rem;
-    line-height: 1rem;
-}
-
 
 /* Buttons */
 .pricing-buttons {

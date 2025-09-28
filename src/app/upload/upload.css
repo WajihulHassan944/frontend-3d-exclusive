@@ -302,7 +302,10 @@ padding-top: 0;
 }
 /* Responsive */
 @media screen and (max-width: 768px) {
-.upload-box{
+.xclusive-container{
+  margin-top: 95px;
+}
+  .upload-box{
   height: 480px;
 }
 .dropHeading{
@@ -374,6 +377,8 @@ padding-top: 0;
   margin: 10px auto;
   display: flex;
   align-items: center;
+  
+  justify-content: flex-start;
   gap: 5px;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -396,6 +401,7 @@ padding-top: 0;
   margin-right: 10px;
   background-color: transparent;
   transition: all 0.2s ease;
+  flex-shrink: 0;
 }
 
 .format-option input:checked::before {

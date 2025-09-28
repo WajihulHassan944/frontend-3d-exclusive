@@ -460,9 +460,6 @@ reader.readAsDataURL(file);
 
      
 
-      {!isLoggedIn && <center><div className="free-minute">🎁 Get 1 minute of free conversion after registration
-      <br /><span>Newsletter signup required • Excludes 8K content</span>
-      </div></center>}
 {/* {isLoggedIn && <center><Credits /></center>} */}
     <PricingSectionInPricing />
     <Whycloud />
