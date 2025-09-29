@@ -1,6 +1,6 @@
-'use client';
-import React from "react";
 
+'use client';
+import React, { useEffect, useState } from "react";
 import {
   ShoppingCart,
   Users,
@@ -13,14 +13,53 @@ import {
 
 } from "lucide-react";
 import { FaArrowTrendUp, FaArrowTrendDown } from "react-icons/fa6";
+import withAdminAuth from "@/hooks/withAdminAuth";
 import { GeistSans } from "geist/font/sans";
 import "./admin.css";
-import withAdminAuth from "@/hooks/withAdminAuth";
-
+import { baseUrl } from "@/const";
 const Dashboard = () => {
+  const [dashboard, setDashboard] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchDashboard = async () => {
+      try {
+        const res = await fetch(`${baseUrl}/b2/conversion-dashboard`);
+        const data = await res.json();
+        if (data.success) {
+          setDashboard(data.dashboard);
+        }
+      } catch (err) {
+        console.error("Error fetching dashboard:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDashboard();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className={`dashboard ${GeistSans.className}`}>
+        <p>Loading dashboard...</p>
+      </div>
+    );
+  }
+
+  if (!dashboard) {
+    return (
+      <div className={`dashboard ${GeistSans.className}`}>
+        <p>Failed to load dashboard data</p>
+      </div>
+    );
+  }
+
+  const { stats, recentOrders } = dashboard;
+
   return (
     <div className={`dashboard ${GeistSans.className}`}>
-      {/* Top Stats */}
+       {/* Top Stats */}
       <div className="stats-grid">
         <div className="stat-card">
           <div className="stat-header">
@@ -59,94 +98,83 @@ const Dashboard = () => {
         </div>
       </div>
 
+      
       {/* Bottom Section */}
       <div className="bottom-grid">
         {/* RunPod AI Conversions */}
-     <div className="conversion-card">
-  <h3>RunPod AI Conversions</h3>
-  <div className="conversion-status">
-    <span className="status in-progress">
-      <span className="label in-progress">
-      <Loader className="status-icon rotate" /> <span>In Progress</span>
-      </span>
-      <b>5</b>
-    </span>
+        <div className="conversion-card">
+          <h3>RunPod AI Conversions</h3>
+          <div className="conversion-status">
+            <span className="status in-progress">
+              <span className="label in-progress">
+                <Loader className="status-icon rotate" /> <span>In Progress</span>
+              </span>
+              <b>{stats?.inProgress || 0}</b>
+            </span>
 
-    <span className="status queued">
-      <span className="label queued">
-       <Clock className="status-icon" /> <span>Queued</span>
-      </span>
-      <b>12</b>
-    </span>
+            <span className="status queued">
+              <span className="label queued">
+                <Clock className="status-icon" /> <span>Queued</span>
+              </span>
+              <b>{stats?.queued || 0}</b>
+            </span>
 
-    <span className="status completed">
-      <span className="label completed">
-       <CheckCircle className="status-icon" /> <span>Completed</span>
-      </span>
-      <b>89</b>
-    </span>
+            <span className="status completed">
+              <span className="label completed">
+                <CheckCircle className="status-icon" /> <span>Completed</span>
+              </span>
+              <b>{stats?.completed || 0}</b>
+            </span>
 
-    <span className="status failed">
-      <span className="label failed">
-       <XCircle className="status-icon" /> <span>Failed</span>
-      </span>
-      <b>3</b>
-    </span>
-  </div>
+            <span className="status failed">
+              <span className="label failed">
+                <XCircle className="status-icon" /> <span>Failed</span>
+              </span>
+              <b>{stats?.failed || 0}</b>
+            </span>
+          </div>
 
-  <div className="progress-row">
-    <span>Completion Rate</span>
-    <span>97%</span>
-  </div>
-  <div className="progress-bar">
-    <div className="progress" style={{ width: "97%" }}></div>
-  </div>
-</div>
+          <div className="progress-row">
+            <span>Completion Rate</span>
+            <span>{stats?.completionRate || "0%"}</span>
+          </div>
+          <div className="progress-bar">
+            <div
+              className="progress"
+              style={{ width: stats?.completionRate || "0%" }}
+            ></div>
+          </div>
+        </div>
 
         {/* Recent Orders */}
         <div className="orders-card">
           <h3>Recent Orders</h3>
           <ul>
-            <li>
-              <div className="order-left">
-                <strong>John Johnson</strong>
-                <span>#12345 • 2 min ago</span>
-              </div>
-              <div className="order-right">
-                <b>€89.99</b>
-                <span className="order-status completed">completed</span>
-              </div>
-            </li>
-            <li>
-              <div className="order-left">
-                <strong>Marie de Vries</strong>
-                <span>#12344 • 5 min ago</span>
-              </div>
-              <div className="order-right">
-                <b>€156.50</b>
-                <span className="order-status processing">processing</span>
-              </div>
-            </li>
-            <li>
-              <div className="order-left">
-                <strong>Peter Baker</strong>
-                <span>#12343 • 12 min ago</span>
-              </div>
-              <div className="order-right">
-                <b>€45.00</b>
-                <span className="order-status completed">completed</span>
-              </div>
-            </li>
-            <li>
-              <div className="order-left">
-                <strong>Lisa van Dam</strong>
-                <span>#12342 • 18 min ago</span>
-              </div>
-              <div className="order-right">
-                <b>€203.25</b>
-                <span className="order-status pending">pending</span>
-              </div>
-            </li>
+            {recentOrders?.length > 0 ? (
+              recentOrders.map((order) => (
+                <li key={order._id}>
+                  <div className="order-left">
+                    <strong>{order.customer || "Unknown"}</strong>
+                    <span>
+                      {order.orderId} • {order.timeAgo}
+                    </span>
+                  </div>
+                  <div className="order-right">
+                    <b>
+                      {order.currency}
+                      {order.amount}
+                    </b>
+                    <span
+                      className={`order-status ${order.status?.toLowerCase()}`}
+                    >
+                      {order.status}
+                    </span>
+                  </div>
+                </li>
+              ))
+            ) : (
+              <li>No recent orders</li>
+            )}
           </ul>
         </div>
       </div>

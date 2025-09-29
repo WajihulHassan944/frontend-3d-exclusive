@@ -244,9 +244,9 @@ font-size: 1.5rem;
 }
 
 .immersive-image-container:hover .hover-overlay {
-  opacity: 0; /* hide when hovering */
+  opacity: 0; 
 }
-/* Responsive adjustments for tablets & mobiles */
+
 @media (max-width: 768px) {
   .immersive-section {
     padding: 40px 15px;
@@ -257,7 +257,7 @@ font-size: 1.5rem;
   .immersive-title {
    font-size: 2.25rem;
     line-height: 2.5rem;
-    height: 80px; /* remove fixed height so text wraps nicely */
+    height: 80px; 
   }
 
   .immersive-subtitle {
