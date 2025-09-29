@@ -18,14 +18,8 @@
   justify-content: space-between;
 }
 .logo-div { display: flex; align-items: center; gap: 20px;}
-.logo      {  height: fit-content;margin-right: 30px; padding: 5px;
+.logo      {  height: fit-content;margin-right: 70px; padding: 5px;
   object-fit: contain; display: flex; align-items: center; gap: 10px;}
-.logo p{
-  color: #fff;
-  font-weight: 600;
-  font-size: 16px;
-  letter-spacing: 1px;
-}
 .logo img{
   width: 80px;
 }
@@ -230,4 +224,10 @@
 .user-dropdown a:hover,
 .user-dropdown button:hover {
   color: #602fff;
+}
+
+@media(max-width:768px){
+  .logo img{
+  width: 65px;
+}
 }

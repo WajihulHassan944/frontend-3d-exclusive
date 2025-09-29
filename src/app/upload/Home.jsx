@@ -293,15 +293,8 @@ const isUsingFreeMinute = hasFreeMinute && durationMinutes <= 1;
   return (
     <div className="xclusive-container">
    {isLoggedIn && (
-  <div className="xclusive-header" style={{ marginTop: '30px' }}>
-    <Image
-      src="/logo.png"
-      alt="Xclusive 3D Logo"
-      width={160}
-      height={90}
-      className="logo-1"
-    />
-  </div>
+   <center><h1 className='xclusive-header'>Turn your videos into an <span className='highlight'> unforgettable 3D experience</span></h1>
+  </center>
 )}
 
     <center>  <div className="upload-section">

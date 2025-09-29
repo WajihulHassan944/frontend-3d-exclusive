@@ -45,8 +45,7 @@ export default function Navbar() {
               className="brand-logo"
             />
           </div>
-          <p>XCLUSIVE 3D</p>
-        </Link>
+                 </Link>
 
         {/* ─── Nav Links ───────────────────────────── */}
         <div className="logo-div">
