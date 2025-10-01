@@ -33,70 +33,119 @@ const videoNoteRef = useRef(null);
 const [conversionFormat, setConversionFormat] = useState('Full Side by Side');
 
  const router = useRouter();
-// inside Home component
-
-useEffect(() => {
-  // Try restoring metadata from localStorage (not actual file)
-  const savedMeta = localStorage.getItem("tempVideoMeta");
-  if (savedMeta && !videoFile) {
+ useEffect(() => {
+  const savedBase64 = localStorage.getItem('tempVideo');
+  if (savedBase64 && !videoFile) {
     try {
-      const { name, size, type } = JSON.parse(savedMeta);
+      const parts = savedBase64.split(',');
+      if (parts.length !== 2) throw new Error('Invalid Base64 format');
 
-      // Show only filename & placeholder message until user reselects
-      setVideoMeta({
-        fileName: name,
-        fileSize: formatFileSize(size),
-        type,
-        error: "Please reselect the video file to continue.",
-      });
+      const mimeString = parts[0].split(':')[1].split(';')[0];
+      const byteString = atob(parts[1]);
 
-      setShowVideoNote(true);
+      const ab = new ArrayBuffer(byteString.length);
+      const ia = new Uint8Array(ab);
+      for (let i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
+      }
+
+      const blob = new Blob([ab], { type: mimeString });
+      const file = new File([blob], 'saved-temp.mp4', { type: mimeString });
+      const fileURL = URL.createObjectURL(blob);
+
+      setVideoFile(file);
+      setVideoPreview(fileURL);
+
+      (async () => {
+        try {
+          const { duration, width, height } = await getVideoMetadata(file);
+          const quality = `${height}p`;
+          const durationMinutes = Math.ceil(duration / 60);
+
+          let costPerMinute = 1;
+          if (height >= 2160 && height < 4320) {
+            costPerMinute = 6;
+          }
+
+          const cost = durationMinutes * costPerMinute;
+        const hasFreeMinute =
+  user?.hasFreeConversion &&
+  user?.newsletterOptIn === true &&
+  height < 4320; // disallow 8K free
+
+const isUsingFreeMinute = hasFreeMinute && durationMinutes <= 1;
+
+          const balance = user?.wallet?.balance || 0;
+
+          setVideoMeta({
+            fileName: file.name,
+            duration: durationMinutes,
+            quality,
+            cost,
+            balance,
+            isUsingFreeMinute,
+            canProceed: isUsingFreeMinute || balance >= cost,
+          });
+
+          setShowVideoNote(true);
+          setTimeout(() => {
+            videoNoteRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }, 100);
+        } catch (err) {
+          console.error('Metadata extraction error:', err);
+          setVideoMeta({ error: 'Failed to read video metadata.' });
+          setShowVideoNote(true);
+        }
+      })();
     } catch (err) {
-      console.error("Failed to parse saved video metadata:", err);
-      localStorage.removeItem("tempVideoMeta");
+      console.error('Base64 decode error:', err);
     }
   }
-}, [videoFile]);
+}, []);
+
 
 const handleFileChange = async (e) => {
   const file = e.target.files?.[0];
   if (!file) return;
 
-  // URL for preview
   const fileURL = URL.createObjectURL(file);
   setVideoFile(file);
   setVideoPreview(fileURL);
-  setUploadStatus("");
+  setUploadStatus('');
   setShowVideoNote(false);
 
-  // Save metadata only (not file!)
-  localStorage.setItem(
-    "tempVideoMeta",
-    JSON.stringify({ name: file.name, size: file.size, type: file.type })
-  );
+  // Save video to localStorage
+  const reader = new FileReader();
+  reader.onloadend = () => {
+    localStorage.setItem('tempVideo', reader.result);
+  };
+  reader.readAsDataURL(file);
 
-  // Extract video metadata (duration, resolution, etc.)
+  // Get metadata
   try {
     const { duration, width, height } = await getVideoMetadata(file);
-    const quality = `${height}p`;
-    const durationMinutes = Math.ceil(duration / 60);
+   const quality = `${height}p`;
+const durationMinutes = Math.ceil(duration / 60);
 
-    // Pricing logic
-    let costPerMinute = 1;
-    if (height >= 2160 && height < 4320) costPerMinute = 6;
-    const cost = durationMinutes * costPerMinute;
+// Updated credit calculation logic
+let costPerMinute = 1;
+if (height >= 2160 && height < 4320) {
+  costPerMinute = 6;
+}
 
-    const hasFreeMinute =
-      user?.hasFreeConversion &&
-      user?.newsletterOptIn === true &&
-      height < 4320; // disallow 8K free
-    const isUsingFreeMinute = hasFreeMinute && durationMinutes <= 1;
+const cost = durationMinutes * costPerMinute;
+
+  const hasFreeMinute =
+  user?.hasFreeConversion &&
+  user?.newsletterOptIn === true &&
+  height < 4320; // disallow 8K free
+
+const isUsingFreeMinute = hasFreeMinute && durationMinutes <= 1;
 
     const balance = user?.wallet?.balance || 0;
 
     setVideoMeta({
       fileName: file.name,
-      fileSize: formatFileSize(file.size),
       duration: durationMinutes,
       quality,
       cost,
@@ -106,18 +155,17 @@ const handleFileChange = async (e) => {
     });
 
     setShowVideoNote(true);
-    setTimeout(() => {
-      videoNoteRef.current?.scrollIntoView({
-        behavior: "smooth",
-        block: "center",
-      });
-    }, 100);
+setTimeout(() => {
+  videoNoteRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}, 100);
+
   } catch (err) {
-    console.error("Metadata extraction error:", err);
-    setVideoMeta({ error: "Failed to read video metadata." });
+    console.error('Metadata extraction error:', err);
+    setVideoMeta({ error: 'Failed to read video metadata.' });
     setShowVideoNote(true);
   }
 };
+
 
 
   const getVideoMetadata = (file) =>
@@ -273,71 +321,28 @@ const isUsingFreeMinute = hasFreeMinute && durationMinutes <= 1;
           e.stopPropagation();
           setDragActive(false);
         }}
-  onDrop={async (e) => {
+       onDrop={(e) => {
   e.preventDefault();
   e.stopPropagation();
   setDragActive(false);
-
   const file = e.dataTransfer.files?.[0];
-  if (file && file.type.startsWith("video/")) {
+  if (file && file.type.startsWith('video/')) {
     const fileURL = URL.createObjectURL(file);
+
+     const reader = new FileReader();
+reader.onloadend = () => {
+  localStorage.setItem('tempVideo', reader.result);
+};
+reader.readAsDataURL(file);
+
+
     setVideoFile(file);
     setVideoPreview(fileURL);
-    setUploadStatus("");
-    setShowVideoNote(false);
-
-    // ✅ Save metadata only (not base64!)
-    localStorage.setItem(
-      "tempVideoMeta",
-      JSON.stringify({ name: file.name, size: file.size, type: file.type })
-    );
-
-    try {
-      const { duration, width, height } = await getVideoMetadata(file);
-      const quality = `${height}p`;
-      const durationMinutes = Math.ceil(duration / 60);
-
-      // Pricing logic
-      let costPerMinute = 1;
-      if (height >= 2160 && height < 4320) costPerMinute = 6;
-      const cost = durationMinutes * costPerMinute;
-
-      const hasFreeMinute =
-        user?.hasFreeConversion &&
-        user?.newsletterOptIn === true &&
-        height < 4320;
-      const isUsingFreeMinute = hasFreeMinute && durationMinutes <= 1;
-
-      const balance = user?.wallet?.balance || 0;
-
-      setVideoMeta({
-        fileName: file.name,
-        fileSize: formatFileSize(file.size),
-        duration: durationMinutes,
-        quality,
-        cost,
-        balance,
-        isUsingFreeMinute,
-        canProceed: isUsingFreeMinute || balance >= cost,
-      });
-
-      setShowVideoNote(true);
-      setTimeout(() => {
-        videoNoteRef.current?.scrollIntoView({
-          behavior: "smooth",
-          block: "center",
-        });
-      }, 100);
-    } catch (err) {
-      console.error("Metadata extraction error:", err);
-      setVideoMeta({ error: "Failed to read video metadata." });
-      setShowVideoNote(true);
-    }
-  } else {
-    alert("Please drop a valid video file.");
+    setUploadStatus('');
+   } else {
+    alert('Please drop a valid video file.');
   }
 }}
-
       >
         <div className="upload-icon">
           <FiUpload size={32} />
