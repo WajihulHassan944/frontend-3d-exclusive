@@ -15,6 +15,7 @@ import PricingSectionInPricing from '../pricing/PricingSection/PricingSection';
 import CustomerTestimonials from './CustomerTestimonials/CustomerTestimonials';
 import NewsletterSignup from './NewsletterSignup/NewsletterSignup';
 import ImmersiveThreeD from './ImmersiveThreeD/ImmersiveThreeD';
+import toast from 'react-hot-toast';
 
 
 const Home = () => {
@@ -31,7 +32,7 @@ const dispatch = useDispatch();
 const [showVideoNote, setShowVideoNote] = useState(false); // controls div
 const videoNoteRef = useRef(null);
 const [conversionFormat, setConversionFormat] = useState('Full Side by Side');
-
+const [progress, setProgress] = useState(0);
  const router = useRouter();
 // inside Home component
 
@@ -147,6 +148,7 @@ const handleFileChange = async (e) => {
   return parseFloat((bytes / Math.pow(1024, i)).toFixed(2)) + " " + sizes[i];
 }
 
+
 const handleUpload = async () => {
   if (!videoFile) return;
 
@@ -157,28 +159,26 @@ const handleUpload = async () => {
 
   setUploading(true);
   setUploadStatus('');
+  setProgress(0);
 
   try {
     const { duration, width, height } = await getVideoMetadata(videoFile);
-   const quality = `${height}p`;
-const durationMinutes = Math.ceil(duration / 60);
+    const quality = `${height}p`;
+    const durationMinutes = Math.ceil(duration / 60);
 
-// Updated credit calculation logic
-let costPerMinute = 1;
-if (height >= 2160 && height < 4320) {
-  costPerMinute = 6;
-}
+    let costPerMinute = 1;
+    if (height >= 2160 && height < 4320) {
+      costPerMinute = 6;
+    }
+    const cost = durationMinutes * costPerMinute;
 
-const cost = durationMinutes * costPerMinute;
+    const balance = user?.wallet?.balance || 0;
+    const hasFreeMinute =
+      user?.hasFreeConversion &&
+      user?.newsletterOptIn === true &&
+      height < 4320;
 
-    
-const balance = user?.wallet?.balance || 0;
-const hasFreeMinute =
-  user?.hasFreeConversion &&
-  user?.newsletterOptIn === true &&
-  height < 4320; // disallow 8K free
-
-const isUsingFreeMinute = hasFreeMinute && durationMinutes <= 1;
+    const isUsingFreeMinute = hasFreeMinute && durationMinutes <= 1;
 
     if (isUsingFreeMinute) {
       alert("🎁 Using free 1-minute conversion.");
@@ -188,7 +188,7 @@ const isUsingFreeMinute = hasFreeMinute && durationMinutes <= 1;
       return;
     }
 
-    // ✅ 1. Get signed URL with cost
+    // ✅ 1. Get signed URL
     const res = await fetch(`${baseUrl}/b2/sign-url`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -197,21 +197,37 @@ const isUsingFreeMinute = hasFreeMinute && durationMinutes <= 1;
         fileName: videoFile.name,
         fileType: videoFile.type,
         usingFreeConversion: isUsingFreeMinute,
-        cost, // <-- ✅ now included
+        cost,
       }),
     });
 
     const { signedUrl, key } = await res.json();
 
-    // 2. Upload
-    const uploadRes = await fetch(signedUrl, {
-      method: 'PUT',
-      body: videoFile,
+    // ✅ 2. Upload with progress tracking
+    await new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open("PUT", signedUrl);
+
+      xhr.upload.onprogress = (event) => {
+        if (event.lengthComputable) {
+          const percent = Math.round((event.loaded / event.total) * 100);
+          setProgress(percent); // <-- Update state
+        }
+      };
+
+      xhr.onload = () => {
+        if (xhr.status >= 200 && xhr.status < 300) {
+          resolve();
+        } else {
+          reject(new Error("Upload failed"));
+        }
+      };
+
+      xhr.onerror = () => reject(new Error("Upload error"));
+      xhr.send(videoFile);
     });
 
-    if (!uploadRes.ok) throw new Error('Upload to R2 failed');
-
-    // 3. Save metadata
+    // ✅ 3. Save metadata
     const saveRes = await fetch(`${baseUrl}/b2/save-metadata`, {
       method: 'POST',
       credentials: 'include',
@@ -222,17 +238,18 @@ const isUsingFreeMinute = hasFreeMinute && durationMinutes <= 1;
         quality,
         lengthInSeconds: Math.round(duration),
         conversionFormat,
-        fileSize: formatFileSize(videoFile.size), 
-        creditsUsed: isUsingFreeMinute ? 0 : cost, 
+        fileSize: formatFileSize(videoFile.size),
+        creditsUsed: isUsingFreeMinute ? 0 : cost,
       }),
     });
 
     if (!saveRes.ok) throw new Error('Metadata save failed');
 
-    localStorage.removeItem('tempVideo');
-    setUploadStatus('✅ Upload successful!');
+    localStorage.removeItem('tempVideoMeta');
     await refreshAndDispatchUser(dispatch);
     router.push('/dashboard');
+     toast.success('Upload successful!');
+   
   } catch (err) {
     console.error(err);
     setUploadStatus(`❌ Upload failed: ${err.message}`);
@@ -240,6 +257,7 @@ const isUsingFreeMinute = hasFreeMinute && durationMinutes <= 1;
     setUploading(false);
   }
 };
+
 
   return (
     <div className="xclusive-container">
@@ -422,6 +440,25 @@ const isUsingFreeMinute = hasFreeMinute && durationMinutes <= 1;
   </div>
 
 </div>
+
+
+{uploading && (
+  <div className="upload-progress-container-new">
+    <div 
+      className="upload-progress-bar-new"
+      style={{
+        width: `${progress}%`,
+        borderRadius: progress === 100 
+          ? "10px"          // fully rounded if 100%
+          : "10px 0 0 10px" // only left rounded while loading
+      }}
+    >
+      <span className="upload-progress-thumb">{progress}%</span>
+    </div>
+  </div>
+)}
+
+
 
  <button
   className="convert-btn"
