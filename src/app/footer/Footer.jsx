@@ -29,7 +29,11 @@ export default function Footer() {
         </nav>
       </div>
 
-      <div className="footer-copy">
+<center>
+  <p className='mutedp'>Apple Vision Pro and Meta Quest are trademarks of their respective owners. We are not affiliated with or endorsed by Apple or Meta.</p>
+</center>
+
+ <div className="footer-copy">
         <p>
           © {new Date().getFullYear()} <strong>Xclusive 3D</strong> — All rights reserved.
         </p>
