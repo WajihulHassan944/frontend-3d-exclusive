@@ -2,82 +2,60 @@
 
 import React from 'react';
 import './Whycloud.css';
-import { FaRegPlayCircle } from 'react-icons/fa';
 import { AiOutlineYoutube } from 'react-icons/ai';
-import { FiUpload } from 'react-icons/fi';
-import { MdOutlineBolt } from 'react-icons/md';
+import { FiDownload } from 'react-icons/fi';
+import { MdOutlineAccessTime } from 'react-icons/md';
 import { motion } from 'framer-motion';
+import { Play } from 'lucide-react';
 
-// Parent container animation (stagger children)
 const containerVariants = {
   hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.2, // delay between cards
-    },
-  },
+  show: { opacity: 1, transition: { staggerChildren: 0.2 } },
 };
 
-// Each card animation
 const itemVariants = {
   hidden: { opacity: 0, y: 40 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
+  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } },
 };
 
-const Whycloud = () => {
+const Whycloud = ({ sectionData }) => {
+  if (!sectionData) return null;
+
   return (
     <div className="why-cloud-wrapper">
-      <h2 className="why-heading">Why convert to 3D at Xclusive3D</h2>
+      <h2
+        className="why-heading"
+         dangerouslySetInnerHTML={{
+            __html: (sectionData?.title ||
+              'Start now with your <span class="highlight">immersive 3D</span> experience')
+              .replace(/\\u003C/g, '<')
+              .replace(/\\u003E/g, '>')
+              .replace(/className=/g, 'class='),
+          }}
+      />
+      <p className="why-subtext">{sectionData.description}</p>
 
       <motion.div
         className="features"
         variants={containerVariants}
         initial="hidden"
-        whileInView="show" // animates only when in viewport
-        viewport={{ once: true, amount: 0.2 }} // triggers when 20% in view
+        whileInView="show"
+        viewport={{ once: true, amount: 0.2 }}
       >
-        <motion.div className="feature-item" variants={itemVariants}>
-          <div className="icon-circle">
-            <FaRegPlayCircle className="why-icons" />
-          </div>
-          <div className="feature-text">
-            <h3>Immersive Experience</h3>
-            <p>
-              Turn your 2D videos into stunning 3D — ready to watch on your Meta Quest or Apple Vision Pro
-            </p>
-          </div>
-        </motion.div>
-
-        <motion.div className="feature-item" variants={itemVariants}>
-          <div className="icon-circle">
-            <AiOutlineYoutube className="why-icons" />
-          </div>
-          <div className="feature-text">
-            <h3>YouTube Ready</h3>
-            <p>Compatible with YouTube 3D</p>
-          </div>
-        </motion.div>
-
-        <motion.div className="feature-item" variants={itemVariants}>
-          <div className="icon-circle">
-            <FiUpload className="why-icons" />
-          </div>
-          <div className="feature-text">
-            <h3>Downloadable Files</h3>
-            <p>Get your converted 3D video files ready to download</p>
-          </div>
-        </motion.div>
-
-        <motion.div className="feature-item" variants={itemVariants}>
-          <div className="icon-circle">
-            <MdOutlineBolt className="why-icons" />
-          </div>
-          <div className="feature-text">
-            <h3>AI Powered</h3>
-            <p>High-quality and fast AI cloud conversion</p>
-          </div>
-        </motion.div>
+        {sectionData.cards?.map((card, index) => (
+          <motion.div className="feature-item" variants={itemVariants} key={card._id}>
+            <div className="icon-circle">
+              {index === 0 && <Play className="why-icons" size={25} />}
+              {index === 1 && <AiOutlineYoutube className="why-icons" />}
+              {index === 2 && <FiDownload className="why-icons" />}
+              {index === 3 && <MdOutlineAccessTime className="why-icons" />}
+            </div>
+            <div className="feature-text">
+              <h3>{card.title}</h3>
+              <p>{card.description}</p>
+            </div>
+          </motion.div>
+        ))}
       </motion.div>
     </div>
   );

@@ -53,17 +53,18 @@ export default function Navbar() {
             {isLoggedIn ? (
               <>
                 <li><Link href="/dashboard">Dashboard</Link></li>
-                <li><Link href="/upload">Convert to 3D</Link></li>
+                <li><Link href="/upload">Convert</Link></li>
                 <li><Link href="/pricing">Pricing</Link></li>
                 <li><Link href="/faq">FAQ</Link></li>
                 <li><Link href="/add-billing">Billing</Link></li>
               </>
             ) : (
               <>
-                <li><Link href="/">Home</Link></li>
+                <li><Link href="/upload">Convert</Link></li>
                 <li><Link href="/pricing">Pricing</Link></li>
                 <li><Link href="/contact">Contact</Link></li>
                 <li><Link href="/blogs">Blogs</Link></li>
+                <li><Link href="/sample-files">Sample Files</Link></li>
                 <li><Link href="/faq">FAQ</Link></li>
               </>
             )}
@@ -158,7 +159,7 @@ export default function Navbar() {
           </>
         ) : (
           <>
-            <Link href="/" onClick={() => setOpen(false)}>Home</Link>
+            <Link href="/upload" onClick={() => setOpen(false)}>Convert</Link>
             <Link href="/pricing" onClick={() => setOpen(false)}>Pricing</Link>
             <Link href="/contact" onClick={() => setOpen(false)}>Contact</Link>
             <Link href="/faq" onClick={() => setOpen(false)}>FAQ</Link>

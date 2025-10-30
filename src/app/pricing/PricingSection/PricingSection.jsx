@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { FaCheck } from 'react-icons/fa';
 import './PricingSection.css';
@@ -9,66 +9,61 @@ import toast from 'react-hot-toast';
 import { baseUrl } from '@/const';
 import { refreshAndDispatchUser } from '@/utils/refreshUser';
 import { useCurrencyByUserCountry } from '@/utils/getCurrencySymbolByCountry';
-import { localizedPricing } from '@/utils/localizedPricing';
+import CreditUsagePerMinute from './CreditUsagePerMinute';
 
 const PricingSectionInPricing = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const isLoggedIn = useSelector((state) => state.user.isAuthenticated);
   const [loadingAmount, setLoadingAmount] = useState(null);
-const [hoveredIndex, setHoveredIndex] = useState(null);
-const pathname = usePathname();
+  const [hoveredIndex, setHoveredIndex] = useState(null);
+  const [plans, setPlans] = useState([]);
+  const [loadingPlans, setLoadingPlans] = useState(true);
 
-  // ✅ Get currency directly from reusable hook
+  const pathname = usePathname();
   const { code: currencyCode, symbol: currencySymbol } = useCurrencyByUserCountry();
 
-  // Build plans dynamically
-  const plans = [15, 50, 120].map((credits) => {
-    const price =
-      localizedPricing[currencyCode]?.[credits] ??
-      localizedPricing['EUR'][credits];
+  // ✅ Fetch products dynamically from backend using selected currency
+  useEffect(() => {
+  const fetchProducts = async () => {
+  try {
+    setLoadingPlans(true); // start loading
+    const res = await fetch(`${baseUrl}/products/by-currency?currency=${currencyCode}`);
+    const data = await res.json();
 
-    return {
-      credits,
-      price: `${currencySymbol} ${Math.round(price)}`,
-      rate: credits === 15
-          ? 'Good to explore'
-          : credits === 50
-          ? 'Best value per minute'
-          : 'Lowest cost per minute',
-      name:
-        credits === 15
-          ? 'Starter Package'
-          : credits === 50
-          ? 'Pro Package'
-          : 'Business Package',
-      features:
-        credits === 15
-          ? ['Up to 2.7K conversion', 'Standard processing']
-          : credits === 50
-          ? [
-              'Up to 4K conversion',
-              'Standard processing',
-              'Commercial license',
-            ]
-          : [
-              'Up to 8K conversion',
-              'Batch uploads',
-              'Priority rendering',
-              'Commercial license',
-            ],
-      popular: credits === 50,
-    };
-  });
+    if (data.success && Array.isArray(data.products)) {
+      const mappedPlans = data.products.map((p) => ({
+        credits: p.credits,
+        name: p.name,
+        rate: p.description,
+        price: `${currencySymbol} ${Math.round(p.localizedPricing?.[0]?.price || p.priceEUR)}`,
+        features: p.features,
+        popular: p.isPopular,
+      }));
 
-  const handleBuyCredits = async (credits) => {
-    if (!localizedPricing[currencyCode] || localizedPricing[currencyCode][credits] === undefined) {
-      toast.error('Please wait, calculating local pricing...');
-      return;
+      const sortedPlans = mappedPlans.sort(
+        (a, b) =>
+          Number(a.price.replace(/[^\d.-]/g, '')) -
+          Number(b.price.replace(/[^\d.-]/g, ''))
+      );
+
+      setPlans(sortedPlans);
+    } else {
+      toast.error('Failed to load pricing data');
     }
+  } catch (err) {
+    console.error('❌ Error fetching products:', err);
+    toast.error('Something went wrong while loading plans');
+  } finally {
+    setLoadingPlans(false); // stop loading
+  }
+};
 
+    if (currencyCode) fetchProducts();
+  }, [currencyCode, currencySymbol]);
+
+  const handleBuyCredits = async (credits, amount) => {
     setLoadingAmount(credits);
-    const amount = Math.round(localizedPricing[currencyCode][credits]);
 
     try {
       const res = await fetch(`${baseUrl}/cart/add`, {
@@ -95,9 +90,9 @@ const pathname = usePathname();
     }
   };
 
-  const handleClick = (credits) => {
+  const handleClick = (credits, amount) => {
     if (isLoggedIn) {
-      handleBuyCredits(credits);
+      handleBuyCredits(credits, amount);
     } else {
       localStorage.setItem('pendingCredits', credits);
       router.push('/login');
@@ -106,81 +101,73 @@ const pathname = usePathname();
 
   return (
     <>
-      <div className="priceBoxWrapper">
-        <div className="price-box">
-          <h3 className="price-box-heading">Credit Usage per minute</h3>
-          <div className="price-table">
-            <div className="price-row">
-              <span>1080p</span>
-              <span className="orangeColored">1 credit</span>
-            </div>
-            <div className="price-row">
-              <span>2.7K</span>
-              <span className="orangeColored">2 credits</span>
-            </div>
-            <div className="price-row">
-              <span>4K</span>
-              <span className="orangeColored">3 credits</span>
-            </div>
-            <div className="price-row">
-              <span>8K</span>
-              <span className="orangeColored">6 credits</span>
-            </div>
-          </div>
-          <div className="price-note-div">
-            ✓ Credits valid for 1 year from purchase date
-          </div>
-        </div>
-      </div>
- 
-     {!isLoggedIn &&  <center><div className="free-minute-pricing" style={{ marginBottom: pathname === "/" ? "95px" : "50px" }} >🎁 Get 1 minute of free conversion after registration
-     <br /><span>Newsletter signup required • Excludes 8K content</span></div></center>}
-     
-      <h1 className="buy-credit-title">Buy your <span className='highlight'> credits</span></h1>
-      <div className="pricing-card-wrapper">
-        {plans.map((plan, index) => (
+      <CreditUsagePerMinute />
+      {!isLoggedIn && (
+        <center>
           <div
-  key={index}
-  className={`pricing-card ${plan.popular ? 'pricing-card-popular' : ''}`}
-  onClick={() => handleClick(plan.credits)}
-  onMouseEnter={() => setHoveredIndex(index)}
-  onMouseLeave={() => setHoveredIndex(null)}
-  style={{
-    cursor: loadingAmount === plan.credits ? 'default' : 'pointer',
-    pointerEvents: loadingAmount === plan.credits ? 'none' : 'auto',
-  }}
->
-{index === 2 && (
-  <div className="pricing-card-ribbon">
-    <span>Best Value</span>
-  </div>
-)}
-            {plan.popular && <div className="pricing-card-label">Most Popular</div>}
-            <h3 className="pricing-card-credits">{plan.credits} credits</h3>
-            <p className="pricing-card-price">{plan.price}</p>
-            <p className="pricing-card-rate">{plan.rate}</p>
-            <h4 className="pricing-card-name">{plan.name}</h4>
-            <h5>One-time purchase</h5>
-            <ul className="pricing-feature-list">
-              {plan.features.map((feature, i) => (
-                <li key={i}>
-                  <FaCheck className="pricing-feature-icon" /> {feature}
-                </li>
-              ))}
-            </ul>
-            <div className="pricing-button-container">
-              <button
-  className={`pricing-get-started-btn ${
-    hoveredIndex !== null && hoveredIndex !== index ? 'button-dull' : ''
-  }`}
-  disabled={loadingAmount === plan.credits}
->
-  {loadingAmount === plan.credits ? 'Processing...' : 'Get Started'}
-</button>
-            </div>
-            <p className="credit-valid-para">Credits valid for 1 year</p>
+            className="free-minute-pricing"
+            style={{ marginBottom: pathname === '/' ? '95px' : '50px' }}
+          >
+            🎁 Get 1 minute of free conversion after registration
+            <br />
+            <span>Newsletter signup required • Excludes 8K content</span>
           </div>
-        ))}
+        </center>
+      )}
+
+      <h1 className="buy-credit-title">
+        Buy your <span className="highlight"> credits</span>
+      </h1>
+
+      <div className="pricing-card-wrapper">
+        {loadingPlans ? (
+    <p className="loading-text">Loading plans...</p>
+  ) : (plans.map((plan, index) => {
+          const amount = Number(plan.price.replace(/[^\d.-]/g, ''));
+          return (
+            <div
+              key={index}
+              className={`pricing-card ${plan.popular ? 'pricing-card-popular' : ''}`}
+              onClick={() => handleClick(plan.credits, amount)}
+              onMouseEnter={() => setHoveredIndex(index)}
+              onMouseLeave={() => setHoveredIndex(null)}
+              style={{
+                cursor: loadingAmount === plan.credits ? 'default' : 'pointer',
+                pointerEvents: loadingAmount === plan.credits ? 'none' : 'auto',
+              }}
+            >
+              {index === 2 && (
+                <div className="pricing-card-ribbon">
+                  <span>Best Value</span>
+                </div>
+              )}
+              {plan.popular && <div className="pricing-card-label">Most Popular</div>}
+              <h3 className="pricing-card-credits">{plan.credits} credits</h3>
+              <p className="pricing-card-price">{plan.price}</p>
+              <p className="pricing-card-rate">{plan.rate}</p>
+              <h4 className="pricing-card-name">{plan.name}</h4>
+              <h5>One-time purchase</h5>
+              <ul className="pricing-feature-list">
+                {plan.features.map((feature, i) => (
+                  <li key={i}>
+                    <FaCheck className="pricing-feature-icon" /> {feature}
+                  </li>
+                ))}
+              </ul>
+              <div className="pricing-button-container">
+                <button
+                  className={`pricing-get-started-btn ${
+                    hoveredIndex !== null && hoveredIndex !== index ? 'button-dull' : ''
+                  }`}
+                  disabled={loadingAmount === plan.credits}
+                >
+                  {loadingAmount === plan.credits ? 'Processing...' : 'Get Started'}
+                </button>
+              </div>
+              <p className="credit-valid-para">Credits valid for 1 year</p>
+            </div>
+          );
+        }))}
       </div>
     </>
   );

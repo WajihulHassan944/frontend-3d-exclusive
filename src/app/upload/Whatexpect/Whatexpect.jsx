@@ -1,11 +1,28 @@
-import React from 'react';
-import './Whatexpect.css';
+import React from "react";
+import "./Whatexpect.css";
 
-const Whatexpect = () => {
+const Whatexpect = ({ sectionData }) => {
+  if (!sectionData) return null;
+
   return (
     <div className="expect-wrapper">
-      <h2 className="expect-heading">What you can <span className='highlight'>expect</span>?</h2>
-      <p className="expect-subtext">Watch this video with your VR Headset in 3D</p>
+      {/* Title (renders HTML safely) */}
+      <h2
+        className="expect-heading"
+        dangerouslySetInnerHTML={{
+          __html: sectionData.title
+            ?.replace(/\\u003C/g, "<")
+            .replace(/\\u003E/g, ">")
+            .replace(/className=/g, "class="),
+        }}
+      />
+
+      {/* Description */}
+      {sectionData.description && (
+        <p className="expect-subtext">{sectionData.description}</p>
+      )}
+
+      {/* Video */}
       <div className="video-container">
         <iframe
           src="https://www.youtube.com/embed/76MVs_AkjTY?si=fJiLDbgeLkNKI1LS"

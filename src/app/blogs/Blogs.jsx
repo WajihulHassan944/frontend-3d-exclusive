@@ -1,88 +1,90 @@
 'use client';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import './blogs.css';
+import { baseUrl } from '@/const';
 
-const blogs = [
-  {
-    title: "🌀 How 2D to 3D Video Conversion Works – and Why It's So Demanding",
-    type: "Tutorial",
-    date: "1/15/2024",
-    readTime: "8 min",
-    summary:
-      "A deep dive into the AI-driven pipeline that transforms flat videos into immersive 3D experiences, and why it requires serious...",
-    image: "/blogs/one.jpg",
-    path: "/blogs/vr-conversion-process",
-  },
-  {
-    title: "🚀 Unlocking the Power of 3D Video in Business: Training, VR, and...",
-    type: "Insights",
-    date: "1/10/2024",
-    readTime: "6 min",
-    summary:
-      "How 3D video technology is revolutionizing business training, marketing, and communication across industries.",
-    image: "/blogs/two.jpg",
-    path: "/blogs/vr-client-expectations",
-  },
-  {
-    title:
-      "🕶️ How to Watch Full Side-by-Side and MV-HEVC 3D Videos from...",
-    type: "Tutorial",
-    date: "1/8/2024",
-    readTime: "7 min",
-    summary:
-      "At Xclusive3D.com, we transform your regular 2D videos into immersive 3D experiences. Once you've downloaded your converted...",
-    image: "/blogs/three.jpg",
-    path: "/blogs/vr-business-advantages",
-  },
-  {
-    title: "🎥 Full Side-by-Side vs MV-HEVC: What's the Difference – and When...",
-    type: "Technology",
-    date: "1/5/2024",
-    readTime: "6 min",
-    summary:
-      "Understanding the differences between Full SBS and MV-HEVC formats for 3D video content.",
-    image: "/blogs/four.jpg",
-    path: "/blogs/top-vr-applications",
-  },
-  {
-    title: "🔮 The Future Is in 3D: Why 3D Video Is the Missing Link for VR",
-    type: "Business",
-    date: "1/3/2024",
-    readTime: "6 min",
-    summary:
-      "Exploring how 3D video technology is transforming VR experiences and bridging the gap between passive viewing and active...",
-    image: "/blogs/five.jpg",
-    path: "/blogs/vr-business-opportunities",
-  },
-];
-
-const Blogs = () => {
+const Blogs = ({ section }) => {
   const router = useRouter();
+  const [blogs, setBlogs] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        const res = await fetch(`${baseUrl}/blogs/all`);
+        const data = await res.json();
+        if (data.success) {
+          const publishedBlogs = data.blogs.filter(
+            (b) => b.status?.toLowerCase() === 'published'
+          );
+          setBlogs(publishedBlogs);
+        }
+      } catch (err) {
+        console.error('Error fetching blogs:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchBlogs();
+  }, []);
 
   return (
     <div className="blog-section">
-      <h1 className="blog-title">Learn more about <span className='highlight'>3D video</span></h1>
-     <center> <p className="blog-subtitle">
-        Discover everything about 3D content for Meta Quest and Apple Vision Pro. From conversion to implementation.
-      </p></center>
+      <h1
+        className="blog-title"
+        dangerouslySetInnerHTML={{
+          __html: (section?.title || "Learn more about <span class='highlight'>3D video</span>")
+            .replace(/\\u003C/g, "<")
+            .replace(/\\u003E/g, ">")
+            .replace(/className=/g, "class="),
+        }}
+      />
+
+      <center>
+        <p className="blog-subtitle">{section?.description || "Discover everything about 3D content for Meta Quest and Apple Vision Pro. From conversion to implementation."}</p>
+      </center>
 
       <div className="blog-grid">
-        {blogs.map((blog, index) => (
-          <div key={index} className="blog-card" onClick={() => router.push(blog.path)}>
-            <img src={blog.image} alt={blog.title} className="blog-image" />
-            <div className="blog-content">
-              <div className="blog-meta">
-                <span className={`blog-tag ${blog.type.toLowerCase()}`}>{blog.type}</span>
-                <span>📅 {blog.date}</span>
-                <span>⏱ {blog.readTime}</span>
+        {loading ? (
+          <p>Loading blogs...</p>
+        ) : blogs.length === 0 ? (
+          <p>No blogs found.</p>
+        ) : (
+          blogs.map((blog) => (
+            <div
+              key={blog._id}
+              className="blog-card"
+              onClick={() => router.push(`/blogs/${blog.slug}`)}
+            >
+              <img
+                src={blog.featuredImage}
+                alt={blog.title}
+                className="blog-image"
+              />
+              <div className="blog-content">
+                <div className="blog-meta">
+                  <span className={`blog-tag ${blog.categories?.[0]?.toLowerCase() || 'general'}`}>
+                    {blog.categories?.[0] || 'General'}
+                  </span>
+                  <span>📅 {new Date(blog.publishDate).toLocaleDateString()}</span>
+                  <span>⏱ 5 min</span>
+                </div>
+                <h3 className="blog-heading">
+                  {blog.title.length > 66
+                    ? blog.title.slice(0, 66) + '...'
+                    : blog.title}
+                </h3>
+                <p className="blog-summary">
+                  {blog.excerpt.length > 123
+                    ? blog.excerpt.slice(0, 123) + '...'
+                    : blog.excerpt}
+                </p>
+                <p className="blog-readmore">Read more →</p>
               </div>
-              <h3 className="blog-heading">{blog.title}</h3>
-              <p className="blog-summary">{blog.summary}</p>
-              <p className="blog-readmore">Read more →</p>
             </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
     </div>
   );

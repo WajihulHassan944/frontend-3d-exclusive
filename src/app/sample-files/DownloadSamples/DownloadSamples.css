@@ -1,0 +1,119 @@
+.samples-container {
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  padding: 20px 20px 130px;
+  
+}
+
+.samples-grid {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 40px;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+  max-width: 1100px;
+}
+
+.sample-card {
+   background-color: #051a42;
+    border: 1px solid #ffffff1a;
+  border-radius: 12px;
+  padding: 30px 40px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: left;
+  transition: all 0.3s ease;
+}
+
+.sample-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.sample-subtitle {
+  color: #b0c3ff;
+  font-size: 15px;
+  margin-bottom: 25px;
+}
+
+.sample-size {
+  color: #b0c3ff;
+  margin-bottom: 25px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.download-btn {
+  background:linear-gradient(to right, #22c55e , #10b981);
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  padding: 14px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.download-btn:hover {
+  background: linear-gradient(90deg, #00a65e, #18b86e);
+  transform: scale(1.06);
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / .1), 0 8px 10px -6px rgb(0 0 0 / .1);
+}
+.sample-card:has(.download-btn:hover) {
+  box-shadow: 0 10px 15px -3px rgb(168 85 247 / .2),
+              0 4px 6px -4px rgb(168 85 247 / .2);
+  border: 1px solid #a855f780;
+}
+
+.download-icon {
+  font-size: 18px;
+}
+
+.how-to-view {
+  background-image: linear-gradient(to bottom right, rgb(59 130 246 / .05) , rgb(168 85 247 / .05));
+  border-radius: 12px;
+  padding: 24px;
+  max-width: 1100px;
+  margin: 0 auto;
+  border: 1px solid #ffffff1a;
+}
+
+.how-to-view-title {
+  font-size: 26px;
+  font-weight: 700;
+  margin-left: 9px;
+  margin-bottom: 15px;
+}
+
+.how-to-view-list {
+  list-style: decimal inside;
+  line-height: 1.9;
+  color: #b0c3ff;
+  font-size: 16px;
+  padding-left: 10px;
+}
+
+@media (max-width: 768px) {
+  .samples-grid {
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .sample-card {
+    width: 90%;
+  }
+
+  .how-to-view {
+    width: 90%;
+  }
+}

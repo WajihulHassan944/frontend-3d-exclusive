@@ -31,9 +31,8 @@
   color: #e0e0e0;
   margin-top: 0.5rem;
 }
-
-.cookies-content a {
-  color: #ffa94d;
+ .orange {
+  color: #ffa94d !important;
   text-decoration: underline;
 }
 .cookies-logo{

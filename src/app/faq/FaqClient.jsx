@@ -5,23 +5,32 @@ import './faq.css';
 import { FiChevronUp, FiChevronDown } from 'react-icons/fi';
 import Link from 'next/link';
 
-
-export default function FaqClient({faqs}) {
+export default function FaqClient({ faqs, section }) {
   const [openIdx, setOpenIdx] = useState(null);
 
   const toggle = (idx) => {
     setOpenIdx(openIdx === idx ? null : idx);
   };
 
-
   return (
     <>
       <section className="faq-section">
         <div className="faq-header">
-          <h1 className="faq-title">Frequently Asked <span className='highlight'>Questions</span></h1>
-         <center> <p className="faq-subtitle">
-            Find answers to common questions about our 3D video conversion service
-          </p></center>
+     <h1
+  className="faq-title"
+  dangerouslySetInnerHTML={{
+    __html: (section?.title || "Frequently Asked <span class='highlight'>Questions</span>")
+      .replace(/\\u003C/g, "<")    // decode escaped <
+      .replace(/\\u003E/g, ">")    // decode escaped >
+      .replace(/className=/g, "class="), // convert JSX to HTML
+  }}
+/>
+
+          <center>
+            <p className="faq-subtitle">
+              {section?.description || 'Find answers to common questions about our 3D video conversion service.'}
+            </p>
+          </center>
         </div>
 
         <ul className="faq-list">

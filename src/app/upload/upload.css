@@ -9,17 +9,24 @@ padding-top: 0;
 }
 
 .xclusive-header {
-    font-size: 4rem;
+    font-size: 4.5rem;
          letter-spacing: -.025em;
         line-height: 1.125;
         max-width: 1100px;
   font-weight: 700;
-  margin-top: 60px;
-  margin-bottom: 110px;
+  margin-top: 150px;
+  margin-bottom: 15px;
   color: #ffffff;
 }
+.xclusive-subtext{
+    font-size: 1.5rem;
+        line-height: 2rem;
+  color: #d1d5db !important;
+  font-weight: 400;
+  margin-bottom: 120px;
+}
 .upload-section{
-  max-width: 600px;
+  max-width: 850px;
 }
 
 .upload-box {
@@ -38,6 +45,7 @@ padding-top: 0;
   text-align: center;
   min-height: 270px;
   position: relative;
+  max-width: 700px;
 }
 
 .upload-box:hover {
@@ -352,15 +360,8 @@ padding-top: 0;
   cursor: not-allowed;
 }
 .format-selector {
-  margin:50px 0;
+  margin:70px 0 50px;
   text-align: center;
-}
-
-.format-title {
-  color: #fff;
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 16px;
 }
 
 .format-option {
@@ -369,7 +370,6 @@ padding-top: 0;
   background: rgba(0,0,0,0.4);
   color: #fff;
   width: 100%;
-  max-width: 600px; /* fixed width for uniformity */
   text-align: left;
   padding: 14px 18px;
   margin: 10px auto;
@@ -415,14 +415,16 @@ padding-top: 0;
 }
 
 .format-option label {
-  font-size: 15px;
+  font-size: 14px;
+    font-weight: 600;
   cursor: pointer;
  
 }
 
 .format-option label span {
-  color: #b3b3ff;
-  font-size: 13px;
+ color: #bfbfbf;
+  font-size: 13.5px;
+  margin-left: 2px;
 }
 
 
@@ -513,4 +515,31 @@ padding-top: 0;
   border-radius: 6px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.2);
   white-space: nowrap;
+}
+
+
+
+ .xclusive-container .step-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 25px;
+  gap: 10px;
+}
+
+.xclusive-container .step-header .step-number {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 18px;
+  color: #fff;
+}
+
+.xclusive-container .step-header .step-title {
+  font-size: 24px;
+  font-weight: 700;
 }

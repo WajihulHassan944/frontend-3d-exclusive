@@ -1,0 +1,211 @@
+.howItWorksWrapper {
+  padding: 80px 10%;
+  color: white;
+  text-align: center;
+}
+
+.howItWorks-heading {
+  font-size: 2.85rem;
+  line-height: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 80px;
+}
+
+.howItWorks-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 60px;
+  max-width: 1200px;
+  margin: 0 auto 80px;
+  flex-wrap: wrap;
+  text-align: left;
+}
+
+.howItWorks-text {
+  flex: 1 1 45%;
+  position: relative;
+  max-width: 500px;
+  margin-left: 70px;
+}
+
+.howItWorksWrapper .step-number {
+  font-size: 6rem;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.1);
+  margin: 0;
+  position: absolute;
+  left: -80px;
+  top: -30px;
+}
+
+.howItWorksWrapper .step-title {
+  font-size: 1.85rem;
+  font-weight: 700;
+  margin-bottom: 15px;
+  position: relative;
+  z-index: 2;
+}
+
+.howItWorksWrapper .step-description {
+  font-size: 1.07rem;
+  line-height: 1.7rem;
+  color: rgba(255, 255, 255, 0.75);
+  position: relative;
+  z-index: 2;
+}
+
+.howItWorks-image {
+  flex: 1 1 45%;
+  display: flex;
+  justify-content: flex-end;
+  position: relative;
+}
+
+.howItWorks-content:nth-of-type(2) .howItWorks-image {
+  justify-content: flex-start;
+}
+
+/* ✅ Before/After Comparison Slider */
+.comparison-container {
+  position: relative;
+  width: 100%;
+  max-width: 570px;
+  aspect-ratio: 16/9;
+  overflow: hidden;
+  border-radius: 16px;
+  cursor: ew-resize;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.comparison-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.comparison-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  overflow: hidden;
+}
+.comparison-handle {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 4px;
+  background: #fff;
+  cursor: ew-resize;
+  transform: translateX(-50%);
+}
+
+.pause-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  color: black;
+  font-weight: 700;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+}
+
+.howItWorksWrapper .label {
+  position: absolute;
+  bottom: 10px;
+  font-size: 0.9rem;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 5px 10px;
+  border-radius: 6px;
+}
+
+.howItWorksWrapper .label-left {
+  left: 10px;
+}
+
+.howItWorksWrapper .label-right {
+  right: 10px;
+}
+
+.howItWorks-image img {
+  width: 100%;
+  max-width: 570px;
+  border-radius: 16px;
+  object-fit: cover;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .howItWorks-content {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .howItWorks-text {
+    margin-left: 0;
+  }
+
+  .howItWorksWrapper .step-number {
+    position: static;
+    font-size: 4rem;
+    margin-bottom: 10px;
+  }
+
+  .howItWorks-image {
+    justify-content: center !important;
+  }
+}
+
+
+/* Prevent selection on images, buttons, and slider elements */
+.howItWorks-image,
+.comparison-container,
+.comparison-handle,
+.pause-icon,
+.howItWorks-text {
+  user-select: none;
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none;    /* Firefox */
+  -ms-user-select: none;     /* IE10+ */
+}
+
+
+/* Make original image fixed in place */
+.comparison-container .comparison-img:first-child {
+  position: relative; /* keep in normal flow */
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Overlay image stays absolutely positioned and clips */
+.comparison-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: var(--divider, 50%); /* dynamically set width */
+  overflow: hidden;
+}
+
+.comparison-overlay img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

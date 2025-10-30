@@ -35,6 +35,7 @@ color: #fff;
   overflow: hidden;
   cursor: pointer;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  max-width: 415px;
 }
 
 .blog-card:hover {

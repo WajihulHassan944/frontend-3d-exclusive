@@ -118,5 +118,7 @@
 
 .stat .label {
   font-size: 14px;
-  opacity: 0.8;
+  opacity: 0.75;
+  font-weight: 400;
+  margin-top: 4px;
 }

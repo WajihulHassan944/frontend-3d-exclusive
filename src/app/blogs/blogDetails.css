@@ -58,34 +58,34 @@
   object-fit: cover;
 }
 
-.blogContent h2, .blogContent h3 {
+.blog-text h2, .blog-text h3 {
   margin-top: 30px;
   color: #fff;
 }
 
-.blogContent h2 {
+.blog-text h2 {
   font-size: 26px;
 }
 
-.blogContent h3 {
+.blog-text h3 {
   font-size: 22px;
   margin-bottom: 10px;
 }
 
-.blogContent p {
+.blog-text {
   font-size: 16px;
   line-height: 1.7;
   color: #ddd;
   margin-bottom: 18px;
 }
 
-.blogContent ul {
+.blog-text ul {
   margin-left: 20px;
   margin-bottom: 20px;
   color: #ccc;
 }
 
-.blogContent ul li {
+.blog-text ul li {
   list-style: disc;
   margin-bottom: 8px;
 }

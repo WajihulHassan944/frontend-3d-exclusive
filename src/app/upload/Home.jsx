@@ -8,14 +8,10 @@ import { useRouter } from 'next/navigation';
 import { refreshAndDispatchUser } from '@/utils/refreshUser';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
-import Whycloud from './Whycloud/Whycloud';
-import Whatexpect from './Whatexpect/Whatexpect';
 import { FiCheckCircle } from "react-icons/fi";
-import PricingSectionInPricing from '../pricing/PricingSection/PricingSection';
-import CustomerTestimonials from './CustomerTestimonials/CustomerTestimonials';
-import NewsletterSignup from './NewsletterSignup/NewsletterSignup';
-import ImmersiveThreeD from './ImmersiveThreeD/ImmersiveThreeD';
 import toast from 'react-hot-toast';
+import ExperienceSelector from './ExperienceSelector/ExperienceSelector';
+import ConversionCostBox from './ConversionCostBox/ConversionCostBox';
 
 
 const Home = () => {
@@ -33,7 +29,8 @@ const [showVideoNote, setShowVideoNote] = useState(false); // controls div
 const videoNoteRef = useRef(null);
 const [conversionFormat, setConversionFormat] = useState('Full Side by Side');
 const [progress, setProgress] = useState(0);
- const router = useRouter();
+const [threeDExperience, setThreeDExperience] = useState('comfort');
+const router = useRouter();
 // inside Home component
 
 useEffect(() => {
@@ -240,6 +237,7 @@ const handleUpload = async () => {
         conversionFormat,
         fileSize: formatFileSize(videoFile.size),
         creditsUsed: isUsingFreeMinute ? 0 : cost,
+        threeDExperience,
       }),
     });
 
@@ -261,13 +259,22 @@ const handleUpload = async () => {
 
   return (
     <div className="xclusive-container">
-   {isLoggedIn && (
-   <center><h1 className='xclusive-header'>Turn your videos into an <span className='highlight'> unforgettable 3D experience</span></h1>
+   {/* {isLoggedIn && (
+   <center><h1 className='xclusive-header' style={{marginBottom:'100px'}}>Turn your videos into an <span className='highlight'> unforgettable 3D experience</span></h1>
   </center>
-)}
+)} */}
+
+{/* {!isLoggedIn && ( */}
+   <center><h1 className='xclusive-header'>Convert Your Video to <span className='highlight'>3D</span></h1>
+   <p className='xclusive-subtext'>Upload your video and customize your 3D conversion settings</p>
+  </center>
+{/* )} */}
 
     <center>  <div className="upload-section">
- 
+  <div className="step-header">
+        <div className="step-number">1</div>
+        <h2 className="step-title">Upload Your Video</h2>
+      </div>
     <>
       <input
         type="file"
@@ -381,14 +388,14 @@ const handleUpload = async () => {
       <video src={videoPreview} controls width="100%" />
     </div>
   )}
- {showVideoNote && videoMeta && isLoggedIn && (
+ {/* {showVideoNote && videoMeta && isLoggedIn && (
   <div ref={videoNoteRef} className="video-meta-card">
     {videoMeta.error ? (
       <p>⚠️ {videoMeta.error}</p>
     ) : (
       <>
         <p><strong>Video:</strong> {videoMeta.fileName}</p>
-        {/* <p><strong>Quality:</strong> {videoMeta.quality}</p> */}
+        <p><strong>Quality:</strong> {videoMeta.quality}</p>
         <p><strong>Credits Required:</strong> {videoMeta.isUsingFreeMinute ? '0 (using free minute)' : videoMeta.cost}</p>
         <p><strong>Your Balance:</strong> {videoMeta.balance} credit(s)</p>
          <p><strong>1 min Free Conversion:</strong> {user.hasFreeConversion ? "Not Used": "Availed"}</p>
@@ -407,13 +414,20 @@ const handleUpload = async () => {
       </>
     )}
   </div>
-)}
+)} */}
 
 
 
   {uploadStatus && <p className="upload-status">{uploadStatus}</p>}
+
+<ExperienceSelector selected={threeDExperience} setSelected={setThreeDExperience} />
+
 <div className="format-selector">
-  <p className="format-title">Choose conversion format</p>
+  <div className="step-header">
+        <div className="step-number">3</div>
+        <h2 className="step-title">Choose Output Format</h2>
+      </div>
+
     <div
     className={`format-option ${conversionFormat === 'Full Side by Side' ? 'selected' : ''}`}
     onClick={() => setConversionFormat('Full Side by Side')}
@@ -477,20 +491,12 @@ const handleUpload = async () => {
   )}
 </button>
 
-
+<ConversionCostBox credits={videoMeta?.cost} />
   
 </div>
 </center>
 
-     
-
-{/* {isLoggedIn && <center><Credits /></center>} */}
-    <PricingSectionInPricing />
-    <Whycloud />
-    <CustomerTestimonials />
-    <ImmersiveThreeD />
-    <Whatexpect />
-    <NewsletterSignup />
+    
     </div>
   );
 };

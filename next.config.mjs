@@ -12,6 +12,11 @@ const nextConfig = {
         hostname: 'lh3.googleusercontent.com',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'frontend-3d-exclusive.vercel.app',
+        pathname: '/**',
+      },
     ],
   },
 };

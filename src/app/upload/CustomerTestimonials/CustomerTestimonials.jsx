@@ -70,7 +70,7 @@ const itemVariants = {
   show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } },
 };
 
-const CustomerTestimonials = () => {
+const CustomerTestimonials = ({ sectionData }) => {
   const [animate, setAnimate] = useState(false);
   const statsRef = useRef(null);
 
@@ -91,28 +91,39 @@ const fadeUp = {
   hidden: { opacity: 0, y: 30 },
   show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
 };
+
+  const cards = sectionData?.cards || [];
+
+
   return (
     <div className="testimonial-wrapper">
       <div className="testimonails-main">
-         <motion.h2
+          <motion.h2
           className="testimonial-title"
           variants={fadeUp}
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, amount: 0.2 }}
-        >
-          What our <span className="highlight">customers</span> say
-        </motion.h2>
+          dangerouslySetInnerHTML={{
+            __html: sectionData?.title
+              ?.replace(/\\u003C/g, "<")
+              .replace(/\\u003E/g, ">")
+              .replace(/className=/g, "class="),
+          }}
+        />
 
-        <motion.p
-          className="testimonial-subtitle"
-          variants={fadeUp}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, amount: 0.2 }}
-        >
-          Join thousands of creators who transformed their content
-        </motion.p>
+
+        {sectionData?.description && (
+          <motion.p
+            className="testimonial-subtitle"
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, amount: 0.2 }}
+          >
+            {sectionData?.description}
+          </motion.p>
+        )}
 
         {/* Animated testimonials */}
         <motion.div
@@ -122,21 +133,27 @@ const fadeUp = {
           whileInView="show"
           viewport={{ once: true, amount: 0.2 }}
         >
-          {testimonials.map((t, i) => (
-            <motion.div key={i} className="testimonial-card" variants={itemVariants}>
+                    {cards.map((t, i) => (
+            <motion.div key={t._id || i} className="testimonial-card" variants={itemVariants}>
               <div className="stars">
                 {[...Array(5)].map((_, idx) => (
                   <FaStar key={idx} color="#FFD700" size={16} />
                 ))}
               </div>
-              <p className="quote">"{t.quote}"</p>
+              <p className="quote">"{t.description}"</p>
               <div className="user">
                 <div className="avatar">
-                  <img src={t.img} alt={t.name} className="avatar-img" />
+                  {/* Optional: fallback image if you want */}
+                    <img
+                    src={`/testimonials/${t.title.toLowerCase().split(' ')[0]}.jpg`}
+                    alt={t.title}
+                    className="avatar-img"
+                    onError={(e) => (e.target.src = '/testimonials/default.jpg')}
+                  />
                 </div>
                 <div>
-                  <div className="username">{t.name}</div>
-                  <div className="role">{t.role}</div>
+                  <div className="username">{t.title}</div>
+                  <div className="role">{t.subDescription}</div>
                 </div>
               </div>
             </motion.div>
@@ -147,9 +164,9 @@ const fadeUp = {
         <div className="stats-bar" ref={statsRef}>
           <div className="stat">
             <div className="value">
-              {animate && <Counter target={15000} suffix="+" duration={2000} />}
+              {animate && <>Join {''} <Counter target={3000} suffix="+" duration={2000} /></>}
             </div>
-            <div className="label">Videos Converted</div>
+            <div className="label">Early Adopters</div>
           </div>
           <div className="stat">
             <div className="value">

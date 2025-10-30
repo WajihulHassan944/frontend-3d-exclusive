@@ -3,12 +3,14 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import './home.css';
+import { useRouter } from 'next/navigation';
 
-const HeroSection = () => {
+const HeroSection = ({ sectionData }) => {
   const ref = useRef(null);
   const [isMobile, setIsMobile] = useState(false);
+  const router = useRouter();
 
-  // detect screen width
+  // Detect screen width
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 768);
     handleResize();
@@ -21,7 +23,6 @@ const HeroSection = () => {
     offset: ['start end', 'end start'],
   });
 
-  // font size shrinks more aggressively on mobile
   const fontSize = useTransform(
     scrollYProgress,
     [0, 1],
@@ -38,18 +39,18 @@ const HeroSection = () => {
   return (
     <section className="hero-section" ref={ref}>
       <div className="hero-content">
-        <h1>
-           {isMobile ? (
-            <>
-               Start now <br /> with your <span className="animatedh1">immersive <br /> 3D</span><br /> experience
-            </>
-          ) : (
-            <>
-               Start now with your <span className="animatedh1">immersive 3D</span> experience
-            </>
-          )}
-        </h1>
+        {/* ✅ Dynamic Title with HTML decoding */}
+        <h1
+          dangerouslySetInnerHTML={{
+            __html: (sectionData?.title ||
+              'Start now with your <span class="highlight">immersive 3D</span> experience')
+              .replace(/\\u003C/g, '<')
+              .replace(/\\u003E/g, '>')
+              .replace(/className=/g, 'class='),
+          }}
+        />
 
+        {/* ✅ Dynamic Description */}
         <motion.p
           style={{
             y,
@@ -57,21 +58,22 @@ const HeroSection = () => {
             fontSize,
             willChange: 'transform, opacity, font-size',
           }}
-        >
-          {isMobile ? (
-            <>
-              Transform your 2D videos into <br />
-              stunning 3D content for Meta <br />
-              Quest and Apple Vision Pro
-            </>
-          ) : (
-            <>
-              Transform your 2D videos into stunning 3D content for Meta Quest and Apple <br />
-              Vision Pro
-            </>
-          )}
-        </motion.p>
+          dangerouslySetInnerHTML={{
+            __html: (sectionData?.description ||
+              'Transform your 2D videos into stunning 3D content for Meta Quest and Apple <br /> Vision Pro, Samsung XR and Pico Ultra')
+              .replace(/\\u003C/g, '<')
+              .replace(/\\u003E/g, '>')
+              .replace(/className=/g, 'class='),
+          }}
+        />
       </div>
+
+      <button
+        className="start-converting-btn"
+        onClick={() => router.push('/upload')}
+      >
+        Start 3D converting Now
+      </button>
     </section>
   );
 };

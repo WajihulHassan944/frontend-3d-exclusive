@@ -6,27 +6,31 @@ import PricingSectionInPricing from './PricingSection/PricingSection';
 import { useSelector } from 'react-redux';
 import PaymentOptions from './PaymentOptions/PaymentOptions';
 
-const Pricing = () => {
-   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+const Pricing = ({ section }) => {
+  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
 
   return (
-  <center> <div className="pricing-container">
-     
+    <center>
+      <div className="pricing-container">
+        <h2
+          className="pricing-title"
+          dangerouslySetInnerHTML={{
+            __html: (section?.title || "<span class='highlight'>Pricing</span>")
+              .replace(/\\u003C/g, "<")
+              .replace(/\\u003E/g, ">")
+              .replace(/className=/g, "class="),
+          }}
+        />
 
-      <h2 className="pricing-title highlight">Pricing</h2>
-      <p className='pricingSubTitle'>Choose the perfect plan for your 3D video conversion needs</p>
-      
-      
-      <PricingSectionInPricing />
-     
-<PaymentOptions />
+        <p className="pricingSubTitle">
+          {section?.description || "Choose the perfect plan for your 3D video conversion needs."}
+        </p>
 
-
-
-
-    </div>
-  </center> 
-   );
+        <PricingSectionInPricing />
+        <PaymentOptions />
+      </div>
+    </center>
+  );
 };
 
 export default Pricing;
