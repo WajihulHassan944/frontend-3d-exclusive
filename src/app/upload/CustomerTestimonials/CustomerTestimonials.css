@@ -31,6 +31,8 @@
   gap: 20px;
   justify-content: space-between;
   margin-bottom: 60px;
+  opacity: 1 !important;  /* to override Framer Motion SSR artifacts */
+  overflow: visible;
   
 }
 

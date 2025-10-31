@@ -7,6 +7,7 @@ import { motion } from 'framer-motion';
 const Counter = ({ start = 0, target, suffix = '', duration = 2000, decimals = 0 }) => {
   const [count, setCount] = useState(start);
 
+
   useEffect(() => {
     const startTime = performance.now();
     const step = (currentTime) => {
@@ -48,7 +49,11 @@ const itemVariants = {
 const CustomerTestimonials = ({ sectionData }) => {
   const [animate, setAnimate] = useState(false);
   const statsRef = useRef(null);
+const [isClient, setIsClient] = useState(false);
 
+useEffect(() => {
+  setIsClient(true);
+}, []);
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -101,11 +106,12 @@ const fadeUp = {
         )}
 
         {/* Animated testimonials */}
-        <motion.div
+       {isClient && (
+ <motion.div
           className="testimonial-cards"
           variants={containerVariants}
           initial="hidden"
-          whileInView="show"
+          animate={animate ? "show" : "hidden"}
           viewport={{ once: true, amount: 0.2 }}
         >
                     {cards.map((t, i) => (
@@ -134,7 +140,7 @@ const fadeUp = {
             </motion.div>
           ))}
         </motion.div>
-
+)}
         {/* Stats Section with Counter Animation */}
         <div className="stats-bar" ref={statsRef}>
           <div className="stat">
