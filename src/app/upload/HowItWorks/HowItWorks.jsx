@@ -8,33 +8,40 @@ const HowItWorks = ({ sectionData }) => {
   const sliderRef = useRef(null);
   const isDragging = useRef(false);
 
-  const handleMouseDown = () => (isDragging.current = true);
-  const handleMouseUp = () => (isDragging.current = false);
+  const startDrag = () => (isDragging.current = true);
+  const stopDrag = () => (isDragging.current = false);
 
-  const handleMouseMove = (e) => {
+  const onDrag = (e) => {
     if (!isDragging.current || !sliderRef.current) return;
+
     const rect = sliderRef.current.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const clientX = e.clientX ?? e.touches?.[0]?.clientX; // support touch
+    if (clientX === undefined) return;
+
+    const x = ((clientX - rect.left) / rect.width) * 100;
     setDividerPos(Math.min(100, Math.max(0, x)));
   };
 
   useEffect(() => {
-    window.addEventListener("mouseup", handleMouseUp);
-    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mouseup", stopDrag);
+    window.addEventListener("mousemove", onDrag);
+    window.addEventListener("touchend", stopDrag);
+    window.addEventListener("touchmove", onDrag);
+
     return () => {
-      window.removeEventListener("mouseup", handleMouseUp);
-      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", stopDrag);
+      window.removeEventListener("mousemove", onDrag);
+      window.removeEventListener("touchend", stopDrag);
+      window.removeEventListener("touchmove", onDrag);
     };
   }, []);
 
-  // ✅ Move this AFTER all hooks
   if (!sectionData) return null;
 
   const steps = sectionData.subSection?.cards || [];
 
   return (
     <div className="howItWorksWrapper">
-      {/* Dynamic Title */}
       <h2
         className="howItWorks-heading"
         dangerouslySetInnerHTML={{
@@ -53,7 +60,6 @@ const HowItWorks = ({ sectionData }) => {
             <h3 className="step-title">{steps[0].title}</h3>
             <p className="step-description">{steps[0].description}</p>
           </div>
-
           <div className="howItWorks-image">
             <img src="/assets/how-it-works-one.jpg" alt={steps[0].title} />
           </div>
@@ -65,33 +71,37 @@ const HowItWorks = ({ sectionData }) => {
         <div className="howItWorks-content">
           <div className="howItWorks-image">
             <div className="comparison-container" ref={sliderRef}>
-              <img
-                src="/assets/how-it-works-two.jpg"
-                alt="Original"
-                className="comparison-img"
-              />
-              <div
-                className="comparison-overlay"
-                style={{ width: `${dividerPos}%` }}
-              >
-                <img
-                  src="/assets/how-it-works-one.jpg"
-                  alt="Depth Map"
-                  className="comparison-img"
-                />
-              </div>
-              <div
-                className="comparison-handle"
-                style={{ left: `${dividerPos}%` }}
-                onMouseDown={handleMouseDown}
-              >
-                <div className="pause-icon">❚❚</div>
-              </div>
-              <span className="label label-left">Original</span>
-              <span className="label label-right">Depth Map</span>
-            </div>
-          </div>
+  {/* Background Image */}
+  <img
+    src="/assets/how-it-works-two.jpg"
+    alt="Original"
+    className="comparison-img"
+  />
 
+  {/* Overlay Image (static, clipped) */}
+  <img
+    src="/assets/how-it-works-one.jpg"
+    alt="Depth Map"
+    className="comparison-img overlay-img"
+    style={{ clipPath: `inset(0 ${100 - dividerPos}% 0 0)` }}
+  />
+
+  {/* Divider / Handle */}
+  <div
+    className="comparison-handle"
+    style={{ left: `${dividerPos}%` }}
+    onMouseDown={startDrag}
+    onTouchStart={startDrag}
+  >
+    <div className="pause-icon"></div>
+  </div>
+
+  {/* Labels */}
+  <span className="label label-left">Original</span>
+  <span className="label label-right">Depth Map</span>
+</div>
+
+          </div>
           <div className="howItWorks-text">
             <h1 className="step-number">2</h1>
             <h3 className="step-title">{steps[1].title}</h3>
@@ -108,12 +118,8 @@ const HowItWorks = ({ sectionData }) => {
             <h3 className="step-title">{steps[2].title}</h3>
             <p className="step-description">{steps[2].description}</p>
           </div>
-
           <div className="howItWorks-image">
-            <img
-              src="/assets/how-it-works-three.jpg"
-              alt={steps[2].title}
-            />
+            <img src="/assets/how-it-works-three.jpg" alt={steps[2].title} />
           </div>
         </div>
       )}

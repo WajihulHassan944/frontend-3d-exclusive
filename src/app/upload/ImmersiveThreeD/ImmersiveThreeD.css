@@ -205,11 +205,12 @@ font-size: 1.5rem;
 }
 
 .vr-card {
+ width: 100%;
+ max-width: 210px;
   background: #ffffff1a;
   border: 1px solid #fff3;
   padding: 15px;
   border-radius: 8px;
-  max-width: 130px;
   max-height: 125px;
 }
 .vr-card strong {
@@ -219,10 +220,14 @@ font-size: 1.5rem;
   line-height: 1.25rem;
 }
 .vr-card p{
-    color: #ababba;
-    font-size: .875rem;
+  color: #4ade80;
+    font-size: .815rem;
     line-height: 1.25rem;
     margin-bottom: 0;
+}
+
+.vr-card:nth-of-type(1) p{
+    color: #ababba;
 }
 .vr-card a {
   color: #4ade80;

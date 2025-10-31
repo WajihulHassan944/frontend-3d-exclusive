@@ -66,36 +66,33 @@
 .howItWorks-content:nth-of-type(2) .howItWorks-image {
   justify-content: flex-start;
 }
-
-/* ✅ Before/After Comparison Slider */
-.comparison-container {
+.howItWorksWrapper .comparison-container {
   position: relative;
   width: 100%;
   max-width: 570px;
   aspect-ratio: 16/9;
   overflow: hidden;
   border-radius: 16px;
-  cursor: ew-resize;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  user-select: none;
 }
 
-.comparison-img {
+.howItWorksWrapper .comparison-img {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
+  pointer-events: none;
 }
 
-.comparison-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  overflow: hidden;
+/* Overlay image remains static, only clipped */
+.howItWorksWrapper .overlay-img {
+  z-index: 5;
 }
-.comparison-handle {
+
+.howItWorksWrapper .comparison-handle {
   position: absolute;
   top: 0;
   height: 100%;
@@ -103,23 +100,32 @@
   background: #fff;
   cursor: ew-resize;
   transform: translateX(-50%);
+  z-index: 10;
 }
 
-.pause-icon {
+.howItWorksWrapper .pause-icon {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  width: 50px;
+  height: 50px;
   background: white;
-  color: black;
-  font-weight: 700;
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+}
+
+.howItWorksWrapper .pause-icon::before,
+.howItWorksWrapper .pause-icon::after {
+  content: '';
+  width: 2px;
+  height: 25px;
+  background: black;
+  border-radius: 2px;
+  margin: 0 2px;
 }
 
 .howItWorksWrapper .label {
@@ -129,6 +135,7 @@
   background: rgba(0, 0, 0, 0.6);
   padding: 5px 10px;
   border-radius: 6px;
+  z-index: 11;
 }
 
 .howItWorksWrapper .label-left {
