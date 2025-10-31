@@ -4,31 +4,6 @@ import './CustomerTestimonials.css';
 import { FaStar } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 
-const testimonials = [
-  {
-    img: '/testimonials/michael.jpg',
-    name: 'Michael Johnson',
-    role: 'Travel Content Creator',
-    quote:
-      "Incredible quality! My travel videos look absolutely stunning on my Quest 3. The depth perception makes viewers feel like they're actually there with me.",
-  },
-  {
-    img: '/testimonials/sarah.jpg',
-    name: 'Sarah Chen',
-    role: 'Food Influencer',
-    quote:
-      'Game changer for my YouTube channel! My 3D cooking videos get 10x more engagement. The cloud processing is lightning fast too.',
-  },
-  {
-    img: '/testimonials/david.jpg',
-    name: 'David Rodriguez',
-    role: 'Real Estate Agent',
-    quote:
-      'My real estate virtual tours are now incredibly immersive. Clients can truly experience properties before visiting. Sales increased by 40%!',
-  },
-];
-
-// Counter component (unchanged)
 const Counter = ({ start = 0, target, suffix = '', duration = 2000, decimals = 0 }) => {
   const [count, setCount] = useState(start);
 
