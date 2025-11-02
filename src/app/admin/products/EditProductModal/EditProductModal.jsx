@@ -1,8 +1,12 @@
 "use client";
 import React, { useState } from "react";
 import "./EditProductModal.css";
+import { X } from "lucide-react";
+import { baseUrl } from "@/const";
+import toast from "react-hot-toast";
+export default function EditProductModal({ onClose, onAdd, product }) {
+  const isEditing = !!product;
 
-export default function EditProductModal({ onClose, onSave, product }) {
   const [formData, setFormData] = useState({
     name: product?.name || "",
     credits: product?.credits || "",
@@ -13,11 +17,10 @@ export default function EditProductModal({ onClose, onSave, product }) {
     isPopular: product?.isPopular || false,
     packageType: product?.packageType || "Standard",
     isActive: product?.isActive ?? true,
-    localizedPricing: product?.localizedPricing || [],
   });
 
-  const [showLocalized, setShowLocalized] = useState(false);
-
+  const [loading, setLoading] = useState(false);
+  
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
@@ -26,32 +29,73 @@ export default function EditProductModal({ onClose, onSave, product }) {
     }));
   };
 
-  const handleLocalizedChange = (index, field, value) => {
-    const updated = [...formData.localizedPricing];
-    updated[index][field] = value;
-    setFormData((prev) => ({
-      ...prev,
-      localizedPricing: updated,
-    }));
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const updated = {
+    setLoading(true);
+    
+    const payload = {
       ...formData,
       features: formData.features
         .split("\n")
         .map((f) => f.trim())
         .filter(Boolean),
     };
-    onSave?.(updated);
+
+    try {
+      let res;
+      if (isEditing) {
+        // Call PUT API (for editing)
+        res = await fetch(`${baseUrl}/products/${product._id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+      } else {
+        // Call POST API (for creating new product)
+        res = await fetch(`${baseUrl}/products/`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+      }
+
+      const data = await res.json();
+
+      if (!res.ok) throw new Error(data.message || "Request failed");
+
+       toast.success(
+      isEditing
+        ? "Product updated successfully!"
+        : "Product created successfully!"
+    );
+      onAdd();
+      onClose(false);
+    } catch (error) {
+      console.error("Product save error:", error);
+       toast.error(error.message || "Something went wrong");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="modal-overlay">
       <div className="modal-card">
-        <h2 className="modal-title">Edit Product</h2>
-        <p className="modal-subtitle">Update product details and pricing</p>
+        <div className="modal-header">
+          <div>
+            <h2 className="modal-title">
+              {isEditing ? "Edit Product" : "Add New Product"}
+            </h2>
+            <p className="modal-subtitle">
+              {isEditing
+                ? "Update product details and pricing"
+                : "Create a new product entry"}
+            </p>
+          </div>
+          <button className="close-btn-popup" onClick={() => onClose(false)}>
+            <X size={17} />
+          </button>
+        </div>
 
         <form onSubmit={handleSubmit} className="modal-form">
           {/* Row 1: Name & Credits */}
@@ -64,6 +108,7 @@ export default function EditProductModal({ onClose, onSave, product }) {
                 value={formData.name}
                 onChange={handleChange}
                 placeholder="Pro Package"
+                required
               />
             </div>
             <div className="form-group">
@@ -74,6 +119,7 @@ export default function EditProductModal({ onClose, onSave, product }) {
                 value={formData.credits}
                 onChange={handleChange}
                 placeholder="50"
+                required
               />
             </div>
           </div>
@@ -88,6 +134,7 @@ export default function EditProductModal({ onClose, onSave, product }) {
                 value={formData.originalPriceEUR}
                 onChange={handleChange}
                 placeholder="135"
+                required
               />
             </div>
             <div className="form-group">
@@ -97,40 +144,10 @@ export default function EditProductModal({ onClose, onSave, product }) {
                 name="priceEUR"
                 value={formData.priceEUR}
                 onChange={handleChange}
-                placeholder="110"
+                placeholder="0"
               />
             </div>
           </div>
-
-          {/* 💠 Localized pricing link */}
-          <p
-            className="localized-toggle"
-            onClick={() => setShowLocalized((prev) => !prev)}
-          >
-            {showLocalized ? "Hide localized pricing" : "Edit localized pricing"}
-          </p>
-
-          {/* Conditionally render localized pricing fields */}
-          {showLocalized && (
-            <div className="localized-section">
-              {formData.localizedPricing.length > 0 ? (
-                formData.localizedPricing.map((lp, index) => (
-                  <div className="localized-row" key={index}>
-                    <span className="currency-label">{lp.currency}</span>
-                    <input
-                      type="number"
-                      value={lp.price}
-                      onChange={(e) =>
-                        handleLocalizedChange(index, "price", e.target.value)
-                      }
-                    />
-                  </div>
-                ))
-              ) : (
-                <p className="no-localized">No localized pricing available</p>
-              )}
-            </div>
-          )}
 
           {/* Description */}
           <div className="form-group">
@@ -165,12 +182,7 @@ export default function EditProductModal({ onClose, onSave, product }) {
                   type="checkbox"
                   name="isPopular"
                   checked={formData.isPopular === true}
-                  onChange={(e) =>
-                    setFormData((prev) => ({
-                      ...prev,
-                      isPopular: e.target.checked ? true : false,
-                    }))
-                  }
+                  onChange={handleChange}
                 />
                 <span className="slider"></span>
               </label>
@@ -189,13 +201,25 @@ export default function EditProductModal({ onClose, onSave, product }) {
             </div>
           </div>
 
+      
           {/* Actions */}
           <div className="form-actions">
-            <button type="button" className="cancel-btn" onClick={onClose}>
+            <button
+              type="button"
+              className="cancel-btn"
+              onClick={() => onClose(false)}
+              disabled={loading}
+            >
               Cancel
             </button>
-            <button type="submit" className="save-btn">
-              Save Changes
+            <button type="submit" className="save-btn" disabled={loading}>
+              {loading
+                ? isEditing
+                  ? "Updating..."
+                  : "Creating..."
+                : isEditing
+                ? "Save Changes"
+                : "Add Product"}
             </button>
           </div>
         </form>

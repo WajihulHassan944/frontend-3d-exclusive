@@ -36,7 +36,7 @@ const PricingSectionInPricing = () => {
         credits: p.credits,
         name: p.name,
         rate: p.description,
-        price: `${currencySymbol} ${Math.round(p.localizedPricing?.[0]?.price || p.priceEUR)}`,
+        price: `${currencySymbol} ${Math.round(p.localizedPricing?.[0]?.price || p.originalPriceEUR)}`,
         features: p.features,
         popular: p.isPopular,
       }));
@@ -136,11 +136,12 @@ const PricingSectionInPricing = () => {
                 pointerEvents: loadingAmount === plan.credits ? 'none' : 'auto',
               }}
             >
-              {index === 2 && (
-                <div className="pricing-card-ribbon">
-                  <span>Best Value</span>
-                </div>
-              )}
+         {index === plans.length - 1 && (
+  <div className="pricing-card-ribbon">
+    <span>Best Value</span>
+  </div>
+)}
+
               {plan.popular && <div className="pricing-card-label">Most Popular</div>}
               <h3 className="pricing-card-credits">{plan.credits} credits</h3>
               <p className="pricing-card-price">{plan.price}</p>

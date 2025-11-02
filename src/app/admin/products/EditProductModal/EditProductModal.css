@@ -187,53 +187,26 @@ textarea {
   }
 }
 
-
-.localized-toggle {
-  color: #007bff;
-  font-size: 14px;
-  margin-top: -8px;
-  margin-bottom: 10px;
+.modal-overlay .close-btn-popup {
+  background: transparent;
+  border: none;
   cursor: pointer;
-  transition: 0.2s;
-}
-
-.localized-toggle:hover {
-  text-decoration: underline;
-}
-
-.localized-section {
-  background: #f9fafc;
-  border-radius: 8px;
-  padding: 12px;
-  margin-bottom: 16px;
-  border: 1px solid #e2e6ef;
-  max-height: 150px;
-  overflow: auto;
-}
-
-.localized-row {
+  color: #6b7280; /* gray-500 */
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 8px;
-}
-
-.currency-label {
-  font-weight: 500;
-  color: #333;
-  min-width: 60px;
-}
-
-.localized-row input {
-  flex: 1;
-  margin-left: 12px;
-  padding: 6px 10px;
-  border: 1px solid #ccc;
+  justify-content: center;
+  padding: 4px;
   border-radius: 6px;
+  transition: background 0.2s, color 0.2s;
 }
 
-.no-localized {
-  color: #666;
-  font-size: 13px;
-  text-align: center;
+.modal-overlay .close-btn-popup:hover {
+  background: #f3f4f6; /* light gray background */
+  color: #111827; /* darker on hover */
 }
+.modal-header{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+

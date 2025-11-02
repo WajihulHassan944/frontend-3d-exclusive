@@ -9,7 +9,7 @@ const ProductStats = ({refreshKey}) => {
     totalProducts: 0,
     activeProducts: 0,
     totalRevenue: 0,
-    activeSchedules: 1, // stays static
+    activeSchedules: 0, // stays static
   });
 
   const [loading, setLoading] = useState(true);
@@ -21,14 +21,15 @@ const ProductStats = ({refreshKey}) => {
         const res = await fetch(`${baseUrl}/products/stats`);
         const data = await res.json();
 
-        if (data) {
-          setStats((prev) => ({
-            ...prev,
-            totalProducts: data.totalProducts ?? prev.totalProducts,
-            activeProducts: data.activeProducts ?? prev.activeProducts,
-            totalRevenue: data.totalRevenue ?? prev.totalRevenue,
-          }));
-        }
+      if (data) {
+  setStats((prev) => ({
+    ...prev,
+    totalProducts: data.totalProducts ?? prev.totalProducts,
+    activeProducts: data.activeProducts ?? prev.activeProducts,
+    totalRevenue: data.totalRevenue ?? prev.totalRevenue,
+    activeSchedules: data.activeSchedules ?? prev.activeSchedules, // ✅ added
+  }));
+}
       } catch (err) {
         console.error("Error fetching product stats:", err);
       } finally {

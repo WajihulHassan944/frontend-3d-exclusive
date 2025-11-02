@@ -132,3 +132,8 @@
 @media (max-width: 600px) {
   .form-row { flex-direction: column; }
 }
+.strikethrough {
+  text-decoration: line-through;
+  color: #888;
+  margin-right: 6px;
+}
