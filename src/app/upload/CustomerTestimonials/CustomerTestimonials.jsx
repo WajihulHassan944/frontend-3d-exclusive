@@ -55,18 +55,30 @@ useEffect(() => {
   setIsClient(true);
 }, []);
   useEffect(() => {
+    let triggerCount = 0;
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting) {
-          setAnimate(true);
-          observer.disconnect(); // run only once
+        const entry = entries[0];
+        if (entry.isIntersecting) {
+          if (triggerCount < 2) {
+            setAnimate(false); // reset animation state
+            setTimeout(() => setAnimate(true), 50); // trigger again
+            triggerCount++;
+          }
         }
       },
       { threshold: 0.3 }
     );
-    if (statsRef.current) observer.observe(statsRef.current);
-    return () => observer.disconnect();
+
+    const current = statsRef.current;
+    if (current) observer.observe(current);
+
+    return () => {
+      if (current) observer.unobserve(current);
+      observer.disconnect();
+    };
   }, []);
+
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
   show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },

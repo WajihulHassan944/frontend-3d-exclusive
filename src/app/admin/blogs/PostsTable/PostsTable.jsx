@@ -2,11 +2,12 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { FiSearch, FiEye, FiFileText, FiCalendar } from 'react-icons/fi';
 import { BsThreeDotsVertical } from 'react-icons/bs';
-import { User } from 'lucide-react';
+import { Eye, Pencil, Trash2, User } from 'lucide-react';
 import toast from 'react-hot-toast';
 import './PostsTable.css';
 import { baseUrl } from '@/const';
 import Link from 'next/link';
+import DeleteBlogModal from './DeleteBlogModal/DeleteBlogModal';
 
 const categoryOptions = [
   'Tutorials',
@@ -24,6 +25,8 @@ const PostsTable = ({refreshKey, onDeleted}) => {
   const [loading, setLoading] = useState(false);
   const [activeMenu, setActiveMenu] = useState(null);
   const [deletingId, setDeletingId] = useState(null);
+  const [blogToDelete, setBlogToDelete] = React.useState(null);
+const [deletingBlogId, setDeletingBlogId] = React.useState(null);
   const [filters, setFilters] = useState({
     search: '',
     status: 'All Status',
@@ -53,33 +56,29 @@ const PostsTable = ({refreshKey, onDeleted}) => {
     }
   };
 
-  // --- Delete handler ---
-  const handleDelete = async (e, id) => {
-    e.stopPropagation(); // Prevent dropdown from closing
-    if (!confirm('Are you sure you want to delete this blog?')) return;
-    setDeletingId(id);
-    try {
-      const res = await fetch(`${baseUrl}/blogs/delete/${id}`, {
-        method: 'DELETE',
-        credentials: 'include',
-      });
-      const data = await res.json();
-      if (data.success) {
-        setPosts((prev) => prev.filter((p) => p._id !== id));
-        toast.success('Blog deleted successfully');
-            if(onDeleted) onDeleted();
-      } else {
-        toast.error('Failed to delete blog');
-      }
-    } catch (err) {
-      console.error('Delete error:', err);
-      toast.error('Something went wrong');
-    } finally {
-      setDeletingId(null);
-      setActiveMenu(null);
+const handleDeleteBlog = async (id) => {
+  setDeletingBlogId(id);
+  try {
+    const res = await fetch(`${baseUrl}/blogs/delete/${id}`, {
+      method: 'DELETE',
+      credentials: 'include',
+    });
+    const data = await res.json();
+    if (data.success) {
+      setPosts((prev) => prev.filter((p) => p._id !== id));
+      toast.success('Blog deleted successfully');
+      setBlogToDelete(null);
+      onDeleted();
+    } else {
+      toast.error(data.message || 'Failed to delete blog');
     }
-  };
-
+  } catch (err) {
+    console.error('Error deleting blog:', err);
+    toast.error('Something went wrong');
+  } finally {
+    setDeletingBlogId(null);
+  }
+};
   // --- Filtered Posts ---
   const filteredPosts = posts.filter((post) => {
     const matchesSearch = post.title
@@ -227,31 +226,54 @@ const PostsTable = ({refreshKey, onDeleted}) => {
                   className="menu-icon"
                 />
                 {activeMenu === idx && (
-                  <div
-                    className="dropdown-menu unique-dropdown" ref={menuRef}
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <button
-                      className="delete-btn"
-                      onClick={(e) => handleDelete(e, post._id)}
-                      disabled={deletingId === post._id}
-                    >
-                      {deletingId === post._id ? (
-                        <div className="spinner-del"></div>
-                      ) : (
-                        'Delete'
-                      )}
-                    </button>
-                   <Link href={`/admin/blogs/new?id=${post._id}`} className="update-link">
-      Update
-    </Link>
-                  </div>
-                )}
+        <div
+          className="dropdown-menu styled-dropdown"
+          ref={menuRef}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <Link
+            href={`/admin/blogs/new?id=${post._id}`}
+            className="dropdown-item-blogs"
+          >
+            <Pencil size={16} />
+            <span>Edit</span>
+          </Link>
+
+          <button className="dropdown-item-blogs" disabled>
+            <Eye size={16} />
+            <span>Preview</span>
+          </button>
+
+         <button
+  className="dropdown-item-blogs delete"
+  onClick={() => setBlogToDelete(post)}
+  disabled={deletingBlogId === post._id}
+>
+  {deletingBlogId === post._id ? (
+    <div className="spinner-del"></div>
+  ) : (
+    <>
+      <Trash2 size={16} />
+      <span>Delete</span>
+    </>
+  )}
+</button>
+
+        </div>
+      )}
               </div>
             </div>
           ))
         )}
       </div>
+      {blogToDelete && (
+  <DeleteBlogModal
+    blog={blogToDelete}
+    deletingBlogId={deletingBlogId}
+    onClose={() => setBlogToDelete(null)}
+    onConfirm={(id) => handleDeleteBlog(id)}
+  />
+)}
     </div>
   );
 };

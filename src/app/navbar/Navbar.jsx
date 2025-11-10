@@ -55,6 +55,7 @@ export default function Navbar() {
                 <li><Link href="/dashboard">Dashboard</Link></li>
                 <li><Link href="/upload">Convert</Link></li>
                 <li><Link href="/pricing">Pricing</Link></li>
+                 <li><Link href="/blogs">Blogs</Link></li>
                 <li><Link href="/faq">FAQ</Link></li>
                 <li><Link href="/add-billing">Billing</Link></li>
               </>

@@ -5,8 +5,9 @@ import { FiSearch, FiMoreVertical } from 'react-icons/fi';
 import AddUserModal from '../AddUserModal/AddUserModal';
 import { baseUrl } from '@/const';
 import toast from 'react-hot-toast';
-import { Loader2 } from 'lucide-react';
-
+import { Pencil, Key, Mail, Trash2, Loader2 } from "lucide-react"
+import DeleteUserModal from '../DeleteUserModal/DeleteUserModal';
+import ResetPasswordModal from '../ResetPasswordModal/ResetPasswordModal';
 const UsersTable = ({onUpdate, refreshKey}) => {
   const [filter, setFilter] = useState('All Users');
   const [search, setSearch] = useState('');
@@ -15,10 +16,11 @@ const UsersTable = ({onUpdate, refreshKey}) => {
   const [dropdownOpen, setDropdownOpen] = useState(null);
   const [selectedUser, setSelectedUser] = useState(null);
 const [deletingUserId, setDeletingUserId] = useState(null);
+const [userToDelete, setUserToDelete] = useState(null);
+const [resetUser, setResetUser] = useState(null);
 
 useEffect(() => {
     const handleClickOutside = (e) => {
-      // Close dropdown only if click is outside *all* dropdowns
       if (!e.target.closest('.actions-wrapper')) {
         setDropdownOpen(null);
       }
@@ -49,15 +51,23 @@ useEffect(() => {
     fetchUsers();
   }, [refreshKey]);
 
+  // Reset search after closing any modal
+useEffect(() => {
+  if (!selectedUser && !resetUser && !userToDelete) {
+    setSearch('');
+  }
+}, [selectedUser, resetUser, userToDelete]);
+
+
   const filteredUsers = users.filter((user) => {
     const matchesSearch =
       user.name.toLowerCase().includes(search.toLowerCase()) ||
       user.email.toLowerCase().includes(search.toLowerCase());
     const matchesFilter =
       filter === 'All Users' ||
-      (filter === 'Active' && user.status === 'active') ||
-      (filter === 'Inactive' && user.status === 'inactive') ||
-      (filter === 'Admins' && user.role === 'admin');
+      (filter === 'Active' && user.status.includes('active')) ||
+      (filter === 'Inactive' && user.status.includes('inactive')) ||
+      (filter === 'Admin' && user.role.includes('admin'));
     return matchesSearch && matchesFilter;
   });
 
@@ -74,7 +84,10 @@ useEffect(() => {
     setSelectedUser(null);
   };
 
-
+const handleResetPassword = (user) => {
+  setResetUser(user);
+  setDropdownOpen(null);
+};
   const handleDeleteClick = async (id) => {
   setDeletingUserId(id);
   try {
@@ -87,6 +100,7 @@ useEffect(() => {
       onUpdate();
       toast.success('User deleted successfully');
        setDropdownOpen(null);
+      setUserToDelete(null);
     } else {
       console.error('Failed to delete user:', data.message);
       toast.error(data.message);
@@ -116,7 +130,7 @@ useEffect(() => {
 
       {/* Filter Tabs */}
       <div className="filter-tabs">
-        {['All Users', 'Active', 'Inactive', 'Admins'].map((tab) => (
+        {['All Users', 'Active', 'Inactive', 'Admin'].map((tab) => (
           <button
             key={tab}
             className={`filter-btn ${filter === tab ? 'active' : ''}`}
@@ -196,19 +210,41 @@ useEffect(() => {
     className="actions-icon"
     onClick={() => handleDropdownToggle(idx)}
   />
-  {dropdownOpen === idx && (
-    <div className="actions-dropdown">
-      <button onClick={() => handleUpdateClick(user)}>Update</button>
-      <button onClick={() => handleDeleteClick(user.id)} disabled={deletingUserId === user.id}>
+{dropdownOpen === idx && (
+  <div className="actions-dropdown">
+    <button onClick={() => handleUpdateClick(user)}>
+      <Pencil size={16} className="icon" />
+      Edit User
+    </button>
+
+    <button onClick={() => handleResetPassword(user)}>
+      <Key size={16} className="icon" />
+      Reset Password
+    </button>
+
+    <button onClick={() => handleSendEmail(user)}>
+      <Mail size={16} className="icon" />
+      Send Email
+    </button>
+
+<button
+  className="delete-btn"
+  onClick={() => {
+    setUserToDelete(user);
+     setDropdownOpen(null);
+  }}
+  disabled={deletingUserId === user.id}
+>
   {deletingUserId === user.id ? (
-    <Loader2 className="animate-spin" size={16} />
+    <Loader2 className="animate-spin icon" size={16} />
   ) : (
-    'Delete'
+    <Trash2 size={16} className="icon" />
   )}
+  {deletingUserId === user.id ? 'Deleting...' : 'Delete User'}
 </button>
 
-    </div>
-  )}
+  </div>
+)}
 </div>
 
                   </td>
@@ -221,6 +257,25 @@ useEffect(() => {
       {selectedUser && (
         <AddUserModal user={selectedUser} onClose={handleModalClose} onUpdate={onUpdate} />
       )}
+{resetUser && (
+  <ResetPasswordModal
+    userId={resetUser.id}
+    userName={resetUser.name}
+    onClose={() => setResetUser(null)}
+  />
+)}
+
+      {userToDelete && (
+  <DeleteUserModal
+    user={userToDelete}
+    deletingUserId={deletingUserId}
+    onClose={() => setUserToDelete(null)}
+    onConfirm={(id) => {
+      handleDeleteClick(id);
+    }}
+  />
+)}
+
     </div>
   );
 };

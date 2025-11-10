@@ -186,22 +186,25 @@
   position: relative;
   display: inline-block;
 }
-
 .actions-dropdown {
   position: absolute;
   top: 100%;
   right: 0;
-  background: #ffffff; /* white background */
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  z-index: 10;
-  min-width: 140px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  z-index: 20;
+  min-width: 180px;
+  overflow: hidden;
   animation: fadeIn 0.2s ease;
+  padding: 5px;
 }
 
 .actions-dropdown button {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   width: 100%;
   background: transparent;
   border: none;
@@ -210,12 +213,34 @@
   padding: 10px 14px;
   cursor: pointer;
   font-size: 14px;
-  transition: background 0.2s, color 0.2s;
+  transition: background 0.2s ease, color 0.2s ease;
 }
 
 .actions-dropdown button:hover {
-  background: #f4f4f4;
+  background: #f8f9fa;
   color: #000;
+}
+
+.actions-dropdown .icon {
+  color: #555;
+}
+
+.actions-dropdown button:hover .icon {
+  color: #000;
+}
+
+.actions-dropdown .delete-btn {
+  color: #dc2626; /* red text */
+  border-top: 1px solid #eee;
+}
+
+.actions-dropdown .delete-btn:hover {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+.actions-dropdown .delete-btn .icon {
+  color: #dc2626;
 }
 
 @keyframes fadeIn {
@@ -228,6 +253,7 @@
     transform: translateY(0);
   }
 }
+
 
 /* Skeleton Loader */
 .skeleton-row .skeleton-cell {

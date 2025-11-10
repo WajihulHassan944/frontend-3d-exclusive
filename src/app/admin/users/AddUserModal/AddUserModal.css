@@ -21,6 +21,8 @@
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
   position: relative;
   animation: fadeIn 0.25s ease;
+  max-height: 95vh;
+  overflow: auto;
 }
 
 @keyframes fadeIn {
@@ -154,4 +156,24 @@
   color: #6b7280;
   cursor: not-allowed;
   border: 1px solid #d1d5db;
+}
+.section-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #111827;
+  margin-top: 18px;
+  margin-bottom: 6px;
+  border-bottom: 1px solid #f3f4f6;
+  padding-bottom: 4px;
+}
+
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.form-row .form-group {
+  flex: 1;
+  min-width: 47%;
 }
