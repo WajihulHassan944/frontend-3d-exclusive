@@ -28,7 +28,6 @@ const AdminSideNav = ({ isOpen, setIsOpen }) => {
 
   const navItems = [
     { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
-    { href: "/admin/posts", label: "Posts", icon: FileText },
     { href: "/admin/media", label: "Media", icon: Image },
     { href: "/admin/pages", label: "Pages", icon: FileText },
         { href: "/admin/blogs", label: "Blogs", icon: BookOpen },

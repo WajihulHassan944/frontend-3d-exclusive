@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { ChevronDown, Youtube, Video, Link2 } from 'lucide-react';
 import { baseUrl } from '@/const';
 import "./MediaAddVideoModal.css";
-const MediaAddVideoModal = ({ onClose, onAdd }) => {
+const MediaAddVideoModal = ({ onClose, onUpload }) => {
   const [platform, setPlatform] = useState('YouTube');
   const [url, setUrl] = useState('');
   const [title, setTitle] = useState('');
@@ -46,7 +46,7 @@ const MediaAddVideoModal = ({ onClose, onAdd }) => {
 
       const data = await res.json();
       if (res.ok) {
-        onAdd?.(data);
+        onUpload();
         onClose();
       } else {
         setError(data.message || 'Failed to add video.');

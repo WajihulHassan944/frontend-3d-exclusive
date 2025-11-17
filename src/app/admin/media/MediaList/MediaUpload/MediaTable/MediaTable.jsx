@@ -4,12 +4,14 @@ import { ImageIcon, VideoIcon, MoreVertical, Link2, Trash, Download, Edit, Trash
 import './MediaTable.css';
 import { baseUrl } from '@/const';
 import EditMediaModal from './EditMediaModal/EditMediaModal';
+import toast from 'react-hot-toast';
 
 const MediaTable = ({
   searchQuery = '',
   filterType = 'all',
   selectAll = false,
   onSelectionChange = () => {},
+  onUpdated
 }) => {
   const [mediaItems, setMediaItems] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -137,7 +139,8 @@ const handleDelete = async (id) => {
     const data = await res.json();
 
     if (res.ok) {
-      setMediaItems((prev) => prev.filter((m) => m._id !== id));
+      toast.success(data.message);
+      onUpdated();
     } else {
       alert(data.message || "Delete failed");
     }
@@ -327,11 +330,7 @@ const handleDelete = async (id) => {
   <EditMediaModal
     item={editItem}
     onClose={() => setShowEditModal(false)}
-    onUpdated={(updated) => {
-      setMediaItems((prev) =>
-        prev.map((m) => (m._id === updated._id ? updated : m))
-      );
-    }}
+    onUpdated={onUpdated}
   />
 )}
 

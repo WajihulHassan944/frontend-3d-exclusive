@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import "./MediaStats.css";
 import { baseUrl } from "@/const";
 
-const MediaStats = () => {
+const MediaStats = ({refreshKey}) => {
   const [stats, setStats] = useState({
     totalFiles: 0,
     images: 0,
@@ -37,7 +37,7 @@ const MediaStats = () => {
     };
 
     fetchStats();
-  }, []);
+  }, [refreshKey]);
 
   return (
     <div className="media-stats">

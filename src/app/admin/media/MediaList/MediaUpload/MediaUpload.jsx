@@ -154,6 +154,7 @@ const handleDeleteSelected = async () => {
     if (res.ok) {
       toast.success("Media deleted successfully!");
       setSelectedMedia([]); // clear selected items
+      handleRefresh();
     } else {
       toast.error(`❌ Failed to delete media: ${data.message}`);
     }
@@ -308,6 +309,7 @@ const handleDeleteSelected = async () => {
     filterType={filterType}
     selectAll={selectAll}
     onSelectionChange={setSelectedMedia}
+    onUpdated={handleRefresh}
   />
 )}
 

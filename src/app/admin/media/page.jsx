@@ -50,7 +50,7 @@ const Pages = () => {
           </div>
         </div>
 
-        <MediaStats />
+        <MediaStats refreshKey={refreshKey} />
       </div>
 
       <MediaUpload key={refreshKey} handleRefresh={handleRefresh} />
