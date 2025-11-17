@@ -145,7 +145,6 @@ const handleFileChange = async (e) => {
   return parseFloat((bytes / Math.pow(1024, i)).toFixed(2)) + " " + sizes[i];
 }
 
-
 const handleUpload = async () => {
   if (!videoFile) return;
 
@@ -185,6 +184,18 @@ const handleUpload = async () => {
       return;
     }
 
+    // ✅ Push GTM event: upload started
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      event: 'video_upload_started',
+      video_name: videoFile.name,
+      quality,
+      duration_minutes: durationMinutes,
+      credits_required: cost,
+      using_free_minute: isUsingFreeMinute,
+      user_id: user?._id || null,
+    });
+
     // ✅ 1. Get signed URL
     const res = await fetch(`${baseUrl}/b2/sign-url`, {
       method: 'POST',
@@ -208,7 +219,7 @@ const handleUpload = async () => {
       xhr.upload.onprogress = (event) => {
         if (event.lengthComputable) {
           const percent = Math.round((event.loaded / event.total) * 100);
-          setProgress(percent); // <-- Update state
+          setProgress(percent);
         }
       };
 
@@ -222,6 +233,16 @@ const handleUpload = async () => {
 
       xhr.onerror = () => reject(new Error("Upload error"));
       xhr.send(videoFile);
+    });
+
+    // ✅ Push GTM event: upload completed
+    window.dataLayer.push({
+      event: 'video_upload_completed',
+      video_name: videoFile.name,
+      quality,
+      duration_seconds: Math.round(duration),
+      credits_used: isUsingFreeMinute ? 0 : cost,
+      user_id: user?._id || null,
     });
 
     // ✅ 3. Save metadata
@@ -243,14 +264,31 @@ const handleUpload = async () => {
 
     if (!saveRes.ok) throw new Error('Metadata save failed');
 
+    // ✅ Push GTM event: metadata saved
+    window.dataLayer.push({
+      event: 'video_metadata_saved',
+      file_key: key,
+      quality,
+      conversion_format: conversionFormat,
+      credits_used: isUsingFreeMinute ? 0 : cost,
+    });
+
     localStorage.removeItem('tempVideoMeta');
     await refreshAndDispatchUser(dispatch);
     router.push('/dashboard');
-     toast.success('Upload successful!');
-   
+    toast.success('Upload successful!');
+
   } catch (err) {
     console.error(err);
     setUploadStatus(`❌ Upload failed: ${err.message}`);
+
+    // ✅ Push GTM event: upload failed
+    window.dataLayer.push({
+      event: 'video_upload_failed',
+      error_message: err.message,
+      video_name: videoFile?.name || null,
+      user_id: user?._id || null,
+    });
   } finally {
     setUploading(false);
   }

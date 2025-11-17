@@ -45,12 +45,43 @@
   margin: 16px auto;
   display: block;
 }
-
 .side-nav-menu {
   list-style: none;
-  padding: 0;
-  margin: 0;
   padding: 5px 15px;
+  margin: 0;
+  height: 90vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: transparent;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+  scrollbar-width: thin; /* thinner than default */
+  scrollbar-color: transparent transparent; /* hide initially */
+}
+
+/* Show background & scrollbar on hover */
+.side-nav-menu:hover {
+  scrollbar-color: #475569 transparent; /* scrollbar thumb & track for Firefox */
+}
+
+/* Chrome / Edge scrollbar styling */
+.side-nav-menu::-webkit-scrollbar {
+  width: 3px;
+}
+.side-nav-menu::-webkit-scrollbar-track {
+  background: transparent;
+}
+.side-nav-menu::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 10px;
+  transition: background 0.3s ease;
+}
+
+/* Optional: fade-in items slightly on hover for nicer feel */
+.side-nav-menu li {
+  transition: background 0.2s ease, color 0.2s ease;
+}
+.side-nav-menu li:hover {
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .side-nav-menu li {

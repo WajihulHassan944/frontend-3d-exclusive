@@ -41,11 +41,9 @@ const PricingSectionInPricing = () => {
         popular: p.isPopular,
       }));
 
-      const sortedPlans = mappedPlans.sort(
-        (a, b) =>
-          Number(a.price.replace(/[^\d.-]/g, '')) -
-          Number(b.price.replace(/[^\d.-]/g, ''))
-      );
+    // 🆕 Sort plans by credits ascending (lowest credits first)
+const sortedPlans = mappedPlans.sort((a, b) => a.credits - b.credits);
+
 
       setPlans(sortedPlans);
     } else {

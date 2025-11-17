@@ -57,8 +57,10 @@ return (
           if (!packages || packages.length === 0) return [];
 
           // Sort by priceEUR ascending
-          const sortedPackages = [...packages].sort((a, b) => a.originalPriceEUR - b.originalPriceEUR);
-          return sortedPackages;
+         // 🆕 Sort by credits ascending (lowest credits first)
+const sortedPackages = [...packages].sort((a, b) => a.credits - b.credits);
+return sortedPackages;
+
         })()
       : Array(3).fill({})
   ).map((pkg, index) => (

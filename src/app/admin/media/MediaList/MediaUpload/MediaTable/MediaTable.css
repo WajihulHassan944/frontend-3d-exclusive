@@ -6,13 +6,13 @@
   border:2px solid #e5e7eb;
   border-radius: 8px;
 
-  overflow-x: auto;
 }
 
 .media-table {
   width: 100%;
   border-collapse: collapse;
   min-width: 800px;
+  overflow-x: auto;
   font-family: 'Inter', sans-serif;
 }
 
@@ -38,6 +38,7 @@
   border-bottom: 2px solid #e5e7eb;
   height: 72px; /* gives consistent height across rows */
 }
+
 
 .media-row:last-child {
   border-bottom: none;
@@ -111,6 +112,7 @@
 .actions-cell {
   text-align: center;
   cursor: pointer;
+  position: relative;
 }
 /* ✅ Added: Make video previews same small size as images */
 .preview-video {
@@ -126,10 +128,93 @@
 .preview-cell {
   width: 70px;
   height: 45px;
-  overflow: hidden;
 }
 
 /* ✅ Added: Ensure table rows align neatly even with mixed content */
 .media-row td {
   vertical-align: middle;
+  position: relative;
 }
+/* WRAPPER */
+.media-actions-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+/* Dots icon */
+.media-actions-dots {
+  cursor: pointer;
+  position: relative;
+  border-radius: 4px;
+  transition: background 0.15s ease;
+}
+
+.media-actions-dots:hover {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+/* Dropdown Menu */
+.media-dropdown-menu-updated {
+  position: absolute;
+  top: 24px;
+  right: 0;
+  width: 165px;
+  background: #f8fafc;
+  border-radius: 8px;
+  padding: 6px 0;
+  box-shadow: 0 10px 15px -3px #0000001a,0 4px 6px -4px #0000001a;
+  z-index: 550;
+  animation: fadeInMenu 0.15s ease-out;
+  border:1px solid #e5e7eb;
+}
+
+/* Items */
+.media-menu-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px 6px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  color: #222;
+  transition: background 0.15s ease;
+  margin-top: -5px;
+    font-family: "GeistSans","GeistSans Fallback";
+}
+
+.media-menu-item:hover {
+  background: #f5f5f5;
+}
+
+.media-menu-item svg {
+  color: #444;
+  margin-top: 3px;
+}
+
+/* Delete style */
+.media-delete {
+  color: #d92828;
+  border-top: 1px solid #e5e7eb;
+  margin-top: 0;
+}
+
+.media-delete svg {
+  color: #d92828;
+}
+
+/* Smooth fade animation */
+@keyframes fadeInMenu {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+

@@ -1,8 +1,9 @@
 'use client';
 import React, { useEffect, useState, useMemo } from 'react';
-import { ImageIcon, VideoIcon, MoreVertical, Link2 } from 'lucide-react';
+import { ImageIcon, VideoIcon, MoreVertical, Link2, Trash, Download, Edit, Trash2, Loader2 } from 'lucide-react';
 import './MediaTable.css';
 import { baseUrl } from '@/const';
+import EditMediaModal from './EditMediaModal/EditMediaModal';
 
 const MediaTable = ({
   searchQuery = '',
@@ -14,6 +15,12 @@ const MediaTable = ({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [selected, setSelected] = useState([]); // ✅ internal selection state
+const [openMenu, setOpenMenu] = useState(null);
+
+const [editItem, setEditItem] = useState(null);
+const [showEditModal, setShowEditModal] = useState(false);
+const [deleteLoading, setDeleteLoading] = useState(null);
+
 
   // 🔹 Fetch media data
   useEffect(() => {
@@ -36,6 +43,13 @@ const MediaTable = ({
     };
     fetchMedia();
   }, []);
+
+  useEffect(() => {
+  const closeMenu = () => setOpenMenu(null);
+  window.addEventListener("click", closeMenu);
+  return () => window.removeEventListener("click", closeMenu);
+}, []);
+
 
   // 🔹 Filter + search
   const filteredMedia = useMemo(() => {
@@ -110,6 +124,31 @@ const MediaTable = ({
 
   if (loading) return <div className="media-loading">Loading media...</div>;
   if (error) return <div className="media-error">{error}</div>;
+const handleDelete = async (id) => {
+  if (!confirm("Delete this media item?")) return;
+
+  setDeleteLoading(id);
+
+  try {
+    const res = await fetch(`${baseUrl}/media/delete/${id}`, {
+      method: "DELETE",
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      setMediaItems((prev) => prev.filter((m) => m._id !== id));
+    } else {
+      alert(data.message || "Delete failed");
+    }
+  } catch (error) {
+    console.error(error);
+    alert("Failed to delete media.");
+  }
+
+  setDeleteLoading(null);
+  setOpenMenu(null);
+};
 
   return (
     <div className="media-table-wrapper">
@@ -136,7 +175,7 @@ const MediaTable = ({
 
         <tbody>
           {filteredMedia.map((item) => (
-            <tr key={item._id} className="media-row">
+            <tr key={item._id} className="media-row ">
               <td>
                 <input
                   type="checkbox"
@@ -202,10 +241,75 @@ const MediaTable = ({
                   day: 'numeric',
                 })}
               </td>
+<td className="actions-cell">
+  <div className="media-actions-wrapper">
+    <MoreVertical
+      size={18}
+      color="#555"
+      className="media-actions-dots"
+      onClick={(e) => {
+        e.stopPropagation();
+        setOpenMenu(openMenu === item._id ? null : item._id);
+      }}
+    />
 
-              {/* <td className="actions-cell">
-                <MoreVertical size={18} color="#555" />
-              </td> */}
+{openMenu === item._id && (
+  <div className="media-dropdown-menu-updated" onClick={(e) => e.stopPropagation()}>
+    <button
+      className="media-menu-item"
+      onClick={() => {
+        setEditItem(item);
+        setShowEditModal(true);
+        setOpenMenu(null);
+      }}
+    >
+      <span><Edit size={16} /></span>
+      Edit
+    </button>
+
+    <button
+      className="media-menu-item"
+      onClick={() => {
+        navigator.clipboard.writeText(item.url);
+        setOpenMenu(null);
+      }}
+    >
+      <span><Link2 size={16} /></span>
+      Copy URL
+    </button>
+
+    <a
+      className="media-menu-item"
+      href={item.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      download
+      onClick={() => setOpenMenu(null)}
+    >
+      <span><Download size={16} /></span>
+      Download
+    </a>
+<button
+  className="media-menu-item media-delete"
+  onClick={() => handleDelete(item._id)}
+  disabled={deleteLoading === item._id}
+>
+  <span>
+    {deleteLoading === item._id ? (
+      <Loader2 size={16} className="animate-spin" />
+    ) : (
+      <Trash2 size={16} />
+    )}
+  </span>
+  {deleteLoading === item._id ? "Deleting..." : "Delete"}
+</button>
+
+  </div>
+)}
+
+  </div>
+</td>
+
             </tr>
           ))}
 
@@ -218,6 +322,19 @@ const MediaTable = ({
           )}
         </tbody>
       </table>
+
+{showEditModal && (
+  <EditMediaModal
+    item={editItem}
+    onClose={() => setShowEditModal(false)}
+    onUpdated={(updated) => {
+      setMediaItems((prev) =>
+        prev.map((m) => (m._id === updated._id ? updated : m))
+      );
+    }}
+  />
+)}
+
     </div>
   );
 };

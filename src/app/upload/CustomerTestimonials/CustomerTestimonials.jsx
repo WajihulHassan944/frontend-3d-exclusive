@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import './CustomerTestimonials.css';
 import { FaStar } from 'react-icons/fa';
 import { motion } from 'framer-motion';
-
+import { baseUrl } from '@/const';
 const Counter = ({ start = 0, target, suffix = '', duration = 2000, decimals = 0 }) => {
   const [count, setCount] = useState(start);
 
@@ -50,6 +50,24 @@ const CustomerTestimonials = ({ sectionData }) => {
   const [animate, setAnimate] = useState(false);
   const statsRef = useRef(null);
 const [isClient, setIsClient] = useState(false);
+const [cards, setCards] = useState([]);
+
+useEffect(() => {
+  const fetchReviews = async () => {
+    try {
+      const res = await fetch(`${baseUrl}/reviews/all`);
+      const data = await res.json();
+      if (data.success && Array.isArray(data.reviews)) {
+        // only featured reviews
+        setCards(data.reviews.filter((r) => r.featured === true));
+      }
+    } catch (err) {
+      console.error("Failed to fetch reviews:", err);
+    }
+  };
+  fetchReviews();
+}, []);
+
 
 useEffect(() => {
   setIsClient(true);
@@ -84,7 +102,6 @@ const fadeUp = {
   show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
 };
 
-  const cards = sectionData?.cards || [];
 
 
   return (
@@ -118,41 +135,46 @@ const fadeUp = {
         )}
 
         {/* Animated testimonials */}
-       {isClient && (
- <motion.div
-          className="testimonial-cards"
-          variants={containerVariants}
-          initial="hidden"
-          animate={animate ? "show" : "hidden"}
-          viewport={{ once: true, amount: 0.2 }}
-        >
-                    {cards.map((t, i) => (
-            <motion.div key={t._id || i} className="testimonial-card" variants={itemVariants}>
-              <div className="stars">
-                {[...Array(5)].map((_, idx) => (
-                  <FaStar key={idx} color="#FFD700" size={16} />
-                ))}
-              </div>
-              <p className="quote">"{t.description}"</p>
-              <div className="user">
-                <div className="avatar">
-                  {/* Optional: fallback image if you want */}
-                    <img
-                    src={`/testimonials/${t.title.toLowerCase().split(' ')[0]}.jpg`}
-                    alt={t.title}
-                    className="avatar-img"
-                    onError={(e) => (e.target.src = '/testimonials/default.jpg')}
-                  />
-                </div>
-                <div>
-                  <div className="username">{t.title}</div>
-                  <div className="role">{t.subDescription}</div>
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
+     {isClient && (
+  <motion.div
+    className="testimonial-cards"
+    variants={containerVariants}
+    initial="hidden"
+    animate={animate ? "show" : "hidden"}
+    viewport={{ once: true, amount: 0.2 }}
+  >
+    {cards.map((t, i) => (
+      <motion.div key={t._id || i} className="testimonial-card" variants={itemVariants}>
+       <div className="stars">
+  {[1, 2, 3, 4, 5].map((star) => (
+    <FaStar
+      key={star}
+      color={star <= t.rating ? "#FFD700" : "#ccc"} // filled if <= rating, else gray
+      size={16}
+    />
+  ))}
+</div>
+
+        <p className="quote">"{t.reviewText}"</p>
+        <div className="user">
+          <div className="avatar">
+            <img
+              src={t.photoUrl || '/testimonials/default.jpg'}
+              alt={t.userName}
+              className="avatar-img"
+              onError={(e) => (e.target.src = '/testimonials/default.jpg')}
+            />
+          </div>
+          <div>
+            <div className="username">{t.userName}</div>
+            <div className="role">{t.roleOrProfession}</div>
+          </div>
+        </div>
+      </motion.div>
+    ))}
+  </motion.div>
 )}
+
         {/* Stats Section with Counter Animation */}
         <div className="stats-bar" ref={statsRef}>
           <div className="stat">

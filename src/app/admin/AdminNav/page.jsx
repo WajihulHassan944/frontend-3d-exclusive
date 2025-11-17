@@ -16,7 +16,8 @@ import {
   CreditCard,
   RefreshCcw,
   BookOpen,
-  Package
+  Package,
+  MessageSquare
 } from "lucide-react";
 import "./adminSideNav.css";
 import TopNavRight from "./TopNav/TopNavRight/TopNavRight";
@@ -37,6 +38,7 @@ const AdminSideNav = ({ isOpen, setIsOpen }) => {
      { href: "/admin/credits", label: "Credits", icon: CreditCard },
        { href: "/admin/conversions", label: "Conversions", icon: RefreshCcw },
     { href: "/admin/coupons", label: "Coupons", icon: Tag },
+       { href: "/admin/reviews", label: "Reviews", icon: MessageSquare },
     { href: "/admin/seo", label: "SEO", icon: Search },
     { href: "/admin/settings", label: "Settings", icon: Settings },
   ];

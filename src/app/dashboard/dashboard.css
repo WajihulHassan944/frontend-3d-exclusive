@@ -1,296 +1,210 @@
-/* Reset */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-/* Main layout */
 .dashboard {
-  max-width: 950px;
-  margin: 0 auto;
-  padding: 2rem 1rem 4rem;
-  font-family: 'Segoe UI', sans-serif;
-}
-
-/* Logo */
-.dashboard-logo {
-  display: block;
-  margin: 0 auto 1.5rem;
-  object-fit: contain;
-}
-
-/* Heading */
-.title {
-  font-size: 2rem;
-  text-align: center;
+  padding: 90px 9%;
   color: #fff;
-  margin-bottom: 2.5rem;
+  min-height: 100vh;
+  font-family: "Inter", sans-serif;
 }
 
-/* Card styling */
-.card-1 {
-  background: rgba(0, 4, 40, 0.65);
-  backdrop-filter: blur(6px);
-  border: 1px solid #ff8c2f;
-  border-radius: 14px;
-  padding: 1.5rem;
-  margin-bottom: 2rem;
+/* === Titles === */
+.dashboard-title {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.dashboard-subtitle {
+  color: #d1d5db;
+  font-weight: 500;
+  margin-bottom: 40px;
+}
+
+/* === Stats Section === */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 25px;
+  margin-bottom: 50px;
+}
+
+.stat-card {
+  background: #0000004d;
+  border-radius: 16px;
+  padding: 30px;
+  border: 1px solid #ffffff1a;
+  transition: transform 0.3s ease;
+}
+.stat-card:nth-of-type(1){
+  background-image: linear-gradient(to right, rgb(168 85 247 / .1) , rgb(236 72 153 / .1) , rgb(59 130 246 / .1));
+}
+.stat-card h3 {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 16.5px;
+font-weight: 600;
+  margin-bottom: 15px;
+}
+
+.stat-value {
+  font-size: 42px;
+  font-weight: 700;
   color: #fff;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
-  display: flex;
-  flex-direction: column;
 }
 
-/* Table rows using flex */
-.row {
-  display: flex;
-  justify-content: space-between;
+.stat-value.completed {
+  color: #26e97a;
+}
+
+.stat-btn {
+  display: inline-block;
+  margin-top: 16px;
+    background: linear-gradient(to right, #9333ea , #db2777);
+  border: none;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 500;
+    font-size: 15.5px;
+  transition: all 0.3s ease;
+}
+
+.stat-btn:hover {
+   box-shadow: 0 0 40px hsl(25 95% 60% / .4);
+  background: linear-gradient(to right, #7e22ce , #be185d);
+}
+
+/* === Table Section === */
+.table-section {
+  background: #0000004d;
+  border-radius: 16px;
+  padding: 36px;
+  border: 1px solid #ffffff1a;
+  margin-bottom: 50px;
+}
+
+.section-title {
+  font-size: 1.875rem;
+    line-height: 2.25rem;
+  font-weight: 700;
+  margin-bottom: 24px;
+}
+
+.table-header,
+.table-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  padding: 18px 5px;
+  border-bottom: 1px solid #ffffff1a;
   align-items: center;
-  gap: 1rem;
-  padding: 0.7rem 0;
-  font-size: 0.95rem;
-  flex-wrap: wrap;
-  text-align: center;
 }
 
-/* Table header */
-.row-head {
+.table-header span {
+  color: #d1d5db;
   font-weight: 600;
-  font-size: 1rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-  margin-bottom: 0.6rem;
-  padding-bottom: 0.4rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  text-align: center;
-  gap: 1rem;
+  font-size: 16.5px;
 }
 
-/* Row data */
-.row-body:not(:last-of-type) {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-/* Columns inside row */
-.row span,
-.row a {
-  flex-shrink: 0;
-  text-align: center;
-  display: inline-block;
-}
-
-/* Serial */
-.row span:nth-child(1),
-.row-head span:nth-child(1) {
-  width: 40px;
-  text-align: center;
-}
-
-
-/* Video filename - only left aligned */
-.row span:nth-child(2),
-.row-head span:nth-child(2) {
-  text-align: left;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 260px;
-  width: 100%;
-}
-
-/* Status */
-.row span:nth-child(3),
-.row-head span:nth-child(3) {
-  min-width: 100px;
-  text-align: center;
-}
-
-/* Download column */
-.row span:nth-child(4),
-.row-head span:nth-child(4) {
-  width: 80px;
-  text-align: center;
-}
-
-/* Download icon */
-.download {
-  color: #fff;
-  transition: transform 0.2s ease;
-}
-.download:hover {
-  transform: scale(1.15);
-}
-
-/* Pills */
-.pill {
-  display: inline-block;
-  padding: 0.25rem 0.8rem;
-  border-radius: 999px;
-  font-size: 0.75rem;
+.table-row span {
+  font-size: 15px;
   font-weight: 500;
   text-transform: capitalize;
-  background-color: #444;
-  color: #fff;
-  width: fit-content;
+  color: #d1d5db;
 }
-
-.pill.uploaded-to-3d-cloud {
-  background-color: #1976d2;
+.table-row:hover{
+  background-color: #ffffff0d;
 }
-
-.pill.processing {
-  background-color: #ffa726;
-}
-
-.pill.completed {
-  background-color: #66bb6a;
-}
-
-.pill.failed {
-  background-color: #ef5350;
-}
-
-/* No videos message */
-.no-videos {
-  text-align: center;
-  font-style: italic;
-  padding: 1rem 0;
-  color: #ccc;
-}
-
-/* Two cards row */
-.row-2cards {
-  display: flex;
-  gap: 1rem;
-  justify-content: space-between;
-  flex-wrap: wrap;
-}
-
-/* Equal sizing for profile and credits */
-.credits-card,
-.profile-card {
-  flex: 1;
-  min-width: 280px;
-  min-height: 200px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-/* Card headings */
-.profile-card h3,
-.credits-card h3 {
-  margin-bottom: 0.8rem;
-  font-size: 1.2rem;
-  color: #ff8c2f;
-}
-
-/* Credit display */
-.count {
-  font-size: 1.8rem;
-  font-weight: bold;
-  margin-bottom: 1rem;
-}
-
-/* Top Up button */
-.topup-btn {
-  display: inline-block;
-  padding: 0.5rem 1.2rem;
-  border-radius: 20px;
+.table-row span:first-child {
   font-weight: 600;
-  font-size: 0.95rem;
   color: #fff;
-  background-color: #ff8c2f;
-  text-decoration: none;
-  transition: background 0.3s ease;
-  width: fit-content;
+  
 }
 
-.topup-btn:hover {
-  background-color: #e57726;
+.no-videos {
+  padding: 20px 0;
+  color: rgba(255, 255, 255, 0.6);
+  text-align: center;
 }
 
-/* Responsive */
+/* === Status Pills === */
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  font-size: 14px;
+  text-transform: capitalize;
+  color: #fff;
+}
+
+.status-pill svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Status colors */
+.status-icon.pending {
+  color: #fcd34d;
+}
+
+.status-icon.processing {
+  color: #fbbf24;
+}
+
+.status-icon.completed {
+  color: #26e97a;
+}
+
+.status-icon.expired {
+  color: #f87171;
+}
+
+/* === Actions === */
+.action-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.download-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #22c55e;
+  color: #fff;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 14px;
+  padding: 6px 12px;
+  transition: all 0.3s ease;
+}
+
+.download-btn:hover {
+  background-color: #16a34a;
+}
+
+.processing,
+.pending {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* === Responsive === */
 @media (max-width: 768px) {
-  .row span:nth-child(2) {
-    max-width: 160px;
+  .table-header,
+  .table-row {
+    grid-template-columns: 1.5fr 1fr 1fr;
   }
 
-  .row span:nth-child(3),
-  .row a {
-    min-width: 60px;
-  }
-}
-
-@media (max-width: 640px) {
-  .row {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.4rem;
-  }
-
-  .row-head {
+  .table-header span:nth-child(4),
+  .table-row span:nth-child(4) {
     display: none;
   }
-
-  .pill {
-    font-size: 0.7rem;
-  }
-
-  .row-2cards {
-    flex-direction: column;
-  }
-
-  .credits-card,
-  .profile-card {
-    min-height: auto;
-  }
-
-  .download {
-    align-self: flex-end;
-  }
 }
 
-.spinning {
-  animation: spin 1s linear infinite;
-}
 
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
 
-.progress-container {
-  position: relative;
-  width: 100px;
-  height: 8px;
-  background: #1f2937;
-  border-radius: 4px;
-  overflow: hidden;
-  display: inline-block;
-  vertical-align: middle;
-}
 
-.progress-bar {
-  height: 8px;
-  background: linear-gradient(to right, #22c55e, #10b981);
-  border-radius: 4px;
-  transition: width 0.5s linear;
-}
-
-.progress-text {
-  position: absolute;
-  top: -20px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 12px;
-  color: #9ca3af;
+.table-row .action-cell .pending,
+.table-row .action-cell .expired,
+.table-row .action-cell .processing {
+  font-weight: 500;
+  font-size: 14px;
+  color: #d1d5db;
 }
