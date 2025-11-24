@@ -54,26 +54,36 @@ const handleSubmit = async () => {
       ? `${baseUrl}/wallet/orders/manual-order/${order._id}`
       : `${baseUrl}/wallet/orders/manual-order`;
 
-    const res = await fetch(url, {
-      method: isEdit ? "PUT" : "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
-    });
+const res = await fetch(url, {
+  method: isEdit ? "PUT" : "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify(formData),
+});
 
-    const data = await res.json();
+const data = await res.json();
 
-    if (res.ok && data.success) {
-      toast.success(
-        data.message ||
-          (isEdit ? "Manual order updated." : "Manual order created.")
-      );
+// ⬇️ Improved error handling
+if (!res.ok || !data.success) {
+  const backendMessage =
+    data.error ||
+    data.message ||
+    data.msg ||
+    data?.details ||
+    "Failed to save order";
 
-      if (onPlaced) onPlaced();
-      onClose();
-    } else {
-      toast.error(data.error || "Failed to save order");
-    }
-  } catch (error) {
+  toast.error(backendMessage);
+  return;
+}
+
+toast.success(
+  data.message ||
+    (isEdit ? "Manual order updated." : "Manual order created.")
+);
+
+if (onPlaced) onPlaced();
+onClose();
+
+    } catch (error) {
     console.error("Error saving order:", error);
     toast.error("Something went wrong. Please try again.");
   } finally {

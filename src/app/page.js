@@ -11,8 +11,11 @@ import NewsletterSignup from "./upload/NewsletterSignup/NewsletterSignup";
 import HowItWorks from "./upload/HowItWorks/HowItWorks";
 import "./upload/upload.css";
 import { baseUrl } from "@/const";
+import ComingSoon from "./coming-soon/ComingSoon";
+
 export default function Page() {
   const [sections, setSections] = useState([]);
+  const [isComingSoon, setIsComingSoon] = useState(false);
 
   useEffect(() => {
     const fetchPageData = async () => {
@@ -20,9 +23,16 @@ export default function Page() {
         const res = await fetch(`${baseUrl}/pages/url/%2F`, {
           cache: "no-store",
         });
+
         const data = await res.json();
+
         if (data.success && data.pageByUrl) {
           setSections(data.pageByUrl.sections || []);
+
+          // ✅ Set Coming Soon dynamically
+          if (typeof data.pageByUrl.isComingSoon === "boolean") {
+            setIsComingSoon(data.pageByUrl.isComingSoon);
+          }
         }
       } catch (err) {
         console.error("Error fetching home page data:", err);
@@ -32,21 +42,26 @@ export default function Page() {
     fetchPageData();
   }, []);
 
-  // ✅ Helper function to get a section by its ID
+  // Helper to get section by ID
   const getSection = (id) => sections.find((sec) => sec.sectionId === id);
 
   return (
     <main>
-      {/* ✅ Pass respective data as props */}
-      <HeroSection sectionData={getSection("hero")} />
-      <CookieConsent />
-      <Whycloud sectionData={getSection("why-convert")} />
-      <ImmersiveThreeD sectionData={getSection("experience-3d")} />
-      <HowItWorks sectionData={getSection("how-it-works")} />
-      <Whatexpect sectionData={getSection("expectations")} />
-      <CustomerTestimonials sectionData={getSection("testimonials")} />
-      <PricingSectionInPricing />
-      <NewsletterSignup sectionData={getSection("updates")} />
+      {isComingSoon ? (
+        <ComingSoon />
+      ) : (
+        <>
+          <HeroSection sectionData={getSection("hero")} />
+          <CookieConsent />
+          <Whycloud sectionData={getSection("why-convert")} />
+          <ImmersiveThreeD sectionData={getSection("experience-3d")} />
+          <HowItWorks sectionData={getSection("how-it-works")} />
+          <Whatexpect sectionData={getSection("expectations")} />
+          <CustomerTestimonials sectionData={getSection("testimonials")} />
+          <PricingSectionInPricing />
+          <NewsletterSignup sectionData={getSection("updates")} />
+        </>
+      )}
     </main>
   );
 }

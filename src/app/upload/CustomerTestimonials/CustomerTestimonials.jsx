@@ -149,7 +149,7 @@ const fadeUp = {
   {[1, 2, 3, 4, 5].map((star) => (
     <FaStar
       key={star}
-      color={star <= t.rating ? "#FFD700" : "#ccc"} // filled if <= rating, else gray
+      color={star <= t.rating ? "#FFD700" : "#ccc"} 
       size={16}
     />
   ))}

@@ -14,7 +14,7 @@ import { baseUrl } from "@/const";
 const OrderStats = ({ refreshKey }) => {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [period, setPeriod] = useState("thisWeek");
+  const [period, setPeriod] = useState("this_week");
   const [error, setError] = useState(null);
 
   // For custom range
@@ -70,12 +70,13 @@ const OrderStats = ({ refreshKey }) => {
             value={period}
             onChange={(e) => setPeriod(e.target.value)}
           >
-            <option value="thisWeek">This Week</option>
-            <option value="lastWeek">Last Week</option>
-            <option value="lastMonth">Last Month</option>
-            <option value="thisYear">This Year</option>
+             <option value="this_week">This Week</option>
+            <option value="last_week">Last Week</option>
+            <option value="last_month">Last Month</option>
+            <option value="this_year">This Year</option>
             <option value="custom">Custom Range</option>
-          </select>
+         
+           </select>
 
           {period === "custom" && (
             <div className="custom-date-range">

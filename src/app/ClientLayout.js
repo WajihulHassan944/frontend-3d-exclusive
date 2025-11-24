@@ -21,28 +21,40 @@ export default function ClientLayout({ children }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [liveVisitors, setLiveVisitors] = useState(0);
 
+  // 🔥 COMING SOON FLAG
+  const [isComingSoon, setIsComingSoon] = useState(false);
+
   const isAdminLogin = pathname === '/admin/login';
   const isAdminRoute = pathname.startsWith('/admin') && !isAdminLogin;
   const isAdminRoot = pathname === '/admin';
 
-  // ✅ Change background for admin pages
+  // ❗ If coming soon, hide UI (navbar + footer + coupon banner)
+  const hideClientUI = isComingSoon || (isAdminRoute || isAdminLogin);
+
+  // Admin background
   useEffect(() => {
     document.body.style.background = isAdminRoute ? '#fff' : '';
   }, [isAdminRoute]);
 
-  // ✅ Setup Live Visitors system (using Pusher + fetch)
+  // Live Visitors System
   useEffect(() => {
-    
-    const connectUser = async () => {
-      try {
-        await fetch(`${baseUrl}/live-visitors/connect`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-        });
-      } catch (err) {
-        console.error('Live visitors connect error:', err);
+     const connectUser = async () => {
+    try {
+      const res = await fetch(`${baseUrl}/live-visitors/connect`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      });
+
+      const data = await res.json();
+
+      // ✅ Set Coming Soon on initial connect
+      if (data.success && typeof data.isComingSoon === "boolean") {
+        setIsComingSoon(data.isComingSoon);
       }
-    };
+    } catch (err) {
+      console.error("Live visitors connect error:", err);
+    }
+  };
 
     const disconnectUser = async () => {
       try {
@@ -55,7 +67,6 @@ export default function ClientLayout({ children }) {
       }
     };
 
-    // 🔌 Initialize Pusher
     const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY, {
       cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER,
     });
@@ -65,13 +76,9 @@ export default function ClientLayout({ children }) {
       setLiveVisitors(data.count);
     });
 
-    // Connect user when component mounts
     connectUser();
-
-    // Disconnect user when closing or navigating away
     window.addEventListener('beforeunload', disconnectUser);
 
-    // Cleanup on unmount
     return () => {
       disconnectUser();
       channel.unbind_all();
@@ -85,18 +92,25 @@ export default function ClientLayout({ children }) {
     <GoogleOAuthProvider clientId="852917251115-oi5pepl5cf67u06d0f9gvpomce2hjbl5.apps.googleusercontent.com">
       <Provider store={store}>
         <UserInitializer />
-        {!isAdminRoute && !isAdminLogin && <CouponBanner />}
 
-        {/* Admin vs Client layout switching */}
+        {/* 🎟️ Coupon Banner (hide if coming soon OR admin) */}
+        {!hideClientUI && <CouponBanner />}
+
+        {/* 🧱 ADMIN LAYOUT */}
         {isAdminRoute && (
           <>
-            <AdminSideNav isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
+            <AdminSideNav
+              isOpen={isSidebarOpen}
+              setIsOpen={setIsSidebarOpen}
+            />
             {isAdminRoot && <TopNav isSidebarOpen={isSidebarOpen} />}
           </>
         )}
 
-        {!isAdminRoute && !isAdminLogin && <Navbar />}
+        {/* 🧭 NAVBAR (hide when isComingSoon = true) */}
+        {!hideClientUI && <Navbar />}
 
+        {/* MAIN CONTENT */}
         <main
           className={
             isAdminRoute
@@ -109,31 +123,8 @@ export default function ClientLayout({ children }) {
           {children}
         </main>
 
-        {!isAdminRoute && !isAdminLogin && <Footer />}
-
-        {/* ✅ Floating Live Visitors Badge
-        {!isAdminRoute && !isAdminLogin && (
-          <div
-            style={{
-              position: 'fixed',
-              bottom: '20px',
-              right: '20px',
-              background: '#1f2a60',
-              color: '#fff',
-              padding: '8px 14px',
-              borderRadius: '10px',
-              fontSize: '14px',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-              zIndex: 9999,
-              boxShadow: '0 4px 10px rgba(0,0,0,0.15)',
-            }}
-          >
-            <span style={{ fontSize: '20px', color: '#22c55e' }}>●</span>
-            Live Visitors: <strong>{liveVisitors}</strong>
-          </div>
-        )} */}
+        {/* FOOTER (hide when ComingSoon true) */}
+        {!hideClientUI && <Footer />}
 
         <Toaster
           position="top-center"
