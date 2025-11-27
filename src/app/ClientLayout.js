@@ -1,6 +1,6 @@
 'use client';
 
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { Provider } from 'react-redux';
@@ -20,7 +20,7 @@ export default function ClientLayout({ children }) {
   const pathname = usePathname();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [liveVisitors, setLiveVisitors] = useState(0);
-
+const router = useRouter();
   // 🔥 COMING SOON FLAG
   const [isComingSoon, setIsComingSoon] = useState(false);
 
