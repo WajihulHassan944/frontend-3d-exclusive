@@ -53,7 +53,7 @@ useEffect(() => {
     window.AppleID.auth.init({
       clientId: process.env.NEXT_PUBLIC_APPLE_CLIENT_ID,
       scope: 'name email',
-      redirectURI: `${baseUrl}/auth/callback/apple`, // must match Apple Developer config
+      redirectURI: `https://backend-3d-exclusive.vercel.app/api/auth/callback/apple`, // must match Apple Developer config
       usePopup: false, // 🔑 full redirect mode
     });
   };
