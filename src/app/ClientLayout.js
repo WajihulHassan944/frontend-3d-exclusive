@@ -93,7 +93,7 @@ const router = useRouter();
   }, [isAdminRoute, isAdminLogin]);
 
   return (
-    <GoogleOAuthProvider clientId="852917251115-oi5pepl5cf67u06d0f9gvpomce2hjbl5.apps.googleusercontent.com">
+    <GoogleOAuthProvider clientId="180462491645-kpi3hqneq6bonva2s61cq8hnj7sn6b49.apps.googleusercontent.com">
       <Provider store={store}>
         <UserInitializer />
 
