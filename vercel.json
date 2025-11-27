@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "https://backend-3d-exclusive.vercel.app/api/$1"
+    }
+  ]
+}
