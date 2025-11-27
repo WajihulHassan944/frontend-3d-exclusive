@@ -23,6 +23,7 @@ export default function ClientLayout({ children }) {
 const router = useRouter();
   // 🔥 COMING SOON FLAG
   const [isComingSoon, setIsComingSoon] = useState(false);
+const [isReady, setIsReady] = useState(false);
 
   const isAdminLogin = pathname === '/admin/login';
   const isAdminRoute = pathname.startsWith('/admin') && !isAdminLogin;
@@ -50,6 +51,7 @@ const router = useRouter();
       // ✅ Set Coming Soon on initial connect
       if (data.success && typeof data.isComingSoon === "boolean") {
         setIsComingSoon(data.isComingSoon);
+        setIsReady(true);
                if (data.isComingSoon === true && !pathname.startsWith("/admin")) {
           router.push("/");
         }
@@ -91,6 +93,16 @@ const router = useRouter();
       pusher.disconnect();
     };
   }, [isAdminRoute, isAdminLogin]);
+
+  if (!isReady) {
+  return (
+       <div className="coming-soon-wrap loaderContainer">
+        <div className="coming-soon-section loading-text">Loading...</div>
+      </div>
+  
+  );
+}
+
 
   return (
     <GoogleOAuthProvider clientId="180462491645-kpi3hqneq6bonva2s61cq8hnj7sn6b49.apps.googleusercontent.com">

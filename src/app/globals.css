@@ -176,3 +176,57 @@ a {
   font-size: .75rem;
     line-height: 1rem;
 }
+
+.coming-soon-wrap {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(135deg, hsl(240 100% 6%) 0%, hsl(250 95% 10%) 20%, hsl(260 90% 14%) 40%, hsl(270 85% 18%) 60%, hsl(280 80% 22%) 80%, hsl(290 75% 26%) 100%);
+  background-image: linear-gradient(135deg, hsl(225 100% 45%) 0%, hsl(235 95% 40%) 20%, hsl(245 90% 35%) 40%, hsl(250 85% 30%) 60%, hsl(235 80% 28%) 80%, hsl(220 75% 26%) 100%);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  text-align: center;
+}
+.loaderContainer{
+  background: transparent !important;
+}
+.coming-soon-section {
+  display: flex;
+  flex-direction: column;      /* 🔥 PUT TEXT + SPINNER INLINE */
+  align-items: center;
+  gap: 12px;                /* Space between text + spinner */
+  padding: 20px;
+  position: relative;
+}
+
+.loading-text {
+  gap: 20px;
+  flex-direction: row;
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #ccc;
+  position: relative;
+}
+
+.loading-text::after {
+  content: '';
+  width: 18px;
+  height: 18px;
+  border: 3px solid #ccc;
+  border-top-color: #fa8938;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  display: inline-block;     /* 🔥 INLINE so it sits next to text */
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

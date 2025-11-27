@@ -16,6 +16,7 @@ import ComingSoon from "./coming-soon/ComingSoon";
 export default function Page() {
   const [sections, setSections] = useState([]);
   const [isComingSoon, setIsComingSoon] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchPageData = async () => {
@@ -29,7 +30,7 @@ export default function Page() {
         if (data.success && data.pageByUrl) {
           setSections(data.pageByUrl.sections || []);
 
-          // ✅ Set Coming Soon dynamically
+          // 🔥 Dynamic Coming Soon
           if (typeof data.pageByUrl.isComingSoon === "boolean") {
             setIsComingSoon(data.pageByUrl.isComingSoon);
           }
@@ -37,6 +38,9 @@ export default function Page() {
       } catch (err) {
         console.error("Error fetching home page data:", err);
       }
+
+      // 🟢 Stop loader once API completes
+      setLoading(false);
     };
 
     fetchPageData();
@@ -44,6 +48,16 @@ export default function Page() {
 
   // Helper to get section by ID
   const getSection = (id) => sections.find((sec) => sec.sectionId === id);
+
+  // 🔥 Block rendering until API resolves
+  if (loading) {
+    return (
+        <div className="coming-soon-wrap loaderContainer">
+        <div className="coming-soon-section loading-text">Loading...</div>
+      </div>
+  
+    );
+  }
 
   return (
     <main>

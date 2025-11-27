@@ -29,7 +29,7 @@ const ComingSoon = () => {
 
   if (loading) {
     return (
-      <div className="coming-soon-wrap">
+      <div className="coming-soon-wrap loaderContainer">
         <div className="coming-soon-section loading-text">Loading...</div>
       </div>
     );
