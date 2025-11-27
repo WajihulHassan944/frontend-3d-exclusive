@@ -50,6 +50,10 @@ export default function ClientLayout({ children }) {
       // ✅ Set Coming Soon on initial connect
       if (data.success && typeof data.isComingSoon === "boolean") {
         setIsComingSoon(data.isComingSoon);
+               if (data.isComingSoon === true && !pathname.startsWith("/admin")) {
+          router.push("/");
+        }
+   
       }
     } catch (err) {
       console.error("Live visitors connect error:", err);
