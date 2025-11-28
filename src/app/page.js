@@ -12,6 +12,7 @@ import HowItWorks from "./upload/HowItWorks/HowItWorks";
 import "./upload/upload.css";
 import { baseUrl } from "@/const";
 import ComingSoon from "./coming-soon/ComingSoon";
+import { useSelector } from "react-redux";
 
 export default function Page() {
   const [sections, setSections] = useState([]);
@@ -45,7 +46,14 @@ export default function Page() {
 
     fetchPageData();
   }, []);
+  const user = useSelector((state) => state.user);
 
+  // ⬇️ ADMIN ALWAYS DISABLES COMING SOON
+  useEffect(() => {
+    if (user?.role?.includes("admin")) {
+      setIsComingSoon(false);
+    }
+  }, [user]);
   // Helper to get section by ID
   const getSection = (id) => sections.find((sec) => sec.sectionId === id);
 

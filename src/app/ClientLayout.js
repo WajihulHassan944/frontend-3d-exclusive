@@ -3,7 +3,7 @@
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { GoogleOAuthProvider } from '@react-oauth/google';
-import { Provider } from 'react-redux';
+import { Provider, useSelector } from 'react-redux';
 import { store } from '@/redux/store';
 import Pusher from 'pusher-js';
 import { baseUrl } from '@/const';
@@ -16,51 +16,80 @@ import TopNav from './admin/AdminNav/TopNav/TopNav';
 import Navbar from './navbar/Navbar';
 import CouponBanner from '../../components/Coupons/CouponBanner';
 
+// --------------------------------------------------------
+// WRAPPER SO REDUX PROVIDER WORKS
+// --------------------------------------------------------
 export default function ClientLayout({ children }) {
+  return (
+    <GoogleOAuthProvider clientId="180462491645-kpi3hqneq6bonva2s61cq8hnj7sn6b49.apps.googleusercontent.com">
+      <Provider store={store}>
+        <ClientLayoutInner>{children}</ClientLayoutInner>
+      </Provider>
+    </GoogleOAuthProvider>
+  );
+}
+
+// --------------------------------------------------------
+// REAL LAYOUT LOGIC (useSelector allowed here)
+// --------------------------------------------------------
+function ClientLayoutInner({ children }) {
   const pathname = usePathname();
+  const router = useRouter();
+
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [liveVisitors, setLiveVisitors] = useState(0);
-const router = useRouter();
-  // 🔥 COMING SOON FLAG
+
   const [isComingSoon, setIsComingSoon] = useState(false);
-const [isReady, setIsReady] = useState(false);
+  const [isReady, setIsReady] = useState(false);
+
+  const user = useSelector((state) => state.user); // NOW VALID
 
   const isAdminLogin = pathname === '/admin/login';
   const isAdminRoute = pathname.startsWith('/admin') && !isAdminLogin;
   const isAdminRoot = pathname === '/admin';
 
-  // ❗ If coming soon, hide UI (navbar + footer + coupon banner)
-  const hideClientUI = isComingSoon || (isAdminRoute || isAdminLogin);
+  // Hide navbar/footer when Coming Soon OR admin pages
+  const hideClientUI = isComingSoon || isAdminRoute || isAdminLogin;
+
+  // --------------------------------------------------------
+  // 🔥 ADMIN OVERRIDE — ALWAYS DISABLE COMING SOON
+  // --------------------------------------------------------
+  useEffect(() => {
+    if (user?.role?.includes('admin')) {
+      setIsComingSoon(false);
+    }
+  }, [user]);
 
   // Admin background
   useEffect(() => {
     document.body.style.background = isAdminRoute ? '#fff' : '';
   }, [isAdminRoute]);
 
-  // Live Visitors System
+  // --------------------------------------------------------
+  // LIVE VISITORS + COMING SOON CHECK
+  // --------------------------------------------------------
   useEffect(() => {
-     const connectUser = async () => {
-    try {
-      const res = await fetch(`${baseUrl}/live-visitors/connect`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-      });
+    const connectUser = async () => {
+      try {
+        const res = await fetch(`${baseUrl}/live-visitors/connect`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+        });
 
-      const data = await res.json();
+        const data = await res.json();
 
-      // ✅ Set Coming Soon on initial connect
-      if (data.success && typeof data.isComingSoon === "boolean") {
-        setIsComingSoon(data.isComingSoon);
-        setIsReady(true);
-               if (data.isComingSoon === true && !pathname.startsWith("/admin")) {
-          router.push("/");
+        if (data.success && typeof data.isComingSoon === "boolean") {
+          setIsComingSoon(data.isComingSoon);
+          setIsReady(true);
+
+          if (data.isComingSoon === true && !pathname.startsWith("/admin")) {
+            router.push("/");
+          }
         }
-   
+      } catch (err) {
+        console.error("Live visitors connect error:", err);
       }
-    } catch (err) {
-      console.error("Live visitors connect error:", err);
-    }
-  };
+    };
 
     const disconnectUser = async () => {
       try {
@@ -94,65 +123,67 @@ const [isReady, setIsReady] = useState(false);
     };
   }, [isAdminRoute, isAdminLogin]);
 
+  // --------------------------------------------------------
+  // LOADING STATE
+  // --------------------------------------------------------
   if (!isReady) {
-  return (
-       <div className="coming-soon-wrap loaderContainer">
+    return (
+      <div className="coming-soon-wrap loaderContainer">
         <div className="coming-soon-section loading-text">Loading...</div>
       </div>
-  
-  );
-}
+    );
+  }
 
-
+  // --------------------------------------------------------
+  // MAIN RETURN
+  // --------------------------------------------------------
   return (
-    <GoogleOAuthProvider clientId="180462491645-kpi3hqneq6bonva2s61cq8hnj7sn6b49.apps.googleusercontent.com">
-      <Provider store={store}>
-        <UserInitializer />
+    <>
+      <UserInitializer />
 
-        {/* 🎟️ Coupon Banner (hide if coming soon OR admin) */}
-        {!hideClientUI && <CouponBanner />}
+      {/* Coupon Banner */}
+      {!hideClientUI && <CouponBanner />}
 
-        {/* 🧱 ADMIN LAYOUT */}
-        {isAdminRoute && (
-          <>
-            <AdminSideNav
-              isOpen={isSidebarOpen}
-              setIsOpen={setIsSidebarOpen}
-            />
-            {isAdminRoot && <TopNav isSidebarOpen={isSidebarOpen} />}
-          </>
-        )}
+      {/* Admin layout */}
+      {isAdminRoute && (
+        <>
+          <AdminSideNav
+            isOpen={isSidebarOpen}
+            setIsOpen={setIsSidebarOpen}
+          />
+          {isAdminRoot && <TopNav isSidebarOpen={isSidebarOpen} />}
+        </>
+      )}
 
-        {/* 🧭 NAVBAR (hide when isComingSoon = true) */}
-        {!hideClientUI && <Navbar />}
+      {/* Public Navbar */}
+      {!hideClientUI && <Navbar />}
 
-        {/* MAIN CONTENT */}
-        <main
-          className={
-            isAdminRoute
-              ? isSidebarOpen
-                ? 'admin-main shifted'
-                : 'admin-main full'
-              : ''
-          }
-        >
-          {children}
-        </main>
+      {/* Main Content */}
+      <main
+        className={
+          isAdminRoute
+            ? isSidebarOpen
+              ? 'admin-main shifted'
+              : 'admin-main full'
+            : ''
+        }
+      >
+        {children}
+      </main>
 
-        {/* FOOTER (hide when ComingSoon true) */}
-        {!hideClientUI && <Footer />}
+      {/* Footer */}
+      {!hideClientUI && <Footer />}
 
-        <Toaster
-          position="top-center"
-          toastOptions={{
-            duration: 3000,
-            style: {
-              background: '#1f2a60',
-              color: '#fff',
-            },
-          }}
-        />
-      </Provider>
-    </GoogleOAuthProvider>
+      <Toaster
+        position="top-center"
+        toastOptions={{
+          duration: 3000,
+          style: {
+            background: '#1f2a60',
+            color: '#fff',
+          },
+        }}
+      />
+    </>
   );
 }
