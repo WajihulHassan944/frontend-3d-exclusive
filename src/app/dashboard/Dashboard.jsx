@@ -106,12 +106,35 @@ return (
                   Pending
                 </>
               )}
-              {v.status === "processing" && (
-                <>
-                  <Clock className="status-icon processing" />
-                  Processing
-                </>
-              )}
+                     {v.status === "processing" && (
+  <>
+    <Clock className="status-icon processing" />
+
+    <span className="processing-text">
+      Processing
+      {v.estimatedProcessingTime && (
+        <span className="info-wrapper">
+          <AlertCircle className="info-icon" size={14} />
+   <span className="info-tooltip">
+  Estimated: {(() => {
+    const totalMinutes = v.estimatedProcessingTime || 0;
+    const totalSeconds = Math.round(totalMinutes * 60);
+
+    const hrs = Math.floor(totalSeconds / 3600);
+    const mins = Math.floor((totalSeconds % 3600) / 60);
+    const secs = totalSeconds % 60;
+
+    if (hrs > 0) return `${hrs}h ${mins}m`;
+    if (mins > 0) return `${mins}m ${secs}s`;
+    return `${secs}s`;
+  })()}
+</span>
+
+    </span>
+      )}
+    </span>
+  </>
+)}
               {v.status === "completed" && (
                 <>
                   <CheckCircle className="status-icon completed" size={16} />
@@ -132,7 +155,7 @@ return (
               )}
             </span>
 
-            <span>{new Date(v.startedAt).toLocaleDateString("en-GB")}</span>
+            <span>{new Date(v.createdAt).toLocaleDateString("en-GB")}</span>
 
             <span className="action-cell">
               {v.status === "completed" ? (
