@@ -53,7 +53,7 @@ useEffect(() => {
     window.AppleID.auth.init({
       clientId: process.env.NEXT_PUBLIC_APPLE_CLIENT_ID,
       scope: 'name email',
-      redirectURI: `https://www.xclusive3d.com/api/auth/callback/apple`, // must match Apple Developer config
+      redirectURI: `https://xclusive3d.com/api/auth/callback/apple`, // must match Apple Developer config
       usePopup: false, // 🔑 full redirect mode
     });
   };
