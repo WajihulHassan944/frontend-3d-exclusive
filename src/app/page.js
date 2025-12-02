@@ -13,12 +13,18 @@ import "./upload/upload.css";
 import { baseUrl } from "@/const";
 import ComingSoon from "./coming-soon/ComingSoon";
 import { useSelector } from "react-redux";
+import { usePathname } from "next/navigation";
 
 export default function Page() {
   const [sections, setSections] = useState([]);
   const [isComingSoon, setIsComingSoon] = useState(false);
   const [loading, setLoading] = useState(true);
-
+const pathname = usePathname();
+useEffect(() => {
+  if (pathname?.startsWith("/blogs")) {
+    setIsComingSoon(false);
+  }
+}, [pathname]);
   useEffect(() => {
     const fetchPageData = async () => {
       try {

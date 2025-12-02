@@ -239,7 +239,7 @@ const handleDeleteBlog = async (id) => {
             <span>Edit</span>
           </Link>
 
-          <button className="dropdown-item-blogs" disabled>
+          <button className="dropdown-item-blogs" onClick={() => window.open(`https://xclusive3d.com/blogs/${post.slug}`, '_blank')} >
             <Eye size={16} />
             <span>Preview</span>
           </button>

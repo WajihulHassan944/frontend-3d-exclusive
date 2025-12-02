@@ -478,7 +478,7 @@ const handleUpload = async () => {
     />
     <label>Full Side by Side <span>(compatible with Meta Quest and YouTube 3D)</span></label>
   </div>
-  <div
+  {/* <div
     className={`format-option ${conversionFormat === 'MV-HEVC' ? 'selected' : ''}`}
     onClick={() => setConversionFormat('MV-HEVC')}
   >
@@ -489,7 +489,7 @@ const handleUpload = async () => {
       readOnly
     />
     <label>Spatial Video <span>(MV-HEVC format compatible with Apple Vision Pro)</span></label>
-  </div>
+  </div> */}
 
 </div>
 

@@ -50,7 +50,11 @@ function ClientLayoutInner({ children }) {
 
   // Hide navbar/footer when Coming Soon OR admin pages
   const hideClientUI = isComingSoon || isAdminRoute || isAdminLogin;
-
+useEffect(() => {
+  if (pathname?.startsWith("/blogs")) {
+    setIsComingSoon(false);
+  }
+}, [pathname]);
   // --------------------------------------------------------
   // 🔥 ADMIN OVERRIDE — ALWAYS DISABLE COMING SOON
   // --------------------------------------------------------

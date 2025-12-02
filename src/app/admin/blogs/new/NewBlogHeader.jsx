@@ -152,7 +152,7 @@ const handleSubmit = async (customStatus) => {
           {blogData.status.charAt(0).toUpperCase() + blogData.status.slice(1)}
         </span>
 
-        <button className="icon-btn" title="Preview">
+        <button className="icon-btn" title="Preview" onClick={() => window.open(`https://xclusive3d.com/blogs/${blogData.slug}`, '_blank')} disabled={!blogData.slug}>
           <Eye size={16} strokeWidth={1.8} />
           <span className="btn-text">Preview</span>
         </button>

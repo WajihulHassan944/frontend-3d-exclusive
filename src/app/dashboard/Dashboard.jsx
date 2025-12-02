@@ -116,7 +116,7 @@ return (
         <span className="info-wrapper">
           <AlertCircle className="info-icon" size={14} />
    <span className="info-tooltip">
-  Estimated: {(() => {
+  Total Expected Processing Time: {(() => {
     const totalMinutes = v.estimatedProcessingTime || 0;
     const totalSeconds = Math.round(totalMinutes * 60);
 
