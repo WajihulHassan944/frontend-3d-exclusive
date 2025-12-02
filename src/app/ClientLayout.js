@@ -54,7 +54,7 @@ useEffect(() => {
   if (pathname?.startsWith("/blogs")) {
     setIsComingSoon(false);
   }
-}, [pathname]);
+}, [pathname, isReady]);
   // --------------------------------------------------------
   // 🔥 ADMIN OVERRIDE — ALWAYS DISABLE COMING SOON
   // --------------------------------------------------------
@@ -86,9 +86,14 @@ useEffect(() => {
           setIsComingSoon(data.isComingSoon);
           setIsReady(true);
 
-          if (data.isComingSoon === true && !pathname.startsWith("/admin")) {
-            router.push("/");
-          }
+         if (
+  data.isComingSoon === true &&
+  !pathname.startsWith("/admin") &&
+  !pathname.startsWith("/blogs")
+) {
+  router.push("/");
+}
+
         }
       } catch (err) {
         console.error("Live visitors connect error:", err);
