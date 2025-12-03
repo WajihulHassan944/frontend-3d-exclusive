@@ -10,7 +10,7 @@ const TransformedImage = ({ image, className = "immersive-image", imageRef }) =>
   return (
     <img
       ref={imageRef}
-      src={image.url}
+      src={image?.url}
       alt={image.alt || ""}
       className={className}
       style={{

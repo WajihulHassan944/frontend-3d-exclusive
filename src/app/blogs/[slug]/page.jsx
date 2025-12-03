@@ -77,7 +77,7 @@ const featuredImage = media?.find(m => m.identifier === slug);
       {blog.featuredImage && (
         <div className="blogImageWrapper">
         <center> <Image
-  src={featuredImage.url}
+  src={featuredImage?.url}
   alt={blog.title}
   width={featuredImage.transformations.resizeWidth || 1200}
   height={featuredImage.transformations.resizeHeight || 700}

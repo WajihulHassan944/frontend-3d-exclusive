@@ -86,14 +86,14 @@ const step3Img = media?.find(m => m.identifier === "how-it-works-third-img");
             <div className="comparison-container" ref={sliderRef}>
   {/* Background Image */}
   <img
-    src={step2Overlay.url}
+    src={step2Overlay?.url}
     alt="Original"
     className="comparison-img"
   />
 
   {/* Overlay Image (static, clipped) */}
   <img
-    src={step1Img.url}
+    src={step1Img?.url}
     alt="Depth Map"
     className="comparison-img overlay-img"
     style={{ clipPath: `inset(0 ${100 - dividerPos}% 0 0)` }}
