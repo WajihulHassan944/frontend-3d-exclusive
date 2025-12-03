@@ -496,3 +496,27 @@ margin-bottom: 20px;
   min-height: 60px;
   resize: vertical;
 }
+/* ❌ Remove Section Button */
+.remove-section-btn {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  color: gray;
+  border: none;
+  padding: 4px 8px;
+  font-size: 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  z-index: 10;
+  transition: 0.2s ease;
+}
+
+.remove-section-btn:hover {
+  background: #e60000;
+  color: #fff;
+}
+
+/* Ensure parent has position relative */
+.content-section {
+  position: relative;
+}

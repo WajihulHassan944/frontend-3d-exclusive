@@ -216,6 +216,8 @@ console.log("page data is",pageData);
               </div>
 
               <h3 className="content-heading">Content Sections</h3>
+  
+
 {/* ✅ Sort safely without mutating the original array */}
 {[...(formData?.sections || [])]
   .slice() // clone array
@@ -230,6 +232,20 @@ console.log("page data is",pageData);
 
     return (
       <div className="content-section" key={section._id || index}>
+      {/* ❌ Remove Section Button - only for these 3 URLs */}
+{["/privacypolicy", "/cookies", "/termsandconditions"].includes(pageUrl) && (
+  <button
+    className="remove-section-btn"
+    onClick={() => {
+      const updated = [...formData.sections];
+      updated.splice(realIndex, 1);
+      setFormData({ ...formData, sections: updated });
+    }}
+  >
+    ✕
+  </button>
+)}
+
         <div className="section-header">
           <GripVertical size={19} color="rgba(0,0,0,0.8)" />
           <span className="section-title">
@@ -249,28 +265,48 @@ console.log("page data is",pageData);
           }
         />
 
-       {section.description && (
+{/* Always show Content + Subdescription on legal pages */}
+{["/privacypolicy", "/cookies", "/termsandconditions"].includes(pageUrl) ? (
   <>
     <label>Content</label>
     <textarea
       rows={4}
-      value={section.description}
+      value={section.description || ""}
       onChange={(e) =>
-        handleSectionChange(realIndex, 'description', e.target.value)
+        handleSectionChange(realIndex, "description", e.target.value)
       }
-    ></textarea>
+    />
+
+   
   </>
-)}
-  {section.subDescription && (
+) : (
   <>
-    <label>Sub description</label>
-    <textarea
-      rows={4}
-      value={section.subDescription}
-      onChange={(e) =>
-        handleSectionChange(realIndex, 'subDescription', e.target.value)
-      }
-    ></textarea>
+    {/* 🔥 For NON-legal pages: show only IF value exists */}
+    {section.description && (
+      <>
+        <label>Content</label>
+        <textarea
+          rows={4}
+          value={section.description}
+          onChange={(e) =>
+            handleSectionChange(realIndex, "description", e.target.value)
+          }
+        />
+      </>
+    )}
+
+    {section.subDescription && (
+      <>
+        <label>Sub Description</label>
+        <textarea
+          rows={4}
+          value={section.subDescription}
+          onChange={(e) =>
+            handleSectionChange(realIndex, "subDescription", e.target.value)
+          }
+        />
+      </>
+    )}
   </>
 )}
 
@@ -490,7 +526,33 @@ console.log("page data is",pageData);
       </div>
     );
   })}
-
+            {/* ✅ Show Add Section button for legal pages */}
+{["/privacypolicy", "/cookies", "/termsandconditions"].includes(pageUrl) && (
+  <button
+    className="add-section-btn"
+    onClick={() => {
+      const updated = [...(formData.sections || [])];
+      updated.push({
+        _id: `temp-${Date.now()}`,
+        sectionId: `section${updated.length + 1}`,
+        title: "",
+        description: "",
+        subDescription: "",
+      });
+      setFormData({ ...formData, sections: updated });
+    }}
+    style={{
+      marginBottom: "15px",
+      padding: "10px 14px",
+      background: "#000",
+      color: "#fff",
+      borderRadius: "6px",
+      cursor:"pointer"
+    }}
+  >
+    + Add Section
+  </button>
+)}
             </>
           )}
 
