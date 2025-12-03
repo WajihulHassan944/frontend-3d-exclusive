@@ -13,6 +13,7 @@ const EditMediaModal = ({ item = null, onClose = () => {}, onUpdated = () => {} 
 
   // Per-tab state (parent aggregates and passes down)
   const [details, setDetails] = useState({
+    identifier: "",
     name: "",
     alt: "",
     url: "",
@@ -49,6 +50,7 @@ const [editImage, setEditImage] = useState({
 
   // ---- DETAILS ----
   setDetails({
+    identifier: item.identifier || "",
     name: item.name || "",
     alt: item.alt || "",
     url: item.url || "",
@@ -186,7 +188,7 @@ const handleReplaceChange = async ({ file, previewUrl }) => {
       const formData = new FormData();
 
       formData.append("file", replace.file);
-
+      formData.append("identifier",details.identifier);
       formData.append("name", details.name);
       formData.append("alt", details.alt || "");
       formData.append("size", details.size || "");
@@ -210,6 +212,7 @@ const handleReplaceChange = async ({ file, previewUrl }) => {
     } else {
       // CASE 2: No file replaced → send JSON
       const payload = {
+        identifier: details.identifier,
         name: details.name,
         alt: details.alt,
         size: details.size,

@@ -1,11 +1,22 @@
 'use client';
 
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./ImmersiveThreeD.css";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchWebsiteMedia } from "@/redux/features/websiteMedia";
+import TransformedImage from "@/utils/TransformedImage";
 
 const ImmersiveThreeD = ({ sectionData }) => {
+  const dispatch = useDispatch();
   const imageRef = useRef(null);
   const [labelText, setLabelText] = useState("Hover to interact");
+const { media } = useSelector(state => state.websiteMedia);
+  useEffect(() => {
+    dispatch(fetchWebsiteMedia());
+  }, [dispatch]);
+// Get dynamic images
+const whaleImage = media?.find(m => m.identifier === "whale-3d-demo");
+const vrImage = media?.find(m => m.identifier === "Experience-3D-Magic-Vr");
 
   if (!sectionData) return null;
 
@@ -53,12 +64,30 @@ const ImmersiveThreeD = ({ sectionData }) => {
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
       >
-        <img
-          ref={imageRef}
-          src="/Immersive/whale-3d-demo.jpg"
-          alt="3D Whale Demo"
-          className="immersive-image"
-        />
+     <img
+  ref={imageRef}
+  src={whaleImage?.url || "/Immersive/whale-3d-demo.jpg"}
+  alt={whaleImage?.alt || "3D Whale Demo"}
+  className="immersive-image"
+  style={{
+    transform: `rotate(${whaleImage?.transformations?.rotate || 0}deg)`,
+    filter: `${whaleImage?.transformations?.filter || ""} brightness(${whaleImage?.transformations?.filterIntensity || 100}%)`,
+
+    width:
+      whaleImage?.transformations?.resizeWidth ||
+      whaleImage?.transformations?.cropWidth ||
+      "auto",
+
+    height:
+      whaleImage?.transformations?.resizeHeight ||
+      whaleImage?.transformations?.cropHeight ||
+      "500px",
+
+    objectFit: "cover",
+  }}
+/>
+
+
         <div className="hover-label">
           <span className="greenDot"></span>
           {labelText}
@@ -79,7 +108,9 @@ const ImmersiveThreeD = ({ sectionData }) => {
         <center>
           <div className="vr-box">
             <div className="vr-image">
-              <img src="/Immersive/vr.png" alt="VR Experience" />
+            <TransformedImage image={vrImage} />
+
+
             </div>
             <div className="vr-text">
               <h3

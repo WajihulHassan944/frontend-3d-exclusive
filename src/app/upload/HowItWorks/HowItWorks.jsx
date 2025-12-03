@@ -2,8 +2,17 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import "./HowItWorks.css";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchWebsiteMedia } from "@/redux/features/websiteMedia";
+import TransformedImage from "@/utils/TransformedImage";
 
 const HowItWorks = ({ sectionData }) => {
+const dispatch = useDispatch();
+const { media } = useSelector(state => state.websiteMedia);
+  useEffect(() => {
+    dispatch(fetchWebsiteMedia());
+  }, [dispatch]);
+  
   const [dividerPos, setDividerPos] = useState(50);
   const sliderRef = useRef(null);
   const isDragging = useRef(false);
@@ -39,6 +48,10 @@ const HowItWorks = ({ sectionData }) => {
   if (!sectionData) return null;
 
   const steps = sectionData.subSection?.cards || [];
+const step1Img = media?.find(m => m.identifier === "how-it-works-first-img");
+const step2Original = media?.find(m => m.identifier === "how-it-works-first-img");
+const step2Overlay = media?.find(m => m.identifier === "how-it-works-second-img");
+const step3Img = media?.find(m => m.identifier === "how-it-works-third-img");
 
   return (
     <div className="howItWorksWrapper">
@@ -61,7 +74,7 @@ const HowItWorks = ({ sectionData }) => {
             <p className="step-description">{steps[0].description}</p>
           </div>
           <div className="howItWorks-image">
-            <img src="/assets/how-it-works-one.jpg" alt={steps[0].title} />
+             <TransformedImage image={step1Img} />
           </div>
         </div>
       )}
@@ -73,14 +86,14 @@ const HowItWorks = ({ sectionData }) => {
             <div className="comparison-container" ref={sliderRef}>
   {/* Background Image */}
   <img
-    src="/assets/how-it-works-two.jpg"
+    src={step2Overlay.url}
     alt="Original"
     className="comparison-img"
   />
 
   {/* Overlay Image (static, clipped) */}
   <img
-    src="/assets/how-it-works-one.jpg"
+    src={step1Img.url}
     alt="Depth Map"
     className="comparison-img overlay-img"
     style={{ clipPath: `inset(0 ${100 - dividerPos}% 0 0)` }}
@@ -119,7 +132,7 @@ const HowItWorks = ({ sectionData }) => {
             <p className="step-description">{steps[2].description}</p>
           </div>
           <div className="howItWorks-image">
-            <img src="/assets/how-it-works-three.jpg" alt={steps[2].title} />
+             <TransformedImage image={step3Img} />
           </div>
         </div>
       )}

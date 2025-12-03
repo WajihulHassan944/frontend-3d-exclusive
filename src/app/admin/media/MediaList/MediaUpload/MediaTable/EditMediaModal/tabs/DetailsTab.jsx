@@ -74,6 +74,14 @@ const DetailsTab = ({ details,editImage, setDetails }) => {
 
       {/* RIGHT SIDE: Form */}
       <div className="emm-form-section">
+   {/* File Name */}
+        <label>Unique Identifier</label>
+        <input
+          type="text"
+          className="emm-input"
+          value={details.identifier}
+          onChange={(e) => setDetails({ identifier: e.target.value })}
+        />
 
         {/* File Name */}
         <label>File Name</label>

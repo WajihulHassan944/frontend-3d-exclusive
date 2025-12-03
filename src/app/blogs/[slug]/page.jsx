@@ -5,11 +5,20 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { baseUrl } from '@/const';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchWebsiteMedia } from '@/redux/features/websiteMedia';
 
 const BlogDetailsPage = () => {
   const { slug } = useParams();
   const [blog, setBlog] = useState(null);
   const [loading, setLoading] = useState(true);
+const dispatch = useDispatch();
+ const { media } = useSelector(state => state.websiteMedia);
+  useEffect(() => {
+    dispatch(fetchWebsiteMedia());
+  }, [dispatch]);
+// Get dynamic images
+const featuredImage = media?.find(m => m.identifier === slug);
 
   useEffect(() => {
     if (!slug) return;
@@ -67,13 +76,20 @@ const BlogDetailsPage = () => {
 
       {blog.featuredImage && (
         <div className="blogImageWrapper">
-          <Image
-            src={blog.featuredImage}
-            alt={blog.title}
-            width={1200}
-            height={700}
-            className="blogImage"
-          />
+        <center> <Image
+  src={featuredImage.url}
+  alt={blog.title}
+  width={featuredImage.transformations.resizeWidth || 1200}
+  height={featuredImage.transformations.resizeHeight || 700}
+  className="blogImage"
+  style={{
+    transform: `rotate(${featuredImage.transformations.rotate || 0}deg)`,
+    filter: `${featuredImage.transformations.filter || ""} brightness(${featuredImage.transformations.filterIntensity || 100}%)`,
+    width: featuredImage.transformations.resizeWidth || featuredImage.transformations.cropWidth || "auto",
+    height: featuredImage.transformations.resizeHeight || featuredImage.transformations.cropHeight || "auto",
+    
+  }}
+/></center>
         </div>
       )}
 
