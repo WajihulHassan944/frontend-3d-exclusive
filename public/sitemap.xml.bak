@@ -1,4 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
+		<!--	created with www.mysitemapgenerator.com	-->
 		<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 	<loc>https://www.xclusive3d.com/</loc>
@@ -6,14 +7,74 @@
 	<priority>1.0</priority>
 </url>
 <url>
+	<loc>https://www.xclusive3d.com/admin/pages</loc>
+	<lastmod>2025-12-07T05:06:43+01:00</lastmod>
+	<priority>0.8</priority>
+</url>
+<url>
+	<loc>https://www.xclusive3d.com/admin/media</loc>
+	<lastmod>2025-12-07T05:06:44+01:00</lastmod>
+	<priority>0.8</priority>
+</url>
+<url>
+	<loc>https://www.xclusive3d.com/admin</loc>
+	<lastmod>2025-12-07T05:06:44+01:00</lastmod>
+	<priority>1.0</priority>
+</url>
+<url>
+	<loc>https://www.xclusive3d.com/admin/orders</loc>
+	<lastmod>2025-12-07T05:06:45+01:00</lastmod>
+	<priority>0.8</priority>
+</url>
+<url>
+	<loc>https://www.xclusive3d.com/admin/users</loc>
+	<lastmod>2025-12-07T05:06:46+01:00</lastmod>
+	<priority>0.8</priority>
+</url>
+<url>
+	<loc>https://www.xclusive3d.com/admin/blogs</loc>
+	<lastmod>2025-12-07T05:06:47+01:00</lastmod>
+	<priority>0.8</priority>
+</url>
+<url>
+	<loc>https://www.xclusive3d.com/admin/credits</loc>
+	<lastmod>2025-12-07T05:06:48+01:00</lastmod>
+	<priority>0.8</priority>
+</url>
+<url>
+	<loc>https://www.xclusive3d.com/admin/reviews</loc>
+	<lastmod>2025-12-07T05:06:49+01:00</lastmod>
+	<priority>0.8</priority>
+</url>
+<url>
+	<loc>https://www.xclusive3d.com/admin/blogs/new</loc>
+	<lastmod>2025-12-07T05:06:50+01:00</lastmod>
+	<priority>0.6</priority>
+</url>
+<url>
 	<loc>https://www.xclusive3d.com/termsandconditions</loc>
 	<lastmod>2025-12-07T05:06:51+01:00</lastmod>
 	<priority>1.0</priority>
 </url>
 <url>
+	<loc>https://www.xclusive3d.com/admin/products</loc>
+	<lastmod>2025-12-07T05:06:52+01:00</lastmod>
+	<priority>0.8</priority>
+</url>
+<url>
+	<loc>https://www.xclusive3d.com/admin/conversions</loc>
+	<lastmod>2025-12-07T05:06:52+01:00</lastmod>
+	<priority>0.8</priority>
+</url>
+<url>
 	<loc>https://www.xclusive3d.com/contact</loc>
 	<lastmod>2025-12-07T05:06:54+01:00</lastmod>
 	<priority>1.0</priority>
+</url>
+<url>
+	<loc>https://www.xclusive3d.com/admin/coupons</loc>
+	<lastmod>2025-12-07T05:06:55+01:00</lastmod>
+	<priority>0.8</priority>
 </url>
 <url>
 	<loc>https://www.xclusive3d.com/pricing</loc>
@@ -24,6 +85,11 @@
 	<loc>https://www.xclusive3d.com/privacypolicy</loc>
 	<lastmod>2025-12-07T05:06:56+01:00</lastmod>
 	<priority>1.0</priority>
+</url>
+<url>
+	<loc>https://www.xclusive3d.com/admin/coupons/new</loc>
+	<lastmod>2025-12-07T05:06:56+01:00</lastmod>
+	<priority>0.6</priority>
 </url>
 <url>
 	<loc>https://www.xclusive3d.com/add-billing</loc>
