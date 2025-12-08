@@ -156,6 +156,20 @@ font-weight: 600;
   color: #f87171;
 }
 
+/* ✅ NEW: Uploaded */
+.status-icon.uploaded {
+  color: #60a5fa; /* blue */
+}
+
+/* ✅ NEW: Queued */
+.status-icon.queued {
+  color: #a78bfa; /* purple */
+}
+
+/* ✅ NEW: Failed */
+.status-icon.failed {
+  color: #ef4444; /* red */
+}
 /* === Actions === */
 .action-cell {
   display: flex;
@@ -237,11 +251,11 @@ font-weight: 600;
   font-size: 12px;
   padding: 6px 10px;
   border-radius: 6px;
-  white-space: nowrap;
   opacity: 0;
   pointer-events: none;
   transition: 0.2s ease-in-out;
   z-index: 50;
+  max-width: 800px;
 }
 
 /* Show on hover */

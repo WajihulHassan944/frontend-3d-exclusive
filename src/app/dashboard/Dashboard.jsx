@@ -7,7 +7,7 @@ import Pusher from 'pusher-js';
 import './dashboard.css';
 import withAuth from '@/hooks/withAuth';
 import WriteReviewSection from './WriteReviewSection/WriteReviewSection';
-import { AlertCircle, CheckCircle, Clock,  Download,  UploadCloud } from 'lucide-react';
+import { AlertCircle, CheckCircle, Clock,  Download,  UploadCloud, XCircle } from 'lucide-react';
 
 const Dashboard = () => {
   const user = useSelector((state) => state.user);
@@ -98,62 +98,90 @@ return (
         videos.map((v) => (
           <div key={v._id} className="table-row">
             <span>{v.originalFileName}</span>
+<span className={`status-pill ${v.status.toLowerCase()}`}>
 
-            <span className={`status-pill ${v.status.toLowerCase()}`}>
-              {v.status === "pending" && (
-                <>
-                  <Clock className="status-icon pending" size={16} />
-                  Pending
-                </>
-              )}
-                     {v.status === "processing" && (
+  {v.status === "pending" && (
+    <>
+      <Clock className="status-icon pending" size={16} />
+      Pending
+    </>
+  )}
+
+  {v.status === "processing" && (
+    <>
+      <Clock className="status-icon processing" />
+
+      <span className="processing-text">
+        Processing
+        {v.estimatedProcessingTime && (
+          <span className="info-wrapper">
+            <AlertCircle className="info-icon" size={14} />
+            <span className="info-tooltip">
+              Total Expected Processing Time: {(() => {
+                const totalMinutes = v.estimatedProcessingTime || 0;
+                const totalSeconds = Math.round(totalMinutes * 60);
+
+                const hrs = Math.floor(totalSeconds / 3600);
+                const mins = Math.floor((totalSeconds % 3600) / 60);
+                const secs = totalSeconds % 60;
+
+                if (hrs > 0) return `${hrs}h ${mins}m`;
+                if (mins > 0) return `${mins}m ${secs}s`;
+                return `${secs}s`;
+              })()}
+            </span>
+          </span>
+        )}
+      </span>
+    </>
+  )}
+
+  {v.status === "completed" && (
+    <>
+      <CheckCircle className="status-icon completed" size={16} />
+      Completed
+    </>
+  )}
+
+  {v.status === "expired" && (
+    <>
+      <AlertCircle className="status-icon expired" size={16} />
+      Expired
+    </>
+  )}
+
+  {v.status === "uploaded" && (
+    <>
+      <UploadCloud className="status-icon uploaded" size={16} />
+      Uploaded
+    </>
+  )}
+
+  {/* ✅ NEW: QUEUED */}
+  {v.status === "queued" && (
+    <>
+      <Clock className="status-icon queued" size={16} />
+      Queued
+    </>
+  )}
+
+  {/* ✅ NEW: FAILED */}
+  {v.status === "failed" && (
   <>
-    <Clock className="status-icon processing" />
-
-    <span className="processing-text">
-      Processing
-      {v.estimatedProcessingTime && (
-        <span className="info-wrapper">
-          <AlertCircle className="info-icon" size={14} />
-   <span className="info-tooltip">
-  Total Expected Processing Time: {(() => {
-    const totalMinutes = v.estimatedProcessingTime || 0;
-    const totalSeconds = Math.round(totalMinutes * 60);
-
-    const hrs = Math.floor(totalSeconds / 3600);
-    const mins = Math.floor((totalSeconds % 3600) / 60);
-    const secs = totalSeconds % 60;
-
-    if (hrs > 0) return `${hrs}h ${mins}m`;
-    if (mins > 0) return `${mins}m ${secs}s`;
-    return `${secs}s`;
-  })()}
-</span>
-
-    </span>
-      )}
-    </span>
+    <XCircle className="status-icon failed" size={16} />
+    Failed
+    {v.errorMessage && (
+      <span className="info-wrapper">
+        <AlertCircle className="info-icon" size={14} />
+        <span className="info-tooltip">
+          Error: {v.errorMessage}
+        </span>
+      </span>
+    )}
   </>
 )}
-              {v.status === "completed" && (
-                <>
-                  <CheckCircle className="status-icon completed" size={16} />
-                  Completed
-                </>
-              )}
-              {v.status === "expired" && (
-                <>
-                  <AlertCircle className="status-icon expired" size={16} />
-                  Expired
-                </>
-              )}
-              {v.status === "uploaded" && (
-                <>
-                  <UploadCloud className="status-icon uploaded" size={16} />
-                  Uploaded
-                </>
-              )}
-            </span>
+
+</span>
 
             <span>{new Date(v.createdAt).toLocaleDateString("en-GB")}</span>
 
