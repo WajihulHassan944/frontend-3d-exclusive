@@ -15,31 +15,39 @@ const Dashboard = () => {
   const [videos, setVideos] = useState([]);
 
 useEffect(() => {
-  // Load videos from Redux if available
   if (user?.videos?.length) {
     setVideos(user.videos);
   }
 
-  // Setup Pusher
   const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY, {
     cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER,
   });
 
-  const channel = pusher.subscribe('exclusive');
+  const channel = pusher.subscribe("exclusive");
 
-  channel.bind('status-update', (data) => {
+  channel.bind("status-update", (data) => {
+    console.log("📡 Incoming Pusher Update:", data);
+
     if (!data || !data.status || !data.videoId) return;
 
     setVideos((prev) =>
-      prev.map((v) =>
-        v._id === data.videoId
-          ? {
-              ...v,
-              status: data.status,
-              ...(data.signedUrl ? { convertedUrl: data.signedUrl } : {}),
-            }
-          : v
-      )
+      prev.map((v) => {
+        if (v._id !== data.videoId) return v;
+
+        const updated = {
+          ...v,
+          status: data.status,
+          progress: data.progress ?? v.progress,
+          errorMessage: data.errorMessage ?? v.errorMessage,
+          creditsUsed: data.creditsUsed ?? v.creditsUsed,
+          quality: data.quality ?? v.quality,
+          startedAt: data.startedAt ?? v.startedAt,
+          ...(data.signedUrl ? { convertedUrl: data.signedUrl } : {}),
+        };
+
+        console.log("🔄 Video Updated:", updated);
+        return updated;
+      })
     );
   });
 
@@ -47,7 +55,7 @@ useEffect(() => {
     channel.unbind_all();
     channel.unsubscribe();
   };
-}, [user]);
+}, []); // ✅ RUN ONCE, NOT ON EVERY USER CHANGE
 
   const totalVideos = videos.length;
   const completed = videos.filter((v) => v.status === 'completed').length;
