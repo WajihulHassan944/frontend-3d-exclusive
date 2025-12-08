@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import './upload.css';
-import { FiUpload } from 'react-icons/fi';
+import { FiCheck, FiUpload } from 'react-icons/fi';
 import { baseUrl } from '@/const';
 import { useRouter } from 'next/navigation';
 import { refreshAndDispatchUser } from '@/utils/refreshUser';
@@ -20,7 +20,9 @@ const Home = () => {
   const [uploading, setUploading] = useState(false);
   const [uploadStatus, setUploadStatus] = useState('');
   const inputRef = useRef(null);
-const [dragActive, setDragActive] = useState(false);
+  const [agreeToTerms, setAgreeToTerms] = useState(false);
+
+  const [dragActive, setDragActive] = useState(false);
 const isLoggedIn = useSelector((state) => state.user?.isLoggedIn);
 const dispatch = useDispatch();
  const user = useSelector((state) => state.user);
@@ -460,7 +462,7 @@ const handleUpload = async () => {
 
 <ExperienceSelector selected={threeDExperience} setSelected={setThreeDExperience} />
 
-<div className="format-selector">
+<div className="format-selector" style={{marginBottom:'70px'}}>
   <div className="step-header">
         <div className="step-number">3</div>
         <h2 className="step-title">Choose Output Format</h2>
@@ -493,6 +495,17 @@ const handleUpload = async () => {
 
 </div>
 
+ <div className="terms-checkbox" onClick={() => setAgreeToTerms(!agreeToTerms)}>
+  <div className={`custom-checkbox ${agreeToTerms ? 'checked' : ''}`}>
+    {agreeToTerms && <FiCheck size={12} color="#fff" />}
+  </div>
+  <label style={{color:'#d1d5db', fontWeight:'500'}}>
+    I confirm I have the legal right to upload this content and agree to the{' '}
+    <a href="/termsandconditions" target="_blank" rel="noopener noreferrer" style={{color:'#c084fc'}}>
+      Terms and Conditions
+    </a>
+  </label>
+</div>
 
 {uploading && (
   <div className="upload-progress-container-new">
@@ -515,10 +528,10 @@ const handleUpload = async () => {
  <button
   className="convert-btn"
   onClick={handleUpload}
-  disabled={uploading || (isLoggedIn && showVideoNote && videoMeta && !videoMeta.canProceed) || !videoFile}
+  disabled={uploading || (isLoggedIn && showVideoNote && videoMeta && !videoMeta.canProceed) || !videoFile || !agreeToTerms}
   style={{
-  opacity: uploading || (isLoggedIn && showVideoNote && videoMeta && !videoMeta.canProceed) || !videoFile? 0.6 : 1,
-  cursor: uploading || (isLoggedIn && showVideoNote && videoMeta && !videoMeta.canProceed) || !videoFile ? 'not-allowed' : 'pointer',
+  opacity: uploading || (isLoggedIn && showVideoNote && videoMeta && !videoMeta.canProceed) || !videoFile || !agreeToTerms? 0.6 : 1,
+  cursor: uploading || (isLoggedIn && showVideoNote && videoMeta && !videoMeta.canProceed) || !videoFile || !agreeToTerms ? 'not-allowed' : 'pointer',
 }}
 
 >
@@ -528,7 +541,7 @@ const handleUpload = async () => {
     'Convert to 3D'
   )}
 </button>
-
+{!videoFile && <p className='cautionPara'>Please upload a video file to continue</p>}
 <ConversionCostBox credits={videoMeta?.cost} />
   
 </div>

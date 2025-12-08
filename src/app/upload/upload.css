@@ -148,8 +148,8 @@ padding-top: 0;
   font-weight: 700;
   border-radius: 8px;
   cursor: pointer;
-  margin-bottom: 50px;
-  margin-top: 30px;
+  margin-bottom: 20px;
+  margin-top: 13px;
   width: 100%;
 }
 .credits {
@@ -542,4 +542,11 @@ padding-top: 0;
 .xclusive-container .step-header .step-title {
   font-size: 24px;
   font-weight: 700;
+}
+
+.cautionPara{
+  color: #9ca3af;
+  font-weight: 500;
+  font-size: 14px;
+  margin-bottom: 50px;
 }
