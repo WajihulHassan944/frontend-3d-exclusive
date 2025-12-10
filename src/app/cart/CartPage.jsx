@@ -200,10 +200,8 @@ const fetchClientSecret = async () => {
   try {
     setLoadingPaymentIntent(true); // start spinner
 
-    // 🌍 Detect country on frontend
-    const geoRes = await fetch(`https://ipwho.is/`);
-    const geoData = await geoRes.json();
-    const userCountry = geoData?.country_code || 'NL';
+   const { data: geoData } = useSelector((state) => state.geo);
+const userCountry = geoData?.country_code || 'NL';
 
     const res = await fetch(`${baseUrl}/wallet/create-payment-intent-all-methods`, {
       method: 'POST',

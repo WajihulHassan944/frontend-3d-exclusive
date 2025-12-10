@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import './login.css';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useGoogleLogin } from '@react-oauth/google';
 import { baseUrl } from '@/const';
 import { loginUser } from '@/redux/features/userSlice';
@@ -20,11 +20,10 @@ const LoginForm = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+const { data: geoData, loading: loadingCountry } = useSelector((state) => state.geo);
 
-const [country, setCountry] = useState('');
-  const [loadingCountry, setLoadingCountry] = useState(true);
-  
-
+const country = geoData?.country || 'Unknown';
+console.log(country);
 const [showPassword, setShowPassword] = useState(false);
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -148,29 +147,6 @@ if (hasPendingCredits) {
   });
 
 
-  // Fetch actual country name using IP geolocation
-  useEffect(() => {
-   const fetchCountry = async () => {
-  try {
-    const res = await fetch('https://ipwho.is/');
-    const data = await res.json();
-    if (data && data.success && data.country) {
-      setCountry(data.country);
-    } else {
-      setCountry('Unknown');
-    }
-  } catch (err) {
-    console.error('Failed to fetch country:', err);
-    setCountry('Unknown');
-  } finally {
-    setLoadingCountry(false);
-  }
-};
-
-
-    fetchCountry();
-  }, []);
-
 useEffect(() => {
   const script = document.createElement('script');
   script.src =
@@ -188,13 +164,11 @@ useEffect(() => {
 }, []);
 
 const handleAppleLogin = () => {
-  if (!country || loadingCountry) {
+
+  if (loadingCountry) {
     toast.error('Please wait until country is determined...');
     return;
   }
-
-  // ✅ In redirect flow, you do not await a response here.
-  // Apple will redirect to backend callback
   window.AppleID.auth.signIn({
     state: crypto.randomUUID(),
     nonce: crypto.randomUUID(),

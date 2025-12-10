@@ -3,7 +3,7 @@
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { GoogleOAuthProvider } from '@react-oauth/google';
-import { Provider, useSelector } from 'react-redux';
+import { Provider, useDispatch, useSelector } from 'react-redux';
 import { store } from '@/redux/store';
 import Pusher from 'pusher-js';
 import { baseUrl } from '@/const';
@@ -15,6 +15,7 @@ import AdminSideNav from './admin/AdminNav/page';
 import TopNav from './admin/AdminNav/TopNav/TopNav';
 import Navbar from './navbar/Navbar';
 import CouponBanner from '../../components/Coupons/CouponBanner';
+import { fetchGeo } from '@/redux/features/geoSlice';
 
 // --------------------------------------------------------
 // WRAPPER SO REDUX PROVIDER WORKS
@@ -35,7 +36,7 @@ export default function ClientLayout({ children }) {
 function ClientLayoutInner({ children }) {
   const pathname = usePathname();
   const router = useRouter();
-
+ const dispatch = useDispatch();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [liveVisitors, setLiveVisitors] = useState(0);
 
@@ -68,6 +69,10 @@ useEffect(() => {
   useEffect(() => {
     document.body.style.background = isAdminRoute ? '#fff' : '';
   }, [isAdminRoute]);
+ 
+  useEffect(() => {
+    dispatch(fetchGeo()); // fetch once on app load
+  }, [dispatch]);
 
   // --------------------------------------------------------
   // LIVE VISITORS + COMING SOON CHECK

@@ -21,6 +21,7 @@ const Home = () => {
   const [uploadStatus, setUploadStatus] = useState('');
   const inputRef = useRef(null);
   const [agreeToTerms, setAgreeToTerms] = useState(false);
+const ipData = useSelector((state) => state.geo.data);
 
   const [dragActive, setDragActive] = useState(false);
 const isLoggedIn = useSelector((state) => state.user?.isLoggedIn);
@@ -261,6 +262,8 @@ const handleUpload = async () => {
         fileSize: formatFileSize(videoFile.size),
         creditsUsed: isUsingFreeMinute ? 0 : cost,
         threeDExperience,
+        clientInfo:ipData
+
       }),
     });
 

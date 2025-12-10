@@ -1,5 +1,4 @@
 'use client';
-
 import React, { useState, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { useGoogleLogin } from '@react-oauth/google';
@@ -9,41 +8,22 @@ import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { FiCheck } from 'react-icons/fi';
 import withoutAuth from '@/hooks/withoutAuth';
+import { useSelector } from 'react-redux';
 const SignupForm = () => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [profileImage, setProfileImage] = useState(null);
-  const [country, setCountry] = useState('');
-  const [loadingCountry, setLoadingCountry] = useState(true);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const [agreeToTerms, setAgreeToTerms] = useState(false);
 const [subscribeNewsletter, setSubscribeNewsletter] = useState(false);
 
-  // Fetch actual country name using IP geolocation
-  useEffect(() => {
-   const fetchCountry = async () => {
-  try {
-    const res = await fetch('https://ipwho.is/');
-    const data = await res.json();
-    if (data && data.success && data.country) {
-      setCountry(data.country);
-    } else {
-      setCountry('Unknown');
-    }
-  } catch (err) {
-    console.error('Failed to fetch country:', err);
-    setCountry('Unknown');
-  } finally {
-    setLoadingCountry(false);
-  }
-};
+const { data: geoData, loading: loadingCountry } = useSelector((state) => state.geo);
 
+const country = geoData?.country || 'Unknown';
 
-    fetchCountry();
-  }, []);
 useEffect(() => {
   const script = document.createElement('script');
   script.src =
@@ -53,21 +33,19 @@ useEffect(() => {
     window.AppleID.auth.init({
       clientId: process.env.NEXT_PUBLIC_APPLE_CLIENT_ID,
       scope: 'name email',
-      redirectURI: `https://xclusive3d.com/api/auth/callback/apple`, // must match Apple Developer config
-      usePopup: false, // 🔑 full redirect mode
+      redirectURI: `https://xclusive3d.com/api/auth/callback/apple`, 
+      usePopup: false,
     });
   };
   document.body.appendChild(script);
 }, []);
 
 const handleAppleLogin = () => {
-  if (!country || loadingCountry) {
+   if (loadingCountry) {
     toast.error('Please wait until country is determined...');
     return;
   }
 
-  // ✅ In redirect flow, you do not await a response here.
-  // Apple will redirect to backend callback
   window.AppleID.auth.signIn({
     state: crypto.randomUUID(),
     nonce: crypto.randomUUID(),

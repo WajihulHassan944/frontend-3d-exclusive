@@ -1,6 +1,7 @@
 import { baseUrl } from '@/const';
 import toast from 'react-hot-toast';
 import { refreshAndDispatchUser } from '@/utils/refreshUser';
+import { useSelector } from 'react-redux';
 
 export const handleStripeSubmit = async ({
   stripe,
@@ -15,7 +16,8 @@ export const handleStripeSubmit = async ({
   if (!stripe || !elements) return;
 
   setCardSubmitting(true);
-
+  const ipData = useSelector((state) => state.geo.data);
+ 
   try {
     // 🔹 Get country code from ipwho.is if needed
     let countryCode = 'US'; // fallback
@@ -23,9 +25,7 @@ export const handleStripeSubmit = async ({
       if (billingData?.country?.length === 2) {
         countryCode = billingData.country.toUpperCase();
       } else {
-        const ipRes = await fetch('https://ipwho.is/');
-        const ipData = await ipRes.json();
-        if (ipData?.success && ipData?.country_code) {
+        if (ipData?.country_code) {
           countryCode = ipData.country_code;
         }
       }

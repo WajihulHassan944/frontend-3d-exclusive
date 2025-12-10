@@ -13,8 +13,7 @@ const Dashboard = () => {
   const user = useSelector((state) => state.user);
   const { wallet, videos: initialVideos = [] } = user;
   const [videos, setVideos] = useState([]);
-
-useEffect(() => {
+ useEffect(() => {
   if (user?.videos?.length) {
     setVideos(user.videos);
   }

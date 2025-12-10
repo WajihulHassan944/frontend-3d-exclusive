@@ -1,15 +1,14 @@
+import { useSelector } from "react-redux";
 import { countryToCurrency } from "./countryToCurrency";
 import { baseUrl } from "@/const";
 
 export const getLocalizedAmount = async (credits) => {
+   const data = useSelector((state) => state.geo.data);
   try {
-    // 1️⃣ Detect user's country
-    const res = await fetch("https://ipwho.is/");
-    const data = await res.json();
-
+   
     // Default fallback
     let currency = "EUR";
-    if (data.success && data.country_code) {
+    if (data.country_code) {
       currency = countryToCurrency[data.country_code]?.code || "EUR";
     }
 
