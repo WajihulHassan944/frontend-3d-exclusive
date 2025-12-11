@@ -39,6 +39,7 @@ function ClientLayoutInner({ children }) {
  const dispatch = useDispatch();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [liveVisitors, setLiveVisitors] = useState(0);
+const [isStickyNav, setIsStickyNav] = useState(false);
 
   const [isComingSoon, setIsComingSoon] = useState(false);
   const [isReady, setIsReady] = useState(false);
@@ -87,19 +88,26 @@ useEffect(() => {
 
         const data = await res.json();
 
-        if (data.success && typeof data.isComingSoon === "boolean") {
-          setIsComingSoon(data.isComingSoon);
-          setIsReady(true);
+       if (data.success) {
+  if (typeof data.isComingSoon === "boolean") {
+    setIsComingSoon(data.isComingSoon);
+  }
 
-         if (
-  data.isComingSoon === true &&
-  !pathname.startsWith("/admin") &&
-  !pathname.startsWith("/blogs")
-) {
-  router.push("/");
+  if (typeof data.isStickyNav === "boolean") {
+    setIsStickyNav(data.isStickyNav);
+  }
+
+  setIsReady(true);
+
+  if (
+    data.isComingSoon === true &&
+    !pathname.startsWith("/admin") &&
+    !pathname.startsWith("/blogs")
+  ) {
+    router.push("/");
+  }
 }
 
-        }
       } catch (err) {
         console.error("Live visitors connect error:", err);
       }
@@ -170,7 +178,7 @@ useEffect(() => {
       )}
 
       {/* Public Navbar */}
-      {!hideClientUI && <Navbar />}
+      {!hideClientUI && <Navbar enableSticky={isStickyNav} />}
 
       {/* Main Content */}
       <main

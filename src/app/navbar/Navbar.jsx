@@ -9,17 +9,35 @@ import { FiShoppingCart } from 'react-icons/fi';
 import { IoMdArrowDropdown } from 'react-icons/io';
 import useLogout from '@/hooks/useLogout';
 
-export default function Navbar() {
+export default function Navbar({ enableSticky = false }) {
   const [open, setOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
   const user = useSelector((state) => state.user);
   const isLoggedIn = useSelector((state) => state.user.isAuthenticated);
   const logout = useLogout();
+const [stickyNav, setStickyNav] = useState(false);
 
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : '';
   }, [open]);
+
+  useEffect(() => {
+  if (!enableSticky) return; 
+
+  const handleScroll = () => {
+    if (window.scrollY > 80) {
+      setStickyNav(true);
+    } else {
+      setStickyNav(false);
+    }
+  };
+
+  window.addEventListener("scroll", handleScroll);
+  return () => window.removeEventListener("scroll", handleScroll);
+}, [enableSticky]);
+
+
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -33,7 +51,9 @@ export default function Navbar() {
   }, []);
 
   return (
-    <header className="nav-wrapper">
+   <header className={`nav-wrapper ${enableSticky && stickyNav ? "sticky-active" : ""}`}>
+
+   
       <nav className="nav" role="navigation" aria-label="Main navigation">
         
         {/* ─── Logo ─────────────────────────────────── */}

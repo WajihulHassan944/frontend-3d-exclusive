@@ -1,7 +1,5 @@
 /* ====== Base layout ====== */
 .nav-wrapper {
-  position: sticky;
-  top: 0;
   z-index: 50;
 
   background: linear-gradient(rgba(0,0,0,0.01), rgba(0,0,0,0.01)); /* background/10 equivalent */
@@ -230,4 +228,33 @@
   .logo img{
   width: 65px;
 }
+}
+
+/* ===== Sticky Navbar ===== */
+.nav-wrapper {
+  position: relative;
+  transition: all 0.35s ease;
+}
+
+.sticky-active {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  backdrop-filter: blur(10px);
+  background: linear-gradient(#03153a, #03153a80);
+  border-bottom: 1px solid #ffffff22;
+  animation: slideDown 0.35s ease forwards;
+  z-index: 999 !important;
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }

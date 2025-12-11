@@ -9,6 +9,20 @@ import { baseUrl } from "@/const";
 
 const Pages = () => {
   const [isComingSoon, setIsComingSoon] = useState(false);
+const [isStickyNav, setIsStickyNav] = useState(false);
+const [actionsOpen, setActionsOpen] = useState(false);
+const actionsRef = React.useRef(null);
+
+useEffect(() => {
+  function handleClickOutside(e) {
+    if (actionsRef.current && !actionsRef.current.contains(e.target)) {
+      setActionsOpen(false);
+    }
+  }
+
+  document.addEventListener("mousedown", handleClickOutside);
+  return () => document.removeEventListener("mousedown", handleClickOutside);
+}, []);
 
   // Fetch initial status
   useEffect(() => {
@@ -17,6 +31,7 @@ const Pages = () => {
         const res = await fetch(`${baseUrl}/pages/coming-soon/status`);
         const data = await res.json();
         setIsComingSoon(data.isComingSoon);
+        setIsStickyNav(data.isStickyNav);
       } catch (err) {
         console.log("Error fetching coming soon status:", err);
       }
@@ -42,6 +57,23 @@ const Pages = () => {
     }
   };
 
+  const toggleStickyNav = async () => {
+  try {
+    const newValue = !isStickyNav;
+
+    await fetch(`${baseUrl}/pages/toggle-sticky-nav`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ isStickyNav: newValue }),
+    });
+
+    setIsStickyNav(newValue);
+  } catch (err) {
+    console.log("Error toggling sticky nav:", err);
+  }
+};
+
+
   return (
     <div className={`pages-container ${GeistSans.className}`}>
       <div className="pages-header">
@@ -50,18 +82,38 @@ const Pages = () => {
           <p>Manage your website pages and content</p>
         </div>
 
-        {/* Toggle Switch */}
-        <div className="pages-comingSoonToggle" onClick={toggleComingSoon}>
-          <label className="comingSoonToggle-label">Maintenance mode</label>
+       {/* Actions Dropdown */}
+<div className="pages-actions" ref={actionsRef}>
+  <button 
+    className="pages-actions-btn"
+    onClick={() => setActionsOpen(!actionsOpen)}
+  >
+    Actions ▾
+  </button>
 
-          <div
-            className={`comingSoonToggle-switch ${
-              isComingSoon ? "active" : "inactive"
-            }`}
-          >
-            <span className="comingSoonToggle-knob"></span>
-          </div>
+  {actionsOpen && (
+    <div className="pages-actions-dropdown">
+
+      {/* Maintenance Mode */}
+      <div className="pages-toggle-row" onClick={toggleComingSoon}>
+        <label>Maintenance Mode</label>
+        <div className={`toggle-switch ${isComingSoon ? "active" : "inactive"}`}>
+          <span className="toggle-knob"></span>
         </div>
+      </div>
+
+      {/* Sticky Navbar */}
+      <div className="pages-toggle-row" onClick={toggleStickyNav}>
+        <label>Sticky Navbar</label>
+        <div className={`toggle-switch ${isStickyNav ? "active" : "inactive"}`}>
+          <span className="toggle-knob"></span>
+        </div>
+      </div>
+
+    </div>
+  )}
+</div>
+
       </div>
 
       <PagesStats />
