@@ -127,159 +127,172 @@ const filteredConversions = conversions.filter((c) => {
         </div>
 
         {/* Table */}
-        <table>
-        <thead>
-  <tr>
-    <th>Flag</th> {/* ✅ new first column */}
-    <th>IP</th> {/* ✅ new second column  it will have ip and country */}
-    <th>Customer</th>
-    <th>File</th>
-    <th>Region</th> {/* ✅ new second column */}
-    
-    <th>Status</th> {/* ✅ moved status to right of File column */}
-    <th>Actions</th>
-  </tr>
-</thead>
+      <table>
+  <thead>
+    <tr>
+      <th>Flag</th>
+      <th>IP</th>
+      <th>Customer</th>
+      <th>File</th>
+      <th>Region</th>
+      <th>Status</th>
+      <th>Dates</th> {/* ✅ New column */}
+      <th>Actions</th>
+    </tr>
+  </thead>
 
-       <tbody>
-  {loading ? (
-    [...Array(2)].map((_, i) => (
-      <tr key={i}>
-        <td>
-          <span className="skeleton-loader" style={{ width: "24px", height: "16px" }} />
-        </td>
-        <td>
-          <span className="skeleton-loader" style={{ width: "100px", height: "14px" }} />
-        </td>
-        <td>
-          <div className="customer">
-            <span className="skeleton-loader" style={{ width: "80px", height: "14px", display: "block", marginBottom: "4px" }} />
-            <span className="skeleton-loader" style={{ width: "120px", height: "12px", display: "block" }} />
-          </div>
-        </td>
-        <td>
-          <span className="skeleton-loader" style={{ width: "100px", height: "14px", display: "block", marginBottom: "4px" }} />
-          <span className="skeleton-loader" style={{ width: "50px", height: "12px", display: "block" }} />
-        </td>
-        <td>
-          <span className="skeleton-loader" style={{ width: "60px", height: "14px" }} />
-        </td>
-        <td>
-          <span className="skeleton-loader" style={{ width: "60px", height: "14px" }} />
-        </td>
-        <td>
-          <span className="skeleton-loader" style={{ width: "50px", height: "16px" }} />
-        </td>
-      </tr>
-    ))
-  ) : filteredConversions.length > 0 ? (
-    filteredConversions.map((c, idx) => (
-      <tr
-        key={c.id}
-        onClick={() =>
-          ["error", "failed"].includes(c.status.toLowerCase())
-            ? setSelectedError(c)
-            : setSelectedError(null)
-        }
-        style={{
-          cursor: ["error", "failed"].includes(c.status.toLowerCase())
-            ? "pointer"
-            : "default",
-        }}
-      >
-        {/* Flag */}
-        <td>
-          {c.clientInfo?.flag?.img ? (
-            <img
-              src={c.clientInfo.flag.img}
-              alt={c.clientInfo.flag.emoji}
-              style={{ width: "24px", height: "16px" }}
-            />
-          ) : "–"}
-        </td>
+  <tbody>
+    {loading ? (
+      [...Array(2)].map((_, i) => (
+        <tr key={i}>
+          <td>
+            <span className="skeleton-loader" style={{ width: "24px", height: "16px" }} />
+          </td>
+          <td>
+            <span className="skeleton-loader" style={{ width: "100px", height: "14px" }} />
+          </td>
+          <td>
+            <div className="customer">
+              <span className="skeleton-loader" style={{ width: "80px", height: "14px", display: "block", marginBottom: "4px" }} />
+              <span className="skeleton-loader" style={{ width: "120px", height: "12px", display: "block" }} />
+            </div>
+          </td>
+          <td>
+            <span className="skeleton-loader" style={{ width: "100px", height: "14px", display: "block", marginBottom: "4px" }} />
+            <span className="skeleton-loader" style={{ width: "50px", height: "12px", display: "block" }} />
+          </td>
+          <td>
+            <span className="skeleton-loader" style={{ width: "60px", height: "14px" }} />
+          </td>
+          <td>
+            <span className="skeleton-loader" style={{ width: "60px", height: "14px" }} />
+          </td>
+          <td>
+            <span className="skeleton-loader" style={{ width: "90px", height: "14px" }} />
+          </td>
+          <td>
+            <span className="skeleton-loader" style={{ width: "50px", height: "16px" }} />
+          </td>
+        </tr>
+      ))
+    ) : filteredConversions.length > 0 ? (
+      filteredConversions.map((c, idx) => (
+        <tr
+          key={c.id}
+          onClick={() =>
+            ["error", "failed"].includes(c.status.toLowerCase())
+              ? setSelectedError(c)
+              : setSelectedError(null)
+          }
+          style={{
+            cursor: ["error", "failed"].includes(c.status.toLowerCase())
+              ? "pointer"
+              : "default",
+          }}
+        >
+          {/* Flag */}
+          <td>
+            {c.clientInfo?.flag?.img ? (
+              <img
+                src={c.clientInfo.flag.img}
+                alt={c.clientInfo.flag.emoji}
+                style={{ width: "24px", height: "16px" }}
+              />
+            ) : "–"}
+          </td>
 
-        {/* IP & Country */}
-     <td>
-  {c.clientInfo?.ip && c.clientInfo?.country ? (
-    <div className="customer">
-      <span className="customer-name">{c.clientInfo.country}</span>
-      <span className="customer-email">{c.clientInfo.ip}</span>
-    </div>
-  ) : (
-    <div className="customer">
-      <span className="customer-name">--</span>
-      <span className="customer-email">--</span>
-    </div>
-  )}
+          {/* IP & Country */}
+          <td>
+            {c.clientInfo?.ip && c.clientInfo?.country ? (
+              <div className="customer">
+                <span className="customer-name">{c.clientInfo.country}</span>
+                <span className="customer-email">{c.clientInfo.ip}</span>
+              </div>
+            ) : (
+              <div className="customer">
+                <span className="customer-name">--</span>
+                <span className="customer-email">--</span>
+              </div>
+            )}
+          </td>
+
+          {/* Customer */}
+          <td>
+            <div className="customer">
+              <span className="customer-name">{c.customer}</span>
+              <span className="customer-email">{c.email}</span>
+            </div>
+          </td>
+
+          {/* File Info */}
+          <td>
+            {c.fileName} <br />
+            <span className="file-size">{c.fileSize || "-"}</span> <br />
+            <small>
+              Type: {c.fileType || "-"} | Resolution: {c.resolution || "-"} | FPS: {c.fps || "-"} | Length: {c.duration || "-"}
+            </small>
+          </td>
+
+          {/* Region */}
+          <td>{c.clientInfo?.region || "–"}</td>
+
+          {/* Status */}
+          <td>
+            <span className={`status ${c.status.toLowerCase()}`}>
+              {c.status === "completed" && <CheckCircle size={14} />}
+              {c.status === "processing" && <RefreshCcw size={14} />}
+              {["queued", "uploaded", "pending"].includes(c.status.toLowerCase()) && <Clock size={14} />}
+              {["error", "failed"].includes(c.status.toLowerCase()) && <AlertCircle size={14} />}
+              {c.status === "pending" && <PauseCircle size={14} />}
+              {c.status}
+            </span>
+          </td>
+
+       {/* Dates Column */}
+<td className="dates-column">
+  <div>
+    <span className="date-label">Uploaded:</span> <span className="date-value">{c.createdAt || "-"}</span>
+  </div>
+  <div>
+    <span className="date-label">Completed:</span> <span className="date-value">{c.completedAt || "-"}</span>
+  </div>
 </td>
 
 
-        {/* Customer */}
-        <td>
-          <div className="customer">
-            <span className="customer-name">{c.customer}</span>
-            <span className="customer-email">{c.email}</span>
-          </div>
-        </td>
-
-        {/* File */}
-        <td>
-          {c.fileName}
-          <br />
-          <span className="file-size">{c.fileSize || "-"}</span>
-        </td>
-
-        {/* Region */}
-        <td>{c.clientInfo?.region || "–"}</td>
-
-        {/* Status */}
-        <td>
-          <span className={`status ${c.status.toLowerCase()}`}>
-            {c.status === "completed" && <CheckCircle size={14} />}
-            {c.status === "processing" && <RefreshCcw size={14} />}
-            {["queued", "uploaded", "pending"].includes(c.status.toLowerCase()) && <Clock size={14} />}
-            {["error", "failed"].includes(c.status.toLowerCase()) && <AlertCircle size={14} />}
-            {c.status === "pending" && <PauseCircle size={14} />}
-            {c.status}
-          </span>
-        </td>
-
-        {/* Actions */}
-        <td className="relative">
-          <MoreHorizontal
-            className="action-menu"
-            size={18}
-            onClick={() => setOpenMenu(openMenu === idx ? null : idx)}
-          />
-          {openMenu === idx && (
-            <div className="dropdown-menu-table">
-              <button
-                className={`btn download ${!c.conversionUrl ? "disabled" : ""}`}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  if (c.conversionUrl) downloadFile(c.conversionUrl, `input-${c.fileName}`);
-                }}
-                disabled={!c.conversionUrl}
-              >
-                <Download size={12} />
-                Download
-              </button>
-            </div>
-          )}
+          {/* Actions */}
+          <td className="relative">
+            <MoreHorizontal
+              className="action-menu"
+              size={18}
+              onClick={() => setOpenMenu(openMenu === idx ? null : idx)}
+            />
+            {openMenu === idx && (
+              <div className="dropdown-menu-table">
+                <button
+                  className={`btn download ${!c.conversionUrl ? "disabled" : ""}`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (c.conversionUrl) downloadFile(c.conversionUrl, `input-${c.fileName}`);
+                  }}
+                  disabled={!c.conversionUrl}
+                >
+                  <Download size={12} />
+                  Download
+                </button>
+              </div>
+            )}
+          </td>
+        </tr>
+      ))
+    ) : (
+      <tr>
+        <td colSpan={8} style={{ textAlign: "center", padding: "20px" }}>
+          No conversions found
         </td>
       </tr>
-    ))
-  ) : (
-    <tr>
-      <td colSpan={7} style={{ textAlign: "center", padding: "20px" }}>
-        No conversions found
-      </td>
-    </tr>
-  )}
-</tbody>
-
-
-        </table>
+    )}
+  </tbody>
+</table>
 
         {/* Error Details */}
         {selectedError && (

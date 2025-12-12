@@ -312,3 +312,20 @@ td {
   from { opacity: 0; transform: translateY(-4px); }
   to { opacity: 1; transform: translateY(0); }
 }
+/* Dates column */
+.dates-column {
+  font-size: 13px;
+  color: #374151; /* main text color */
+  line-height: 1.4;
+}
+
+.dates-column .date-value {
+  font-weight: 500;
+  color: #6b7280; /* lighter label color */
+  margin-right: 4px;
+}
+
+.dates-column .date-label {
+  font-weight: 600;
+  color: #111827; /* stronger value color */
+}
