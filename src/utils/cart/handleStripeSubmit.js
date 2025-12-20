@@ -1,7 +1,6 @@
 import { baseUrl } from '@/const';
 import toast from 'react-hot-toast';
 import { refreshAndDispatchUser } from '@/utils/refreshUser';
-import { useSelector } from 'react-redux';
 
 export const handleStripeSubmit = async ({
   stripe,
@@ -11,12 +10,12 @@ export const handleStripeSubmit = async ({
   setStripeCard,
   setCardSubmitting,
   billingData,
-  isCard, // pass true if card, false for local methods
+  isCard, 
+   ipData
 }) => {
   if (!stripe || !elements) return;
 
   setCardSubmitting(true);
-  const ipData = useSelector((state) => state.geo.data);
  
   try {
     // 🔹 Get country code from ipwho.is if needed

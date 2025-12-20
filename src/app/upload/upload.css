@@ -60,27 +60,7 @@ padding-top: 0;
   line-height: 1.5;
   margin-bottom: 10px;
 }
-@keyframes bounceUpDown {
-  0%, 100% {
-    transform: translateY(0);
-    animation-timing-function: ease-in;
-  }
-  30% {
-    transform: translateY(-12px);
-    animation-timing-function: ease-out;
-  }
-  50% {
-    transform: translateY(0);
-    animation-timing-function: ease-in;
-  }
-  70% {
-    transform: translateY(-6px);
-    animation-timing-function: ease-out;
-  }
-  100% {
-    transform: translateY(0);
-  }
-}
+
 
 .upload-icon {
   font-size: 40px;

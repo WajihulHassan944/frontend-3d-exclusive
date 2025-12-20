@@ -49,6 +49,7 @@ const [isStickyNav, setIsStickyNav] = useState(false);
   const isAdminLogin = pathname === '/admin/login';
   const isAdminRoute = pathname.startsWith('/admin') && !isAdminLogin;
   const isAdminRoot = pathname === '/admin';
+  const isCart = pathname === '/cart';
 
   // Hide navbar/footer when Coming Soon OR admin pages
   const hideClientUI = isComingSoon || isAdminRoute || isAdminLogin;
@@ -164,7 +165,7 @@ useEffect(() => {
       <UserInitializer />
 
       {/* Coupon Banner */}
-      {!hideClientUI && <CouponBanner />}
+      {!hideClientUI && !isCart && <CouponBanner enableSticky={isStickyNav} onClose={() => setIsStickyNav(false)} />}
 
       {/* Admin layout */}
       {isAdminRoute && (
@@ -178,7 +179,9 @@ useEffect(() => {
       )}
 
       {/* Public Navbar */}
-      {!hideClientUI && <Navbar enableSticky={isStickyNav} />}
+    {!hideClientUI && (
+  <Navbar enableSticky={isCart ? false : isStickyNav} />
+)}
 
       {/* Main Content */}
       <main

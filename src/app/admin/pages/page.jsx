@@ -104,7 +104,7 @@ useEffect(() => {
 
       {/* Sticky Navbar */}
       <div className="pages-toggle-row" onClick={toggleStickyNav}>
-        <label>Sticky Navbar</label>
+        <label>Sticky CouponBanner</label>
         <div className={`toggle-switch ${isStickyNav ? "active" : "inactive"}`}>
           <span className="toggle-knob"></span>
         </div>

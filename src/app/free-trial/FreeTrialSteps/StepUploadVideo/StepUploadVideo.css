@@ -1,0 +1,91 @@
+.suv-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 15px 10px 10px;
+}
+
+/* Header Icon */
+.suv-header-icon {
+  color: #4ade80;
+  margin-bottom: 18px;
+}
+
+/* Title */
+.suv-title {
+   font-size: 24px;
+  font-weight: 700;
+  color: #ffffff;
+    margin-bottom: 10px;
+}
+
+/* Subtitle */
+.suv-subtitle {
+  font-size: 16px;
+  color: #9ca3af;
+  margin-bottom: 32px;
+}
+
+/* Dropzone */
+.suv-dropzone {
+  width: 100%;
+  max-width: 720px;
+  min-height: 360px;
+  border-radius: 12px;
+  border: 2px dashed #fa89384d;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+/* Upload Icon */
+.suv-upload-icon {
+  width: 70px;
+  height: 70px;
+  border-radius: 14px;
+  background-color: #fa89381a;
+  display: flex;
+  align-items: center;
+  color: #ff8c2f;
+  border: 1px solid #fa893833;
+  animation: bounceUpDown 1.2s infinite;
+
+  justify-content: center;
+  margin-bottom: 38px;
+}
+
+/* Dropzone Text */
+.suv-dropzone h3 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 10px;
+}
+
+.suv-dropzone p {
+  font-size: 15px;
+  color: #94a3b8;
+  margin-bottom: 26px;
+}
+
+/* Button */
+.suv-choose-btn {
+  height: 42px;
+  padding: 0 22px;
+  border-radius: 6px;
+  background: transparent;
+  color: #ffffff;
+  border: 1px solid #122549;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'Inter';
+}
+
+/* Hide file input */
+.suv-file-input {
+  display: none;
+}

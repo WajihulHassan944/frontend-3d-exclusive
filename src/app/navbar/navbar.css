@@ -1,10 +1,13 @@
 /* ====== Base layout ====== */
 .nav-wrapper {
-  z-index: 50;
+  z-index: 99999999;
 
   background: linear-gradient(rgba(0,0,0,0.01), rgba(0,0,0,0.01)); /* background/10 equivalent */
 
   border-bottom: 1px solid #ffffff1a; /* border-white/10 */
+ backdrop-filter: blur(4px);
+  background: #03153a1a;
+ 
 }
 
 
@@ -257,4 +260,8 @@
     transform: translateY(0);
     opacity: 1;
   }
+}
+.add-top-margin-nav{
+  margin-top: 80.5px;
+  
 }

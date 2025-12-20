@@ -1,0 +1,257 @@
+.select-ten-wrapper {
+  max-width: 860px;
+  margin: auto;
+  color: #ffffff;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* ================= HEADER ================= */
+
+.select-ten-header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.clock-circle {
+   color: #4ade80;
+  margin-bottom: 18px;
+
+}
+
+.select-ten-header h2 {
+   font-size: 24px;
+  font-weight: 700;
+  color: #ffffff;
+    margin-bottom: 10px;
+}
+
+.select-ten-header p {
+   font-size: 16px;
+  color: #9ca3af;
+  margin-bottom: 32px;
+}
+
+/* ================= VIDEO CARD ================= */
+
+.video-card {
+  position: relative;
+  border-radius: 14px;
+  overflow: hidden;
+  margin-bottom: 30px;
+}
+
+.video-preview {
+  width: 100%;
+  height: 340px;
+  object-fit: cover;
+  background: #000;
+}
+
+.play-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0000004d;
+  cursor: pointer;
+}
+
+.play-circle {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  color: #ffffff;
+}
+
+.video-info {
+  position: absolute;
+  bottom: 17px;
+  left: 16px;
+  right: 16px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+}
+
+.free-badge {
+  color: #35e37a;
+  font-weight: 600;
+}
+
+/* ================= SLIDER ================= */
+
+.slider-wrap {
+  margin-top: 22px;
+}
+
+.slider-track {
+  position: relative;
+  height: 32px;
+  background: hsl(224, 22%, 30%);
+  border-radius: 6px;
+}
+
+.slider-selected {
+  position: absolute;
+  left: 30%;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(90deg, #35e37a,#35e37a);
+  opacity: 0.5;
+}
+
+/* MATCHING DESIGN HANDLES */
+.slider-handle {
+  position: absolute;
+  width: 0px;
+  height: 30px;
+  background: #35e37a;
+  border-radius: 10px;
+}
+
+.slider-handle.left {
+  left: calc(30% - 6px);
+}
+
+.slider-handle.right {
+  left: calc(70% - 6px);
+}
+
+/* STRAIGHT LINE META */
+.slider-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 40px;
+  font-size: 13px;
+  color: #8e98b3;
+}
+
+.slider-hint {
+  color: #35e37a;
+  white-space: nowrap;
+}
+
+/* ================= FOOTER ================= */
+
+.footer-row {
+  margin-top: 22px;
+}
+
+.choose-btn {
+  background: none;
+  border: none;
+  color: #9aa4c2;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 0;
+  font-family: 'Inter';
+}
+
+/* ================= CONVERT BUTTON ================= */
+
+.convert-btn {
+  width: 100%;
+  font-size: 1.1rem;
+  line-height: 1.75rem;
+  font-weight: 700;
+  color: #fff;
+  border: none;
+  outline: none;
+  padding: 10px 40px;
+  background-image: linear-gradient(to right, #22c55e, #10b981, #14b8a6);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+margin-top: 18px;
+display: flex;
+justify-content: center;
+align-items: center;
+gap: 10px;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 640px) {
+  .video-preview {
+    height: 240px;
+  }
+
+  .slider-hint {
+    font-size: 12px;
+  }
+
+  .select-ten-wrapper {
+    padding: 32px 18px;
+  }
+}
+/* HANDLE PILL */
+.slider-handle {
+  position: absolute;
+  top: 0;
+  width: 15px;
+  height: 100%;
+  background: #35e37a;
+  border-radius: 999px;
+  cursor:e-resize;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* TOP & BOTTOM LINES (OUTSIDE GRIP) */
+.slider-handle > span {
+  position: absolute;
+  width: 4.3px;
+  height: 14px;
+  background: #2fdc73; /* solid green */
+  border-radius: 3px;
+}
+
+.slider-handle > span:first-child {
+  top: -12px;
+}
+
+.slider-handle > span:last-child {
+  bottom: -12px;
+}
+
+/* CENTER GRIP (3 DASHES IN COLUMN) */
+.slider-handle .grip {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.slider-handle .grip span {
+  width: 2px;
+  height: 4.5px;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 2px;
+}
+
+/* POSITIONS */
+.slider-handle.left {
+  left: calc(30% - 7px);
+}
+
+.slider-handle.right {
+  left: calc(70% - 7px);
+}
+.slider-playhead {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: white;
+  pointer-events: none;
+  z-index: 5;
+}

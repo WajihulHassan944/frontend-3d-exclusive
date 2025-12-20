@@ -14,6 +14,7 @@ import { baseUrl } from "@/const";
 import ComingSoon from "./coming-soon/ComingSoon";
 import { useSelector } from "react-redux";
 import { usePathname } from "next/navigation";
+import PrivacyProtection from "./upload/PrivacyProtection/PrivacyProtection";
 
 export default function Page() {
   const [sections, setSections] = useState([]);
@@ -84,6 +85,7 @@ useEffect(() => {
           <Whycloud sectionData={getSection("why-convert")} />
           <ImmersiveThreeD sectionData={getSection("experience-3d")} />
           <HowItWorks sectionData={getSection("how-it-works")} />
+          <PrivacyProtection sectionData={getSection("privacy-protection")} />
           <Whatexpect sectionData={getSection("expectations")} />
           <CustomerTestimonials sectionData={getSection("testimonials")} />
           <PricingSectionInPricing />

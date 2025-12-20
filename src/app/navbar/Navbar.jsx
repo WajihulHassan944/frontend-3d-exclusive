@@ -16,27 +16,6 @@ export default function Navbar({ enableSticky = false }) {
   const user = useSelector((state) => state.user);
   const isLoggedIn = useSelector((state) => state.user.isAuthenticated);
   const logout = useLogout();
-const [stickyNav, setStickyNav] = useState(false);
-
-  useEffect(() => {
-    document.body.style.overflow = open ? 'hidden' : '';
-  }, [open]);
-
-  useEffect(() => {
-  if (!enableSticky) return; 
-
-  const handleScroll = () => {
-    if (window.scrollY > 80) {
-      setStickyNav(true);
-    } else {
-      setStickyNav(false);
-    }
-  };
-
-  window.addEventListener("scroll", handleScroll);
-  return () => window.removeEventListener("scroll", handleScroll);
-}, [enableSticky]);
-
 
 
   // Close dropdown on outside click
@@ -51,7 +30,7 @@ const [stickyNav, setStickyNav] = useState(false);
   }, []);
 
   return (
-   <header className={`nav-wrapper ${enableSticky && stickyNav ? "sticky-active" : ""}`}>
+   <header className={`nav-wrapper ${enableSticky ? "add-top-margin-nav" : ""}`}>
 
    
       <nav className="nav" role="navigation" aria-label="Main navigation">

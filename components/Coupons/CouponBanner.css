@@ -3,13 +3,24 @@
   align-items: center;
   justify-content: center;
   gap: 10px;
-  background-image: linear-gradient(to right,rgb(30 58 138 / .8) , rgb(30 64 175 / .8));
-
+  background-image: linear-gradient(
+    to right,
+    rgb(30 58 138 / 0.8),
+    rgb(30 64 175 / 0.8)
+  );
   color: #fff;
   padding: 10px 16px;
   padding-right: 60px;
   font-size: 14px;
+
   position: relative;
+  overflow: hidden;
+
+  transform: translateY(0);
+  transition: transform 0.35s ease;
+  will-change: transform;
+
+  
 }
 
 
@@ -98,10 +109,6 @@
     font-size: 16px;
   }
 }
-.coupon-banner {
-  position: relative;
-  overflow: hidden;
-}
 
 .coupon-slide {
   animation: slideInUp 1s ease forwards;
@@ -120,3 +127,19 @@
     opacity: 1;
   }
 }
+
+
+
+.sticky-active {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  /* backdrop-filter: blur(10px);
+  background: linear-gradient(#03153a, #03153a80);
+  border-bottom: 1px solid #ffffff22; */
+  z-index: 999 !important;
+}
+
+
+

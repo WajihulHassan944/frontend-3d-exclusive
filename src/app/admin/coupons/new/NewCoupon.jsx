@@ -90,10 +90,10 @@ const NewCoupon = () => {
       toast.error("Please enter minimum cart items required.");
       return;
     }
-     if (!formData.individualUse && !formData.userEmail) {
-      toast.error("Please enter a user email when Show in homepage is disabled.");
-      return;
-    }
+    //  if (!formData.individualUse && !formData.userEmail) {
+    //   toast.error("Please enter a user email when Show in homepage is disabled.");
+    //   return;
+    // }
       // Map frontend formData → backend payload
       const payload = {
   code: formData.code,

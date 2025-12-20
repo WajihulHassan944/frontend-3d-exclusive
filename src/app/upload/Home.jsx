@@ -83,8 +83,17 @@ const handleFileChange = async (e) => {
     const durationMinutes = Math.ceil(duration / 60);
 
     // Pricing logic
-    let costPerMinute = 1;
-    if (height >= 2160 && height < 4320) costPerMinute = 6;
+let costPerMinute = 1; // default 1080p
+if (height >= 4320) {
+  costPerMinute = 6; // 8K
+} else if (height >= 2160) {
+  costPerMinute = 3; // 4K UHD
+} else if (height >= 1440) {
+  costPerMinute = 2; // 2.7K
+} else {
+  costPerMinute = 1; // 1080p
+}
+
     const cost = durationMinutes * costPerMinute;
 
     const hasFreeMinute =
@@ -165,10 +174,18 @@ const handleUpload = async () => {
     const quality = `${height}p`;
     const durationMinutes = Math.ceil(duration / 60);
 
-    let costPerMinute = 1;
-    if (height >= 2160 && height < 4320) {
-      costPerMinute = 6;
-    }
+   // Pricing logic
+let costPerMinute = 1; // default 1080p
+if (height >= 4320) {
+  costPerMinute = 6; // 8K
+} else if (height >= 2160) {
+  costPerMinute = 3; // 4K UHD
+} else if (height >= 1440) {
+  costPerMinute = 2; // 2.7K
+} else {
+  costPerMinute = 1; // 1080p
+}
+
     const cost = durationMinutes * costPerMinute;
 
     const balance = user?.wallet?.balance || 0;
@@ -366,8 +383,18 @@ const handleUpload = async () => {
       const durationMinutes = Math.ceil(duration / 60);
 
       // Pricing logic
-      let costPerMinute = 1;
-      if (height >= 2160 && height < 4320) costPerMinute = 6;
+     // Pricing logic
+let costPerMinute = 1; // default 1080p
+if (height >= 4320) {
+  costPerMinute = 6; // 8K
+} else if (height >= 2160) {
+  costPerMinute = 3; // 4K UHD
+} else if (height >= 1440) {
+  costPerMinute = 2; // 2.7K
+} else {
+  costPerMinute = 1; // 1080p
+}
+
       const cost = durationMinutes * costPerMinute;
 
       const hasFreeMinute =
@@ -431,7 +458,7 @@ const handleUpload = async () => {
       <video src={videoPreview} controls width="100%" />
     </div>
   )}
- {/* {showVideoNote && videoMeta && isLoggedIn && (
+ {showVideoNote && videoMeta && isLoggedIn && (
   <div ref={videoNoteRef} className="video-meta-card">
     {videoMeta.error ? (
       <p>⚠️ {videoMeta.error}</p>
@@ -457,7 +484,7 @@ const handleUpload = async () => {
       </>
     )}
   </div>
-)} */}
+)}
 
 
 

@@ -4,6 +4,13 @@ import React, { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import './home.css';
 import { useRouter } from 'next/navigation';
+import {
+  Gift,
+  Lock,
+  Trash2,
+  Eye,
+  ShieldCheck,
+} from "lucide-react";
 
 const HeroSection = ({ sectionData }) => {
   const ref = useRef(null);
@@ -68,12 +75,35 @@ const HeroSection = ({ sectionData }) => {
         />
       </div>
 
-      <button
-        className="start-converting-btn"
-        onClick={() => router.push('/upload')}
-      >
-        Start 3D converting Now
-      </button>
+     <div className="hero-cta">
+  <div className="hero-buttons">
+    <button
+      className="try-free-btn"
+      onClick={() => router.push("/free-trial")}
+    >
+      🎁 Try 10 Sec Free
+    </button>
+
+    <button
+      className="start-converting-btn"
+      onClick={() => router.push("/upload")}
+    >
+      Start Converting
+    </button>
+  </div>
+
+  <p className="hero-subtext">
+    Try 10 seconds free • No account needed • Join 3,000+ creators
+  </p>
+
+  <div className="hero-trust">
+    <span><Lock size={16} className='hero-trust-icon' /> Secure HTTPS upload</span>
+    <span><Trash2 size={16} className='hero-trust-icon' /> Available for 7 days, then permanently erased</span>
+    <span><Eye size={16} className='hero-trust-icon' /> Only you can access</span>
+    <span><ShieldCheck size={16} className='hero-trust-icon' /> Never shared or sold</span>
+  </div>
+</div>
+
     </section>
   );
 };

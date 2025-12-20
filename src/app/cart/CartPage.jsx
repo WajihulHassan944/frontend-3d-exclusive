@@ -34,6 +34,7 @@ const CartPage = () => {
 const currency = useCurrencyByUserCountry(); // ✅ get currency
 const currencySymbol = currency.symbol;
   const user = useSelector((state) => state.user);
+     const { data: geoData } = useSelector((state) => state.geo);
   const dispatch = useDispatch();
   const router = useRouter();
     const [clientSecret, setClientSecret] = useState('');
@@ -200,7 +201,7 @@ const fetchClientSecret = async () => {
   try {
     setLoadingPaymentIntent(true); // start spinner
 
-   const { data: geoData } = useSelector((state) => state.geo);
+
 const userCountry = geoData?.country_code || 'NL';
 
     const res = await fetch(`${baseUrl}/wallet/create-payment-intent-all-methods`, {
@@ -377,12 +378,12 @@ const handleCouponValidate = (coupon) => {
       value={billingData.postalCode}
       onChange={(e) => setBillingData({ ...billingData, postalCode: e.target.value })}
     />
-    {/* <input
+    <input
       type="text"
       placeholder="City"
       value={billingData.city}
       onChange={(e) => setBillingData({ ...billingData, city: e.target.value })}
-    /> */}
+    />
 <Select
   options={countryOptions}
   value={countryOptions.find((opt) => opt.label === billingData.country)}
@@ -448,32 +449,53 @@ const handleCouponValidate = (coupon) => {
 
 {credits.length > 0 && (
   <>
-    <div className="final-price-box">
-      <p className="subtotal-line">
-  <span className='colored'>Subtotal:</span>  {currencySymbol} {credits.reduce((sum, c) => sum + c.amount, 0).toFixed(2)}
-</p>
-{vatPercent !== null && (
-  <p className="vat-total-line">
-    Total incl. <span>VAT ({vatPercent}%):</span>{" "}
+<div className="final-price-box">
+  {/* Subtotal */}
+  <p className="subtotal-line">
+    <span className="colored">Subtotal:</span>
+
     {Number(localStorage.getItem("discountAmount") || 0) > 0 ? (
       <>
         <span className="old-price">
-          {currencySymbol} {(priceBeforeDiscount * (1 + vatPercent / 100)).toFixed(2)}
-        </span>{" "}
+          {currencySymbol} {priceBeforeDiscount.toFixed(2)}
+        </span>
         <span className="discounted-price">
-          {currencySymbol} {finalPrice.toFixed(2)}
+          {currencySymbol} {(priceBeforeDiscount - Number(localStorage.getItem("discountAmount"))).toFixed(2)}
         </span>
       </>
     ) : (
       <span>
-        {currencySymbol} {finalPrice.toFixed(2)}
+        {currencySymbol} {priceBeforeDiscount.toFixed(2)}
       </span>
     )}
   </p>
-)}
 
+  {/* Total incl. VAT */}
+  {vatPercent !== null && (
+    <p className="vat-total-line">
+      Total incl. <span>VAT ({vatPercent}%):</span>
 
-    </div>
+      {Number(localStorage.getItem("discountAmount") || 0) > 0 ? (
+        <>
+          {/* striked price = discounted subtotal */}
+          <span className="old-price">
+            {currencySymbol} {(priceBeforeDiscount - Number(localStorage.getItem("discountAmount"))).toFixed(2)}
+          </span>
+
+          {/* final price = discounted subtotal + VAT */}
+          <span className="discounted-price">
+            {currencySymbol} {finalPrice.toFixed(2)}
+          </span>
+        </>
+      ) : (
+        <span>
+          {currencySymbol} {finalPrice.toFixed(2)}
+        </span>
+      )}
+    </p>
+  )}
+</div>
+
   </>
 )}
 

@@ -12,6 +12,8 @@ countries.registerLocale(enLocale);
 
 export default function ShoppingCart({ billingData, setPage, selectedPaymentMethod, setSelectedPaymentMethod }) {
   const user = useSelector((state) => state.user);
+   const ipData = useSelector((state) => state.geo.data);
+
   const dispatch = useDispatch();
   const stripe = useStripe();
   const elements = useElements();
@@ -117,7 +119,8 @@ export default function ShoppingCart({ billingData, setPage, selectedPaymentMeth
                 setStripeCard,
                 setCardSubmitting,
                 billingData,
-                isCard: selectedPaymentMethod === 'card'
+                isCard: selectedPaymentMethod === 'card',
+                ipData
               })
             }
             disabled={cardSubmitting}

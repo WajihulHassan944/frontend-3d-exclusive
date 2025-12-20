@@ -81,7 +81,7 @@ const vrImage = media?.find(m => m.identifier === "Experience-3D-Magic-Vr");
     height:
       whaleImage?.transformations?.resizeHeight ||
       whaleImage?.transformations?.cropHeight ||
-      "500px",
+      "550px",
 
     objectFit: "cover",
   }}
@@ -122,15 +122,20 @@ const vrImage = media?.find(m => m.identifier === "Experience-3D-Magic-Vr");
               />
               <p>{sectionData.subSection.description}</p>
 
-              <div className="vr-cards">
-                {sectionData.subSection.cards?.map((card) => (
-                  <div className="vr-card" key={card._id}>
-                    <strong>{card.title}</strong>
-                    {card.description && <p>{card.description}</p>}
-                    {card.subDescription && <a href="#">{card.subDescription}</a>}
-                  </div>
-                ))}
-              </div>
+              {sectionData.subSection.cards?.some(card => card.description) && (
+  <div className="vr-cards">
+    {sectionData.subSection.cards.map((card) =>
+      card.description ? (
+        <div className="vr-card" key={card._id}>
+          <strong>{card.title}</strong>
+          <p>{card.description}</p>
+          {card.subDescription && <a href="#">{card.subDescription}</a>}
+        </div>
+      ) : null
+    )}
+  </div>
+)}
+
 
               <p className="vr-note">{sectionData.subSection.subDescription}</p>
             </div>

@@ -3,11 +3,12 @@ import "./CouponBanner.css";
 import { Copy, X, Check } from "lucide-react";
 import { baseUrl } from "@/const";
 
-const CouponBanner = () => {
+const CouponBanner = ({ enableSticky = false, onClose }) => {
   const [visible, setVisible] = useState(true);
   const [copiedId, setCopiedId] = useState(null);
   const [coupons, setCoupons] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+
 
   // Fetch coupons
   useEffect(() => {
@@ -48,7 +49,9 @@ const CouponBanner = () => {
   const currentCoupon = coupons[currentIndex];
 
   return (
-    <div className="coupon-banner">
+    
+    <div className={`coupon-banner ${enableSticky  ? "sticky-active" : ""}`}>
+    
       <div
         key={currentCoupon._id} // 👈 important for re-mounting animation
         className="coupon-slide"
@@ -71,7 +74,10 @@ const CouponBanner = () => {
           </span>
         </div>
       </div>
-      <X size={16} className="close-icon" onClick={() => setVisible(false)} />
+      <X size={16} className="close-icon"  onClick={() => {
+          setVisible(false);
+          onClose?.();
+        }} />
     </div>
   );
 };

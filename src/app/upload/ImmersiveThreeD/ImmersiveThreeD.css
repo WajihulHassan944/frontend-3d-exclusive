@@ -53,7 +53,7 @@ color: #fff;
 
 /* Image itself */
 .immersive-image {
-  width: 100%;
+  width: 100% !important;
   border-radius: 10px;
   transition: transform 0.2s ease-out, filter 0.3s ease;
   filter: blur(2px);
@@ -135,6 +135,7 @@ color: #fff;
   font-size: 0.9rem;
   color: #d1d5db;
   margin-top: 4px;
+
 }
 
 /* Caption */
@@ -144,6 +145,7 @@ color: #fff;
   font-size: 16px;
   max-width: 850px;
   line-height: 1.6;
+  margin-bottom: 70px;
 }
 
 /* VR Section */
@@ -192,9 +194,10 @@ font-size: 1.5rem;
 }
 
 .vr-text p {
-  margin-bottom: 1.5rem;
+  margin-top: 15px;
+  margin-bottom: 1.7rem;
   color: #ababba;
-  font-size: 1.125rem;
+  font-size: 1.11rem;
     line-height: 1.75rem;
 }
 
