@@ -13,7 +13,7 @@ const AddBilling = () => {
     useEffect(() => {
     const fetchClientSecret = async () => {
       const res = await fetch(`${baseUrl}/wallet/create-setup-intent`, {
-        method: 'POST',
+        method: 'GET',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include', // if using cookies/auth
       });

@@ -97,10 +97,9 @@ const TransactionsHistory = () => {
 
       <div className='specialinvoicewrapper'>
       {selectedInvoice && (
-        <div>
-          <div className="invoice-preview" ref={invoiceRef}>
+        <div className="invoice-preview thankpageinvoice" ref={invoiceRef}>
             <div className="invoice-top-border" />
-            <div className='spaced-div'>
+            <div className="spaced-div">
               <div className="invoice-logo">XCLUSIVE 3D</div>
               <img src="/logoMain.png" alt="logo" className="invoice-logo-img" />
             </div>
@@ -110,15 +109,14 @@ const TransactionsHistory = () => {
                 <div className="invoice-title">INVOICE</div>
                 <div className="invoice-contact">
                   <div>info@Xclusive3d.com</div>
-                 <div className="blueColored">
+             <div className="blueColored">
   VAT number:{" "}<br />
   <strong>
-    {selectedInvoice.billingInfo.vatNumber
-      ? selectedInvoice.billingInfo.vatNumber
-      : "Not provided"}
+    NL002166652B18
   </strong>
 </div>
 <div className="lightBlueColored">CoC: 34270611</div>
+<div className="lightBlueColored">The Netherlands</div>
 
                 </div>
               </div>
@@ -126,17 +124,25 @@ const TransactionsHistory = () => {
               <div className="invoice-info-right">
                 <div className="billing-block">
                   <div>{selectedInvoice.billingInfo.name}</div>
-                  {selectedInvoice.billingInfo.companyName && (
-                    <div>{selectedInvoice.billingInfo.companyName}</div>
-                  )}
+                  <div>{selectedInvoice.billingInfo.companyName}</div>
                   <div>
-                    {selectedInvoice.billingInfo.street},{" "}
+                    {selectedInvoice.billingInfo.street}<br />
                     {selectedInvoice.billingInfo.postalCode}{" "}
-                    {selectedInvoice.billingInfo.city},{" "}
-                    {selectedInvoice.billingInfo.countryName}
+                    {selectedInvoice.billingInfo.city}{" "}<br />
+                    The {selectedInvoice.billingInfo.countryName}
                   </div>
 
                   <div className="invoice-meta">
+                   
+                
+                    <div className="meta-row">
+                      <div className="meta-label">VAT Number:</div>
+                      <div className="meta-value">
+                       {selectedInvoice.billingInfo.vatNumber
+      ? selectedInvoice.billingInfo.vatNumber
+      : "Not provided"}
+                      </div>
+                    </div>
                     <div className="meta-row">
                       <div className="meta-label">Date:</div>
                       <div className="meta-value">
@@ -149,43 +155,66 @@ const TransactionsHistory = () => {
                     </div>
                   </div>
 
-                  <table className="invoice-table">
-                    <thead>
-                      <tr>
-                        <th>Description</th>
-                        <th>Quantity</th>
-                        <th>Cost</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {groupCredits(selectedInvoice.credits).map((c, idx) => (
-                        <tr key={idx}>
-                          <td>{c.credits} Credits for 3d conversion</td>
-                          <td>{c.quantity}</td>
-                          <td>{selectedInvoice.currency} {c.amount.toFixed(2).replace('.', ',')}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                <table className="invoice-table">
+  <thead>
+    <tr>
+      <th>Description</th>
+      <th>Quantity</th>
+      <th>Cost</th>
+    </tr>
+  </thead>
+  <tbody>
+    {groupCredits(selectedInvoice.credits).map((c, idx) => (
+      <tr key={idx}>
+        <td>{c.credits} Credits for 3d conversion</td>
+        <td>{c.quantity}</td>
+        <td>{selectedInvoice.currency} {c.amount.toFixed(2).replace('.', ',')}</td>
+      </tr>
+    ))}
 
-                  <table className="invoice-summary">
-                    <tbody>
-                      <tr>
-                        <td>Subtotal</td>
-                        <td>{selectedInvoice.currency} {selectedInvoice.amount.toFixed(2).replace('.', ',')}</td>
-                      </tr>
-                      <tr>
-                        <td>VAT</td>
-                        <td>{selectedInvoice.currency} {selectedInvoice.vat.toFixed(2).replace('.', ',')}</td>
-                      </tr>
-                      <tr className="total">
-                        <td>Total</td>
-                        <td>{selectedInvoice.currency} {selectedInvoice.total.toFixed(2).replace('.', ',')}</td>
-                      </tr>
-                    </tbody>
-                  </table>
+    {/* Empty spacing rows */}
+    <tr style={{borderBottom:'2px solid #000'}}>
+      <td  style={{ height: "45px" }}></td>
+       <td  style={{ height: "45px" }}></td>
+        <td  style={{ height: "45px" }}></td>
+    </tr>
+    
+    {/* Subtotal */}
+    <tr>
+      <td></td>
+      <td> </td>
+      <td>{selectedInvoice.currency} {selectedInvoice.amount.toFixed(2).replace('.', ',')}</td>
+    </tr>
+{selectedInvoice.discountAmount > 0 && (
+  <tr>
+    <td></td>
+    <td>Discount ({selectedInvoice.couponCode || ""})</td>
+    <td>
+      -{selectedInvoice.currency}{" "}
+      {selectedInvoice.discountAmount.toFixed(2).replace(".", ",")}
+    </td>
+  </tr>
+)}
+    {/* VAT Row */}
+    {(selectedInvoice.vat > 0 || selectedInvoice.vatRate > 0) && (
+      <tr>
+        <td></td>
+        <td>VAT</td>
+        <td>{selectedInvoice.currency} {selectedInvoice.vat.toFixed(2).replace('.', ',')}</td>
+      </tr>
+    )}
+
+    {/* Total */}
+    <tr className="total" style={{borderBottom:'2px solid #000'}}>
+      <td></td>
+      <td></td>
+      <td>{selectedInvoice.currency} {selectedInvoice.total.toFixed(2).replace('.', ',')}</td>
+    </tr>
+  </tbody>
+</table>
 
                   <div className="invoice-footer">
+                    {selectedInvoice.vatNote != "" ? "VAT Reversed" : ""} <br />
                     Payment method: {selectedInvoice.method} <br />
                     Credits are valid for 1 year (365 days) <br />
                     Thank you for your order and enjoy our immersive 3D conversion.
@@ -193,9 +222,7 @@ const TransactionsHistory = () => {
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      )}</div>
+          </div>      )}</div>
     </div>
   );
 };
