@@ -36,6 +36,9 @@
 
 @media(max-width:768px){
   
+.video-container{
+  max-height: 300px;
+}
 .video-container iframe {
   height: 200px;
   }

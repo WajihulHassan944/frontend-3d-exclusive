@@ -1,18 +1,55 @@
-'use client';
+"use client";
 
 import React, { useState, useRef, useEffect } from "react";
+import { motion } from "framer-motion";
 import "./HowItWorks.css";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchWebsiteMedia } from "@/redux/features/websiteMedia";
 import TransformedImage from "@/utils/TransformedImage";
+const textVariants = {
+  hidden: {
+    opacity: 0,
+    y: 50,
+    scale: 0.96,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.6,
+      ease: "easeOut",
+    },
+  },
+};
+
+const imageVariants = {
+  hidden: {
+    opacity: 0,
+    y: 50,
+    scale: 0.96,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.6,
+      delay: 0.7, // ⏱️ 1 second after text
+      ease: "easeOut",
+    },
+  },
+};
+
 
 const HowItWorks = ({ sectionData }) => {
-const dispatch = useDispatch();
-const { media } = useSelector(state => state.websiteMedia);
+  const dispatch = useDispatch();
+  const { media } = useSelector(state => state.websiteMedia);
+
   useEffect(() => {
     dispatch(fetchWebsiteMedia());
   }, [dispatch]);
-  
+
   const [dividerPos, setDividerPos] = useState(50);
   const sliderRef = useRef(null);
   const isDragging = useRef(false);
@@ -24,7 +61,7 @@ const { media } = useSelector(state => state.websiteMedia);
     if (!isDragging.current || !sliderRef.current) return;
 
     const rect = sliderRef.current.getBoundingClientRect();
-    const clientX = e.clientX ?? e.touches?.[0]?.clientX; // support touch
+    const clientX = e.clientX ?? e.touches?.[0]?.clientX;
     if (clientX === undefined) return;
 
     const x = ((clientX - rect.left) / rect.width) * 100;
@@ -48,10 +85,9 @@ const { media } = useSelector(state => state.websiteMedia);
   if (!sectionData) return null;
 
   const steps = sectionData.subSection?.cards || [];
-const step1Img = media?.find(m => m.identifier === "how-it-works-first-img");
-const step2Original = media?.find(m => m.identifier === "how-it-works-first-img");
-const step2Overlay = media?.find(m => m.identifier === "how-it-works-second-img");
-const step3Img = media?.find(m => m.identifier === "how-it-works-third-img");
+  const step1Img = media?.find(m => m.identifier === "how-it-works-first-img");
+  const step2Overlay = media?.find(m => m.identifier === "how-it-works-second-img");
+  const step3Img = media?.find(m => m.identifier === "how-it-works-third-img");
 
   return (
     <div className="howItWorksWrapper">
@@ -66,76 +102,107 @@ const step3Img = media?.find(m => m.identifier === "how-it-works-third-img");
       />
 
       {/* Step 1 */}
-      {steps[0] && (
-        <div className="howItWorks-content">
-          <div className="howItWorks-text">
-            <h1 className="step-number">1</h1>
-            <h3 className="step-title">{steps[0].title}</h3>
-            <p className="step-description">{steps[0].description}</p>
-          </div>
-          <div className="howItWorks-image">
-             <TransformedImage image={step1Img} />
-          </div>
-        </div>
-      )}
-
-      {/* Step 2 - Comparison Slider */}
-      {steps[1] && (
-        <div className="howItWorks-content">
-          <div className="howItWorks-image">
-            <div className="comparison-container" ref={sliderRef}>
-  {/* Background Image */}
-  <img
-    src={step2Overlay?.url}
-    alt="Original"
-    className="comparison-img"
-  />
-
-  {/* Overlay Image (static, clipped) */}
-  <img
-    src={step1Img?.url}
-    alt="Depth Map"
-    className="comparison-img overlay-img"
-    style={{ clipPath: `inset(0 ${100 - dividerPos}% 0 0)` }}
-  />
-
-  {/* Divider / Handle */}
-  <div
-    className="comparison-handle"
-    style={{ left: `${dividerPos}%` }}
-    onMouseDown={startDrag}
-    onTouchStart={startDrag}
+     {steps[0] && (
+  <motion.div
+    className="howItWorks-content"
+    initial="hidden"
+    whileInView="visible"
+    viewport={{ once: true, margin: "-100px" }}
   >
-    <div className="pause-icon"></div>
-  </div>
+    <motion.div
+      className="howItWorks-text"
+      variants={textVariants}
+    >
+      <h1 className="step-number">1</h1>
+      <h3 className="step-title">{steps[0].title}</h3>
+      <p className="step-description">{steps[0].description}</p>
+    </motion.div>
 
-  {/* Labels */}
-  <span className="label label-left">Original</span>
-  <span className="label label-right">Depth Map</span>
-</div>
+    <motion.div
+      className="howItWorks-image"
+      variants={imageVariants}
+    >
+      <TransformedImage image={step1Img} />
+    </motion.div>
+  </motion.div>
+)}
 
-          </div>
-          <div className="howItWorks-text">
-            <h1 className="step-number">2</h1>
-            <h3 className="step-title">{steps[1].title}</h3>
-            <p className="step-description">{steps[1].description}</p>
-          </div>
+      {/* Step 2 */}
+{steps[1] && (
+  <motion.div
+    className="howItWorks-content"
+    initial="hidden"
+    whileInView="visible"
+    viewport={{ once: true, margin: "-100px" }}
+  >
+    <motion.div
+      className="howItWorks-image"
+      variants={imageVariants}
+    >
+      <div className="comparison-container" ref={sliderRef}>
+        <img
+          src={step2Overlay?.url}
+          alt="Original"
+          className="comparison-img"
+        />
+
+        <img
+          src={step1Img?.url}
+          alt="Depth Map"
+          className="comparison-img overlay-img"
+          style={{ clipPath: `inset(0 ${100 - dividerPos}% 0 0)` }}
+        />
+
+        <div
+          className="comparison-handle"
+          style={{ left: `${dividerPos}%` }}
+          onMouseDown={startDrag}
+          onTouchStart={startDrag}
+        >
+          <div className="pause-icon" />
         </div>
-      )}
+
+        <span className="label label-left">Original</span>
+        <span className="label label-right">Depth Map</span>
+      </div>
+    </motion.div>
+
+    <motion.div
+      className="howItWorks-text"
+      variants={textVariants}
+    >
+      <h1 className="step-number">2</h1>
+      <h3 className="step-title">{steps[1].title}</h3>
+      <p className="step-description">{steps[1].description}</p>
+    </motion.div>
+  </motion.div>
+)}
 
       {/* Step 3 */}
-      {steps[2] && (
-        <div className="howItWorks-content">
-          <div className="howItWorks-text">
-            <h1 className="step-number">3</h1>
-            <h3 className="step-title">{steps[2].title}</h3>
-            <p className="step-description">{steps[2].description}</p>
-          </div>
-          <div className="howItWorks-image">
-             <TransformedImage image={step3Img} />
-          </div>
-        </div>
-      )}
+{steps[2] && (
+  <motion.div
+    className="howItWorks-content"
+    initial="hidden"
+    whileInView="visible"
+    viewport={{ once: true, margin: "-100px" }}
+  >
+    <motion.div
+      className="howItWorks-text"
+      variants={textVariants}
+    >
+      <h1 className="step-number">3</h1>
+      <h3 className="step-title">{steps[2].title}</h3>
+      <p className="step-description">{steps[2].description}</p>
+    </motion.div>
+
+    <motion.div
+      className="howItWorks-image"
+      variants={imageVariants}
+    >
+      <TransformedImage image={step3Img} />
+    </motion.div>
+  </motion.div>
+)}
     </div>
   );
 };

@@ -276,7 +276,8 @@ font-size: 1.5rem;
   }
 
   .immersive-image-container {
-    max-width: 100%;
+    max-width: 95%;
+    max-height: 250px;
     border-radius: 12px;
   }
 

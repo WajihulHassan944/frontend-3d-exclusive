@@ -175,3 +175,10 @@
 .toggle-switch.active .toggle-knob {
   transform: translateX(20px);
 }
+
+@media(max-width:768px){
+  .pages-actions-dropdown {
+  left: 0;
+  }
+
+}

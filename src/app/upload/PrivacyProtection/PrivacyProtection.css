@@ -73,12 +73,20 @@
 }
 
 /* Full width card */
+/* Last full-width card outside grid */
 .privacy-card-full {
   grid-column: span 2;
+  max-width: 930px;
+  margin: 28px auto 0; /* same alignment as grid */
 }
+
 
 /* Responsive */
 @media (max-width: 768px) {
+  
+.privacy-protection-heading {
+  margin-bottom: 20px;
+}
   .privacy-grid {
     grid-template-columns: 1fr;
   }

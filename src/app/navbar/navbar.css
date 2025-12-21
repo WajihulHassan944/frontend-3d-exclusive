@@ -113,6 +113,7 @@
   color: #fff;
   padding: 5rem 2rem;
   display: flex;
+  height: 87vh;
   flex-direction: column;
   gap: 1.5rem;
   transform: translateX(100%);
@@ -264,4 +265,10 @@
 .add-top-margin-nav{
   margin-top: 80.5px;
   
+}
+@media(max-width:768px){
+  
+.add-top-margin-nav{
+  margin-top: 93px;
+}
 }

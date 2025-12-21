@@ -100,19 +100,7 @@ const sortedPlans = mappedPlans.sort((a, b) => a.credits - b.credits);
   return (
     <>
       <CreditUsagePerMinute />
-      {!isLoggedIn && (
-        <center>
-          <div
-            className="free-minute-pricing"
-            style={{ marginBottom: pathname === '/' ? '95px' : '50px' }}
-          >
-            🎁 Get 1 minute of free conversion after registration
-            <br />
-            <span>Newsletter signup required • Excludes 8K content</span>
-          </div>
-        </center>
-      )}
-
+    
       <h1 className="buy-credit-title">
         Buy your <span className="highlight"> credits</span>
       </h1>

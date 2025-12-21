@@ -76,7 +76,6 @@ transition: opacity 0.3s ease-out;
 /* Responsive Design */
 @media (max-width: 768px) {
   .hero-section {
-    height: 94vh;
   }
 
   .hero-content h1 {
@@ -151,9 +150,13 @@ margin-top: 30px;
 @media (max-width: 768px) {
   .hero-buttons {
     flex-direction: column;
+    gap: 0px;
+    margin-top: 20px;
   }
 
   .hero-trust {
     gap: 12px;
+    max-width: 310px;
+    line-height: 1.6;
   }
 }
