@@ -1,12 +1,12 @@
 .hero-section {
-  min-height: 84vh;
+  min-height: 86vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
   color: #fff;
   gap: 20px;
-  padding: 20px 5%;
+  padding: 50px 5% 20px;
   position: relative;
   text-align: center;
   overflow: hidden;
@@ -75,8 +75,6 @@ transition: opacity 0.3s ease-out;
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .hero-section {
-  }
 
   .hero-content h1 {
     font-size: 3.75rem;
@@ -105,6 +103,8 @@ margin-top: 30px;
 .hero-buttons {
   display: flex;
   gap: 20px;
+  margin-top: 20px;
+  margin-bottom: 30px;
 }
 
 .try-free-btn {
