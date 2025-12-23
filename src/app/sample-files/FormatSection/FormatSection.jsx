@@ -25,10 +25,10 @@ export default function FormatSection() {
             </div>
           </div>
 
-          <div className="format-card">
+          <div className="format-card" style={{opacity:'0.3'}}>
             <FilePlay className="format-icon pink" />
             <div>
-              <h3 className="format-label">MV-HEVC Spatial Video</h3>
+              <h3 className="format-label">MV-HEVC Spatial Video <span className='comingSoonLabel'>Coming Soon</span></h3>
               <p className="format-text">
                 Optimized format specifically for Apple Vision Pro with superior compression and quality.
               </p>

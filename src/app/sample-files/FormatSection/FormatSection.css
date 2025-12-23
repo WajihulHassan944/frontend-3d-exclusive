@@ -55,6 +55,9 @@
   font-size: 18px;
   font-weight: 600;
   margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .format-text {
@@ -131,4 +134,12 @@
 .eye-icon {
   font-size: 18px;
   color: #a6b0c3;
+}
+.comingSoonLabel{
+  font-size: 12px;
+  font-weight: 500;
+  color: #fff;
+  background: #fa8938cc;
+  padding: 4px 8px;
+  border-radius: 9999px;
 }

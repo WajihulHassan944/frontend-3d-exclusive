@@ -21,15 +21,18 @@ const DownloadSamples = () => {
         </div>
 
         {/* Card 2 */}
-        <div className="sample-card">
+        <div className="sample-card" style={{opacity:'0.3'}}>
+        <div className="justify-space-between">
           <h3 className="sample-title">MV-HEVC Spatial</h3>
+          <span className='comingSoonLabel'>Coming Soon</span>
+        </div>
           <p className="sample-subtitle">Apple Vision Pro</p>
           <p className="sample-size">
-            <span>File Size:</span> 100 MB
+            <span>File Size:</span> 95 MB
           </p>
-          <button className="download-btn">
+          <button className="download-btn" style={{background:'#172645'}}>
             <Download className="download-icon" size={18} />
-            Download Sample
+            Coming Soon
           </button>
         </div>
       </div>

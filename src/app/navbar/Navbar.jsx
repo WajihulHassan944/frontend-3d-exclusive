@@ -56,6 +56,7 @@ export default function Navbar({ enableSticky = false }) {
                 <li><Link href="/pricing">Pricing</Link></li>
                  <li><Link href="/blogs">Blogs</Link></li>
                 <li><Link href="/faq">FAQ</Link></li>
+                <li><Link href="/sample-files">Sample Files</Link></li>
                 <li><Link href="/add-billing">Billing</Link></li>
               </>
             ) : (

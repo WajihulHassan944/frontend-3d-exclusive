@@ -287,3 +287,10 @@ a {
     transform: translateY(0);
   }
 }
+
+.justify-space-between{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
