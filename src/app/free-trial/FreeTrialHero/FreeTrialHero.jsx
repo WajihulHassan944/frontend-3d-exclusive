@@ -3,7 +3,6 @@
 import React from 'react';
 import './FreeTrialHero.css';
 import { Gift, Check } from 'lucide-react';
-import toast from 'react-hot-toast';
 
 const FreeTrialHero = () => {
   return (
@@ -11,7 +10,7 @@ const FreeTrialHero = () => {
       <div className="ft-hero-content">
 
         {/* Top badge */}
-        <div className="ft-hero-badge" onClick={()=> toast.success('yeah')}>
+        <div className="ft-hero-badge" >
           <Gift size={18} />
           <span>Free Trial - No Credit Card Required</span>
         </div>
