@@ -24,14 +24,14 @@ const vrImage = media?.find(m => m.identifier === "Experience-3D-Magic-Vr");
     const { left, top, width, height } = imageRef.current.getBoundingClientRect();
     const x = e.clientX - left;
     const y = e.clientY - top;
-    const rotateX = ((y / height) - 0.5) * 4;
-    const rotateY = ((x / width) - 0.5) * -4;
+    const rotateX = ((y / height) - 0.5) * 8;
+    const rotateY = ((x / width) - 0.5) * -8;
 
     imageRef.current.style.transform = `
-      perspective(1000px)
+      perspective(1020px)
       rotateX(${rotateX}deg)
       rotateY(${rotateY}deg)
-      scale(1.02)
+      scale(1.04)
       translateZ(10px)
     `;
     setLabelText("Experiencing 3D depth");

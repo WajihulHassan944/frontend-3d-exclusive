@@ -5,18 +5,18 @@ import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import './home.css';
 import { useRouter } from 'next/navigation';
 import {
-  Gift,
   Lock,
   Trash2,
   Eye,
   ShieldCheck,
 } from "lucide-react";
+import { useSelector } from 'react-redux';
 
 const HeroSection = ({ sectionData }) => {
   const ref = useRef(null);
   const [isMobile, setIsMobile] = useState(false);
   const router = useRouter();
-
+const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   // Detect screen width
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 768);
@@ -77,12 +77,14 @@ const HeroSection = ({ sectionData }) => {
 
      <div className="hero-cta">
   <div className="hero-buttons">
-    <button
+   {!isLoggedIn && (
+     <button
       className="try-free-btn"
       onClick={() => router.push("/free-trial")}
     >
       🎁 Try 10 Sec Free
     </button>
+   )}
 
     <button
       className="start-converting-btn"

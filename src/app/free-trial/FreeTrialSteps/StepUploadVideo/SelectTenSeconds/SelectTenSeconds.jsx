@@ -238,6 +238,7 @@ const playheadPercent = duration
 
           <div
             className="slider-handle left"
+                        onMouseDown={onMouseDown}
             style={{ left: `calc(${startPercent}% - 7px)` }}
           >
             <span />
@@ -251,6 +252,7 @@ const playheadPercent = duration
 
           <div
             className="slider-handle right"
+                        onMouseDown={onMouseDown}
             style={{ left: `calc(${startPercent + widthPercent}% - 7px)` }}
           >
             <span />

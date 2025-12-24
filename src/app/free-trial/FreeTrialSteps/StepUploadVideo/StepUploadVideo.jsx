@@ -19,6 +19,8 @@ const [finalVideo, setFinalVideo] = useState(null);
   const fileInputRef = useRef(null);
 const ipData = useSelector((state) => state.geo.data);
 const [freeTrialVideoId, setFreeTrialVideoId] = useState(null);
+const [freeTrialDiscountCode, setFreeTrialDiscountCode] = useState(null);
+
 useEffect(() => {
   if (processing) {
     window.scrollBy({
@@ -43,8 +45,10 @@ useEffect(() => {
 
     // ✅ THIS video only
     if (data.status === "completed") {
-      onFreeTrialSuccess?.(data);
-
+       onFreeTrialSuccess?.({
+    ...data,
+    discountCode: freeTrialDiscountCode,
+  });
       setProcessing(false);
 
       if (data.signedUrl) {
@@ -192,12 +196,14 @@ const handleConvert = async (start, end) => {
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || "Upload failed");
 setFreeTrialVideoId(data.videoId);
-    // 4️⃣ Upload to Cloudflare R2
+setFreeTrialDiscountCode(data.discountCode);
     await fetch(data.signedUrl, {
       method: "PUT",
       headers: { "Content-Type": trimmed.type },
       body: trimmed,
     });
+toast.success('Video Uploaded');
+console.log(data);
 
    } catch (err) {
   console.error("Free trial error:", err);

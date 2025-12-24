@@ -96,12 +96,7 @@ if (height >= 4320) {
 
     const cost = durationMinutes * costPerMinute;
 
-    const hasFreeMinute =
-      user?.hasFreeConversion &&
-      user?.newsletterOptIn === true &&
-      height < 4320; // disallow 8K free
-    const isUsingFreeMinute = hasFreeMinute && durationMinutes <= 1;
-
+   
     const balance = user?.wallet?.balance || 0;
 
     setVideoMeta({
@@ -111,8 +106,7 @@ if (height >= 4320) {
       quality,
       cost,
       balance,
-      isUsingFreeMinute,
-      canProceed: isUsingFreeMinute || balance >= cost,
+      canProceed: balance >= cost,
     });
 
     setShowVideoNote(true);
@@ -189,16 +183,8 @@ if (height >= 4320) {
     const cost = durationMinutes * costPerMinute;
 
     const balance = user?.wallet?.balance || 0;
-    const hasFreeMinute =
-      user?.hasFreeConversion &&
-      user?.newsletterOptIn === true &&
-      height < 4320;
-
-    const isUsingFreeMinute = hasFreeMinute && durationMinutes <= 1;
-
-    if (isUsingFreeMinute) {
-      alert("🎁 Using free 1-minute conversion.");
-    } else if (balance < cost) {
+    
+    if (balance < cost) {
       alert(`❌ Not enough credits. You need ${cost} credits for this ${quality} video.`);
       setUploading(false);
       return;
@@ -212,7 +198,6 @@ if (height >= 4320) {
       quality,
       duration_minutes: durationMinutes,
       credits_required: cost,
-      using_free_minute: isUsingFreeMinute,
       user_id: user?._id || null,
     });
 
@@ -224,7 +209,6 @@ if (height >= 4320) {
       body: JSON.stringify({
         fileName: videoFile.name,
         fileType: videoFile.type,
-        usingFreeConversion: isUsingFreeMinute,
         cost,
       }),
     });
@@ -261,7 +245,7 @@ if (height >= 4320) {
       video_name: videoFile.name,
       quality,
       duration_seconds: Math.round(duration),
-      credits_used: isUsingFreeMinute ? 0 : cost,
+      credits_used: cost,
       user_id: user?._id || null,
     });
 
@@ -277,7 +261,7 @@ if (height >= 4320) {
         lengthInSeconds: Math.round(duration),
         conversionFormat,
         fileSize: formatFileSize(videoFile.size),
-        creditsUsed: isUsingFreeMinute ? 0 : cost,
+        creditsUsed: cost,
         threeDExperience,
         clientInfo:ipData
 
@@ -292,7 +276,7 @@ if (height >= 4320) {
       file_key: key,
       quality,
       conversion_format: conversionFormat,
-      credits_used: isUsingFreeMinute ? 0 : cost,
+      credits_used: cost,
     });
 
     localStorage.removeItem('tempVideoMeta');
@@ -397,12 +381,7 @@ if (height >= 4320) {
 
       const cost = durationMinutes * costPerMinute;
 
-      const hasFreeMinute =
-        user?.hasFreeConversion &&
-        user?.newsletterOptIn === true &&
-        height < 4320;
-      const isUsingFreeMinute = hasFreeMinute && durationMinutes <= 1;
-
+     
       const balance = user?.wallet?.balance || 0;
 
       setVideoMeta({
@@ -412,8 +391,7 @@ if (height >= 4320) {
         quality,
         cost,
         balance,
-        isUsingFreeMinute,
-        canProceed: isUsingFreeMinute || balance >= cost,
+        canProceed: balance >= cost,
       });
 
       setShowVideoNote(true);
@@ -466,9 +444,8 @@ if (height >= 4320) {
       <>
         <p><strong>Video:</strong> {videoMeta.fileName}</p>
         <p><strong>Quality:</strong> {videoMeta.quality}</p>
-        <p><strong>Credits Required:</strong> {videoMeta.isUsingFreeMinute ? '0 (using free minute)' : videoMeta.cost}</p>
+        <p><strong>Credits Required:</strong> {videoMeta.cost}</p>
         <p><strong>Your Balance:</strong> {videoMeta.balance} credit(s)</p>
-         <p><strong>1 min Free Conversion:</strong> {user.hasFreeConversion ? "Not Used": "Availed"}</p>
         {videoMeta.canProceed ? (
       <p className="meta-success">
   <FiCheckCircle className="meta-icon" />

@@ -9,6 +9,7 @@ import toast from 'react-hot-toast';
 
 const FreeTrialSteps = () => {
   const [activeStep, setActiveStep] = useState(1);
+const [discountCode, setDiscountCode] = useState("");
 
   // 🔹 lifted states
   const [email, setEmail] = useState('');
@@ -49,22 +50,24 @@ const FreeTrialSteps = () => {
             />
           )}
 
-        {activeStep === 2 && (
+       {activeStep === 2 && (
   <StepUploadVideo
     email={email}
     onFreeTrialSuccess={(data) => {
-      console.log("Free trial completed:", data);
+      setDiscountCode(data.discountCode); // ✅ store coupon
       setActiveStep(3);
     }}
     onFreeTrialAlreadyUsed={() => {
       toast.error("Free trial already used. Please continue with full signup.");
-      setActiveStep(1); // ✅ go back to Step 1
+      setActiveStep(1);
     }}
   />
 )}
 
 
-          {activeStep === 3 && <StepGetResult />}
+
+        {activeStep === 3 && <StepGetResult discountCode={discountCode} />}
+
         </div>
 
       </div>

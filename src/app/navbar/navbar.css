@@ -1,6 +1,6 @@
 /* ====== Base layout ====== */
 .nav-wrapper {
-  z-index: 99999999;
+  z-index: 999;
 
   background: linear-gradient(rgba(0,0,0,0.01), rgba(0,0,0,0.01)); /* background/10 equivalent */
 

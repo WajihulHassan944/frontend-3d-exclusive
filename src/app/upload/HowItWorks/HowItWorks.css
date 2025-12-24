@@ -70,6 +70,7 @@
   position: relative;
   width: 100%;
   max-width: 570px;
+  min-height: 120px;
   aspect-ratio: 16/9;
   overflow: hidden;
   border-radius: 16px;

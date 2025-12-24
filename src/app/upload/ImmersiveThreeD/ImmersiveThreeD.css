@@ -41,7 +41,7 @@ color: #fff;
   content: "";
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,0.1);
+  background: rgba(0,0,0,0.3);
   transition: background 0.3s ease;
   z-index: 2; /* on top of image */
   pointer-events: none; /* so it doesn’t block hover */

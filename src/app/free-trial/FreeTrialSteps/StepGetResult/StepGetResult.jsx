@@ -5,7 +5,7 @@ import './StepGetResult.css';
 import { Check } from 'lucide-react';
 import Link from 'next/link';
 
-const StepGetResult = () => {
+const StepGetResult = ({ discountCode }) => {
   return (
     <div className="sgr-wrapper">
 
@@ -38,8 +38,9 @@ const StepGetResult = () => {
 
       {/* Coupon */}
       <p className="sgr-coupon">
-        Use code <span>TRIAL40</span> at checkout for 40% off!
-      </p>
+  Use code <span>{discountCode}</span> at checkout for 40% off!
+</p>
+
 
     </div>
   );
