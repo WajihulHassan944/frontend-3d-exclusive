@@ -25,6 +25,7 @@ import { handleBuyCredits } from '@/utils/cart/handleBuyCredits';
 import ShoppingCart from './cart';
 import { handleCheckout } from '@/utils/cart/handleCheckout';
 import CouponInput from './CouponInput/CouponInput';
+import FinalPriceBox from './FinalPriceBox';
 
 const stripePromise = loadStripe(
   'pk_live_51RvNstHpow7HoYZURyGWZHskSTYGsl0zHWJVvK9ItweHZgvmo1eMyyDrbESgcorVsb7EHjv6CvTaQSwKjXfFoWGp0066SXf4lT'
@@ -447,65 +448,19 @@ const handleCouponValidate = (coupon) => {
 
   </div>
 
-{credits.length > 0 && (
-  <>
-<div className="final-price-box">
-  {/* Subtotal */}
-  <p className="subtotal-line">
-    <span className="colored">Subtotal:</span>
 
-    {Number(localStorage.getItem("discountAmount") || 0) > 0 ? (
-      <>
-        <span className="old-price">
-          {currencySymbol} {priceBeforeDiscount.toFixed(2)}
-        </span>
-        <span className="discounted-price">
-          {currencySymbol} {(priceBeforeDiscount - Number(localStorage.getItem("discountAmount"))).toFixed(2)}
-        </span>
-      </>
-    ) : (
-      <span>
-        {currencySymbol} {priceBeforeDiscount.toFixed(2)}
-      </span>
-    )}
-  </p>
-
-  {/* Total incl. VAT */}
-  {vatPercent !== null && (
-    <p className="vat-total-line">
-      Total incl. <span>VAT ({vatPercent}%):</span>
-
-      {Number(localStorage.getItem("discountAmount") || 0) > 0 ? (
-        <>
-          {/* striked price = discounted subtotal */}
-          <span className="old-price">
-            {currencySymbol} {(priceBeforeDiscount - Number(localStorage.getItem("discountAmount"))).toFixed(2)}
-          </span>
-
-          {/* final price = discounted subtotal + VAT */}
-          <span className="discounted-price">
-            {currencySymbol} {finalPrice.toFixed(2)}
-          </span>
-        </>
-      ) : (
-        <span>
-          {currencySymbol} {finalPrice.toFixed(2)}
-        </span>
-      )}
-    </p>
-  )}
-</div>
-
-  </>
-)}
-
-
-
-{vatNote && <p className="vat-note">{vatNote}</p>}
-
+    <FinalPriceBox
+  credits={credits}
+  currencySymbol={currencySymbol}
+  priceBeforeDiscount={priceBeforeDiscount}
+  discountAmount={Number(localStorage.getItem("discountAmount") || 0)}
+  vatPercent={vatPercent}
+  finalPrice={finalPrice}
+  vatNote={vatNote}
+/>
       {!loading && credits.length > 0 && (
 <button
-  className="checkout-btn"
+  className="checkout-btn-one"
   onClick={() => {
     // Save billing data to local storage
     localStorage.setItem('billingData', JSON.stringify(billingData));
@@ -537,9 +492,12 @@ const handleCouponValidate = (coupon) => {
           setPage={setPage}
           selectedPaymentMethod={selectedPaymentMethod}
           setSelectedPaymentMethod={setSelectedPaymentMethod}
+          finalPrice={finalPrice}
+           currencySymbol={currencySymbol}
         />
       </Elements>
     ) : null}
+ 
   </>
 
 ) : page === 3 ? (

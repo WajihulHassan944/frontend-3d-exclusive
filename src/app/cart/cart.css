@@ -63,21 +63,26 @@
 }
 
 /* Checkout Button */
-.cart-container-page .checkout-btn {
+.cart-container-page .checkout-btn,.cart-container-page .checkout-btn-one {
   width: 100%;
-  background-color: #ff672f;
+  background-image: linear-gradient(to right, #9333ea , #db2777);
   color: #fff;
   border: none;
   padding: 0.75rem;
   font-size: 1rem;
-  border-radius: 8px;
+  border-radius: 5px;
   cursor: pointer;
   font-weight: bold;
-  transition: background 0.3s ease;
-}
+   box-shadow: 0 0 40px #fa893866;
 
+}
+.cart-container-page .checkout-btn-one{
+  background: #ff672f;
+  box-shadow: none;
+}
 .cart-container-page .checkout-btn:hover {
-  background-color: #ff4400;
+  box-shadow: 0 0 40px #fa893866;
+
 }
 
 /* Responsive */
@@ -127,7 +132,7 @@
   flex-direction: column;
   gap: 12px;
   margin: 20px 0;
-  padding: 20px;
+  padding: 30px;
   background: #fafafa;
   border-radius: 8px;
   box-shadow: 0 2px 8px #00000015;
@@ -138,20 +143,19 @@
 }
 .backArrowIconWrap{
   position: absolute;
-  top: 15px;
-  left: 15px;
+  top: 23px;
+  left: 24px;
   width: 30px;
   height: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #fb8c33;
   border-radius: 50%;
   cursor: pointer;
 
 }
 .backArrowIconWrap .backArrowIcon{
-  color: #fff;
+  color: #9333ea;
   font-size: 13px;
 }
 .billing-form input {
@@ -166,6 +170,24 @@
   font-weight: bold;
   margin-bottom: 10px;
   color: #333;
+}
+.billing-subtitle{
+  border: 1px solid #f1f5f9;
+  box-shadow: 0 1px 2px #0000000d;
+   font-size: 15px;
+  font-weight: 500;
+  margin-bottom: 10px;
+  color: #333;
+  font-style: italic;
+  background: #fff;
+  padding: 10px 0;
+  margin:0;
+  border-radius: 5px;
+}
+.billing-subtitle span{
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
 }
 .primary-card {
   background-color: #f3f3f3;
@@ -202,7 +224,7 @@
   text-align: left;
 }
 .vat-note {
-  margin: 10px 0;
+  margin: 10px 0 30px;
   font-size: 0.9rem;
   color: #ccc;
   line-height: 20px;
@@ -247,7 +269,7 @@
 .payment-option {
   border: 2px solid transparent;
   border-radius: 8px;
-  padding: 12px;
+  
   margin-bottom: 10px;
   display: block;
   cursor: pointer;
@@ -258,9 +280,9 @@
   margin-right: 10px;
 }
 
-.payment-option.selected-option {
+/* .payment-option.selected-option {
   border-color: orange;
-}
+} */
 .stripe-message {
   margin-top: 10px;
   padding: 10px 12px;

@@ -93,11 +93,11 @@ const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
       Start Converting
     </button>
   </div>
-
+{!isLoggedIn && (
   <p className="hero-subtext">
     Try 10 seconds free • No account needed • Join 3,000+ creators
   </p>
-
+)}
   <div className="hero-trust">
     <span><Lock size={16} className='hero-trust-icon' /> Secure HTTPS upload</span>
     <span><Trash2 size={16} className='hero-trust-icon' /> Available for 7 days, then permanently erased</span>

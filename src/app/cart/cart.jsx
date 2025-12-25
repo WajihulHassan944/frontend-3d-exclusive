@@ -10,7 +10,7 @@ import './cart.css';
 
 countries.registerLocale(enLocale);
 
-export default function ShoppingCart({ billingData, setPage, selectedPaymentMethod, setSelectedPaymentMethod }) {
+export default function ShoppingCart({ billingData, setPage, selectedPaymentMethod, setSelectedPaymentMethod, finalPrice, currencySymbol }) {
   const user = useSelector((state) => state.user);
    const ipData = useSelector((state) => state.geo.data);
 
@@ -35,7 +35,8 @@ export default function ShoppingCart({ billingData, setPage, selectedPaymentMeth
   return (
     <>
       <div className="billing-form">
-        <h3 className="billing-title">Billing Information</h3>
+        <h3 className="billing-title">Secure Checkout</h3>
+        <h4 className="billing-subtitle">Total Amount: <span>{currencySymbol} {finalPrice}</span></h4>
   <div className="backArrowIconWrap">
         <FaArrowLeft onClick={() => setPage(1)} className="backArrowIcon" />
       </div>
@@ -81,9 +82,10 @@ export default function ShoppingCart({ billingData, setPage, selectedPaymentMeth
               value="element"
               checked={selectedPaymentMethod === 'element'}
               onChange={() => setSelectedPaymentMethod('element')}
+              style={{display:'none'}}
             />
             <div className="stripe-element-box">
-              <h4>Choose payment method</h4>
+              {/* <h4>Choose payment method</h4> */}
               <div className="stripe-box">
                 {elementsLoading && <div className="spinner-cart" />} {/* Spinner while loading */}
                 <PaymentElement
@@ -125,7 +127,7 @@ export default function ShoppingCart({ billingData, setPage, selectedPaymentMeth
             }
             disabled={cardSubmitting}
           >
-            {cardSubmitting ? <div className="spinner-cart" /> : 'Submit'}
+            {cardSubmitting ? <div className="spinner-cart" /> : `Pay  ${currencySymbol} ${finalPrice} securely`}
           </button>
         )}
         
