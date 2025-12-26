@@ -282,31 +282,32 @@ console.log("page data is",pageData);
 ) : (
   <>
     {/* 🔥 For NON-legal pages: show only IF value exists */}
-    {section.description && (
-      <>
-        <label>Content</label>
-        <textarea
-          rows={4}
-          value={section.description}
-          onChange={(e) =>
-            handleSectionChange(realIndex, "description", e.target.value)
-          }
-        />
-      </>
-    )}
+    {Object.prototype.hasOwnProperty.call(section, "description") && (
+  <>
+    <label>Content</label>
+    <textarea
+      rows={4}
+      value={section.description || ""}
+      onChange={(e) =>
+        handleSectionChange(realIndex, "description", e.target.value)
+      }
+    />
+  </>
+)}
 
-    {section.subDescription && (
-      <>
-        <label>Sub Description</label>
-        <textarea
-          rows={4}
-          value={section.subDescription}
-          onChange={(e) =>
-            handleSectionChange(realIndex, "subDescription", e.target.value)
-          }
-        />
-      </>
-    )}
+{section.subDescription && (
+  <>
+    <label>Sub Description</label>
+    <textarea
+      rows={4}
+      value={section.subDescription || ""}
+      onChange={(e) =>
+        handleSectionChange(realIndex, "subDescription", e.target.value)
+      }
+    />
+  </>
+)}
+
   </>
 )}
 
@@ -439,27 +440,26 @@ console.log("page data is",pageData);
     <div className="subsection-container">
       <h4>Sub Section</h4>
 
-      {section.subSection.title && (
-        <input
-          type="text"
-          placeholder="Sub Section Title"
-          value={section.subSection.title || ""}
-          onChange={(e) =>
-            handleSubSectionChange(realIndex, "title", e.target.value)
-          }
-        />
-      )}
+{Object.prototype.hasOwnProperty.call(section.subSection, "title") && (
+  <input
+    type="text"
+    placeholder="Sub Section Title"
+    value={section.subSection.title || ""}
+    onChange={(e) =>
+      handleSubSectionChange(realIndex, "title", e.target.value)
+    }
+  />
+)}
 
-      {section.subSection.description && (
-        <textarea
-          placeholder="Sub Section Description"
-          value={section.subSection.description || ""}
-          onChange={(e) =>
-            handleSubSectionChange(realIndex, "description", e.target.value)
-          }
-        />
-      )}
-
+{Object.prototype.hasOwnProperty.call(section.subSection, "description") && (
+  <textarea
+    placeholder="Sub Section Description"
+    value={section.subSection.description || ""}
+    onChange={(e) =>
+      handleSubSectionChange(realIndex, "description", e.target.value)
+    }
+  />
+)}
       {section.subSection.subDescription && (
         <textarea
           placeholder="Sub Section Sub Description"

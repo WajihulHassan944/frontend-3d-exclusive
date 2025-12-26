@@ -1,21 +1,45 @@
-import React, { useEffect } from "react";
-import "./Whatexpect.css";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchWebsiteMedia } from "@/redux/features/websiteMedia";
+import React, { useEffect } from 'react';
+import './Whatexpect.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchWebsiteMedia } from '@/redux/features/websiteMedia';
+import { getVimeoEmbedUrl } from '@/utils/getVimeoEmbedUrl';
 
 const Whatexpect = ({ sectionData }) => {
-  if (!sectionData) return null;
-const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const { media } = useSelector(state => state.websiteMedia);
+
   useEffect(() => {
     dispatch(fetchWebsiteMedia());
   }, [dispatch]);
-// Get dynamic images
-const iframeUrl = media?.find(m => m.identifier === "What-you-can-expect");
+
+  if (!sectionData) return null;
+
+  // Find the video with identifier "what-to-expect"
+ const videoItem = media.find(
+  item =>
+    item.identifier?.toLowerCase().trim() ===
+    "what-you-can-expect"
+);
+console.log("video item is",videoItem);
+  // Build final embed URL
+  let finalVideoUrl = null;
+
+  if (videoItem) {
+    if (videoItem.platform === "vimeo") {
+      finalVideoUrl = getVimeoEmbedUrl(videoItem.url);
+   } else if (videoItem.platform === "youtube") {
+  finalVideoUrl = videoItem.url.includes("embed")
+    ? videoItem.url
+    : `https://www.youtube.com/embed/${new URL(videoItem.url).searchParams.get("v")}`;
+}
+ else {
+      // mp4 file or other direct link
+      finalVideoUrl = videoItem.url;
+    }
+  }
 
   return (
     <div className="expect-wrapper">
-      {/* Title (renders HTML safely) */}
       <h2
         className="expect-heading"
         dangerouslySetInnerHTML={{
@@ -26,34 +50,25 @@ const iframeUrl = media?.find(m => m.identifier === "What-you-can-expect");
         }}
       />
 
-      {/* Description */}
       {sectionData.description && (
         <p className="expect-subtext">{sectionData.description}</p>
       )}
 
-      {/* Video */}
       <div className="video-container">
-       <iframe
-  src={iframeUrl?.url}
-  title="YouTube video player"
-  frameBorder="0"
-  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-  allowFullScreen
-  style={{
-    transform: `rotate(${iframeUrl?.transformations?.rotate || 0}deg)`,
-    filter: `${iframeUrl?.transformations?.filter || ""} brightness(${iframeUrl?.transformations?.filterIntensity || 100}%)`,
-    width:
-      iframeUrl?.transformations?.resizeWidth ||
-      iframeUrl?.transformations?.cropWidth ||
-      "100%",
-    height:
-      iframeUrl?.transformations?.resizeHeight ||
-      iframeUrl?.transformations?.cropHeight ||
-      "500px",
-    objectFit: "cover",
-  }}
-></iframe>
 
+        {/* If Vimeo or YouTube → iframe */}
+        {finalVideoUrl?.includes("embed") || finalVideoUrl?.includes("vimeo.com") ? (
+          <iframe
+            src={finalVideoUrl}
+            title="What to Expect Video"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+          ></iframe>
+        ) : (
+          // Fallback direct video file
+          <video src={finalVideoUrl} controls />
+        )}
       </div>
     </div>
   );

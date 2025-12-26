@@ -176,12 +176,32 @@ const handleReplaceChange = async ({ file, previewUrl }) => {
 }));
 };
 
+const detectPlatformFromUrl = (url = "") => {
+  if (!url) return { platform: "", type: "" };
+
+  const lower = url.toLowerCase();
+
+  if (lower.includes("youtube.com") || lower.includes("youtu.be")) {
+    return { platform: "youtube", type: "external" };
+  }
+
+  if (lower.includes("vimeo.com")) {
+    return { platform: "vimeo", type: "external" };
+  }
+
+  if (lower.endsWith(".mp4") || lower.endsWith(".webm")) {
+    return { platform: "", type: "video" };
+  }
+
+  return { platform: "", type: "external" };
+};
 
   const handleSave = async () => {
   setSaving(true);
 
   try {
     let response;
+const { platform, type } = detectPlatformFromUrl(details.url);
 
     // CASE 1: User selected new file → send multipart/form-data
     if (replace.file) {
@@ -197,8 +217,8 @@ const handleReplaceChange = async ({ file, previewUrl }) => {
         "uploadDate",
         details.uploadDate ? new Date(details.uploadDate).toISOString() : item.uploadDate
       );
-      formData.append("type", details.type);
-      formData.append("platform", details.platform || "");
+formData.append("type", type || details.type);
+formData.append("platform", platform || details.platform || "");
       formData.append("tags", details.tags.join(","));
 
       // Transformations
@@ -221,8 +241,9 @@ const handleReplaceChange = async ({ file, previewUrl }) => {
           ? new Date(details.uploadDate)
           : item.uploadDate,
         tags: details.tags,
-        type: details.type,
-        platform: details.platform,
+      type: type || details.type,
+platform: platform || details.platform,
+
         transformations: editImage,
         url: details.url,
       };
