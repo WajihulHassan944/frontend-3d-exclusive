@@ -115,46 +115,6 @@ const formatFileSize = (bytes) => {
 };
 
 
-const trimVideo = (file, start, end) => {
-  return new Promise((resolve, reject) => {
-    const video = document.createElement("video");
-    video.src = URL.createObjectURL(file);
-    video.muted = true;
-    video.playsInline = true;
-
-    video.onloadedmetadata = async () => {
-      video.currentTime = start;
-    };
-
-    video.onseeked = async () => {
-      const stream = video.captureStream();
-      const recorder = new MediaRecorder(stream, {
-        mimeType: "video/webm; codecs=vp9",
-      });
-
-      const chunks = [];
-      recorder.ondataavailable = (e) => chunks.push(e.data);
-
-      recorder.onstop = () => {
-        const blob = new Blob(chunks, { type: "video/webm" });
-        const trimmedFile = new File([blob], "trimmed-video.webm", {
-          type: "video/webm",
-        });
-        URL.revokeObjectURL(video.src);
-        resolve(trimmedFile);
-      };
-
-      recorder.start();
-      await video.play(); // 🔥 MUST PLAY while recording
-
-      setTimeout(() => {
-        recorder.stop();
-        video.pause();
-      }, (end - start) * 1000);
-    };
-  });
-};
-
   const handleFileChange = (e) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -166,12 +126,10 @@ const handleConvert = async (start, end) => {
   setProcessing(true);
 
   try {
-    // 1️⃣ Trim video
-    const trimmed = await trimVideo(videoFile, start, end);
-    setFinalVideo(trimmed);
+    setFinalVideo(videoFile);
 
     // 2️⃣ Extract metadata
-    const meta = await getVideoMetadata(trimmed);
+    const meta = await getVideoMetadata(videoFile);
 
     // 3️⃣ Request signed URL (free trial API)
     const res = await fetch(
@@ -181,14 +139,17 @@ const handleConvert = async (start, end) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           email,
-          fileName: trimmed.name,
-          fileType: trimmed.type,
+          fileName: videoFile.name,
+          fileType: videoFile.type,
           lengthInSeconds: Math.round(meta.duration),
-          fileSize: formatFileSize(trimmed.size),
+          fileSize: formatFileSize(videoFile.size),
           conversionFormat: "MV-HEVC",
           quality: `${meta.height}p`,
           threeDExperience: "Comfort",
-          clientInfo:ipData
+          clientInfo:ipData,
+          startTime: start,
+        endTime: end,
+        trimOnly: true,
         }),
       }
     );
@@ -199,8 +160,8 @@ setFreeTrialVideoId(data.videoId);
 setFreeTrialDiscountCode(data.discountCode);
     await fetch(data.signedUrl, {
       method: "PUT",
-      headers: { "Content-Type": trimmed.type },
-      body: trimmed,
+      headers: { "Content-Type": videoFile.type },
+      body: videoFile,
     });
 toast.success('Video Uploaded');
 console.log(data);
