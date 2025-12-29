@@ -30,29 +30,26 @@ const Counter = ({ start = 0, target, suffix = '', duration = 2000, decimals = 0
     </span>
   );
 };
+
+// Container variants for staggered animation
 const containerVariants = {
-  hidden: { opacity: 1 },
+  hidden: {},
   show: (isMobile) => ({
-    opacity: 1,
     transition: {
-      staggerChildren: isMobile ? 0.15 : 0.35, // ⏱️ slower on desktop
+      staggerChildren: isMobile ? 0.15 : 0.35, // each card appears one after another
     },
   }),
 };
 
-// ✅ UPDATED PART ONLY (progressive animation timing on mobile per card)
-
-// 1️⃣ Update itemVariants to accept card index
+// Item variants per card
 const itemVariants = {
   hidden: { opacity: 0, y: 32 },
-  show: ({ isMobile, index }) => ({
+  show: ({ index }) => ({
     opacity: 1,
     y: 0,
     transition: {
-      // 📱 mobile: each next card takes longer
-      duration: isMobile ? 0.45 + index * 0.25 : 0.75,
-      // 📱 mobile: small extra delay per card
-      delay: isMobile ? index * 0.15 : 0,
+      duration: 0.6,
+      delay: index * 0.4, // delay based on card index
       ease: "easeOut",
     },
   }),
@@ -162,8 +159,7 @@ const fadeUp = {
           </motion.p>
         )}
 
-        {/* Animated testimonials */}
- {isClient && (
+    {isClient && (
   <motion.div
     className="testimonial-cards"
     variants={containerVariants}
@@ -173,12 +169,12 @@ const fadeUp = {
     viewport={{ once: true, amount: 0.25 }}
   >
     {cards.map((t, i) => (
-  <motion.div
-    key={t._id || i}
-    className="testimonial-card"
-    variants={itemVariants}
-    custom={{ isMobile, index: i }} // 👈 pass index
-  >
+      <motion.div
+        key={t._id || i}
+        className="testimonial-card"
+        variants={itemVariants}
+        custom={{ index: i }} // 👈 pass index for delay
+      >
         <div className="stars">
           {[1, 2, 3, 4, 5].map((star) => (
             <FaStar
