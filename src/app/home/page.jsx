@@ -77,7 +77,7 @@ const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
 
      <div className="hero-cta">
   <div className="hero-buttons">
-   {!isLoggedIn && (
+   {isLoggedIn && (
      <button
       className="try-free-btn"
       onClick={() => router.push("/free-trial")}
