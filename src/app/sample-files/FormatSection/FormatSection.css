@@ -143,3 +143,87 @@
   padding: 4px 8px;
   border-radius: 9999px;
 }
+@media (max-width: 768px) {
+  .format-section {
+    padding: 30px 15px 5px;
+    text-align: center;
+  }
+
+  .format-container {
+    padding: 20px 15px;
+    max-width: 100%;
+    text-align: left;
+    margin-bottom: 50px;
+    border-radius: 0.5rem;
+  }
+
+  .format-heading {
+    font-size: 20px;
+  }
+
+  .format-subheading {
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+
+  .format-list {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .format-card {
+    max-width: 100%;
+  }
+
+  .format-icon {
+    font-size: 24px;
+  }
+
+  .format-label {
+    font-size: 16px;
+  }
+
+  .format-text {
+    font-size: 14px;
+    max-width: 100%;
+  }
+
+  .preset-tabs {
+    flex-direction: column;
+    gap: 10px;
+    max-width: 100%;
+    padding: 5px 0;
+  }
+
+  .preset-tab {
+    font-size: 14px;
+    padding: 6px 0;
+  }
+
+  .preset-box {
+    padding: 25px 15px;
+    max-width: 100%;
+  }
+
+  .preset-title {
+    font-size: 20px;
+  }
+
+  .preset-desc {
+    font-size: 14px;
+  }
+
+  .preset-info {
+    font-size: 13px;
+    gap: 6px;
+  }
+
+  .eye-icon {
+    font-size: 16px;
+  }
+
+  .comingSoonLabel {
+    font-size: 10px;
+    padding: 3px 6px;
+  }
+}

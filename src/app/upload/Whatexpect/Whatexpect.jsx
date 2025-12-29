@@ -20,23 +20,21 @@ const Whatexpect = ({ sectionData }) => {
     item.identifier?.toLowerCase().trim() ===
     "what-you-can-expect"
 );
-console.log("video item is",videoItem);
-  // Build final embed URL
   let finalVideoUrl = null;
 
-  if (videoItem) {
-    if (videoItem.platform === "vimeo") {
-      finalVideoUrl = getVimeoEmbedUrl(videoItem.url);
-   } else if (videoItem.platform === "youtube") {
-  finalVideoUrl = videoItem.url.includes("embed")
-    ? videoItem.url
-    : `https://www.youtube.com/embed/${new URL(videoItem.url).searchParams.get("v")}`;
-}
- else {
-      // mp4 file or other direct link
-      finalVideoUrl = videoItem.url;
-    }
+// ✅ UPDATED PART ONLY
+
+// Build final embed URL (ensure sound + controls)
+if (videoItem) {
+  if (videoItem.platform === "vimeo") {
+    finalVideoUrl = `${getVimeoEmbedUrl(videoItem.url)}?muted=0&controls=1&autoplay=0`;
+  } else if (videoItem.platform === "youtube") {
+    const videoId = new URL(videoItem.url).searchParams.get("v");
+    finalVideoUrl = `https://www.youtube.com/embed/${videoId}?controls=1&mute=0&autoplay=0`;
+  } else {
+    finalVideoUrl = videoItem.url;
   }
+}
 
   return (
     <div className="expect-wrapper">
@@ -58,13 +56,15 @@ console.log("video item is",videoItem);
 
         {/* If Vimeo or YouTube → iframe */}
         {finalVideoUrl?.includes("embed") || finalVideoUrl?.includes("vimeo.com") ? (
-          <iframe
-            src={finalVideoUrl}
-            title="What to Expect Video"
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowFullScreen
-          ></iframe>
+    
+<iframe
+  src={finalVideoUrl}
+  title="What to Expect Video"
+  frameBorder="0"
+  allow="autoplay; encrypted-media; picture-in-picture"
+  allowFullScreen
+></iframe>
+
         ) : (
           // Fallback direct video file
           <video src={finalVideoUrl} controls />

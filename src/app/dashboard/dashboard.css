@@ -199,18 +199,6 @@ font-weight: 600;
   color: rgba(255, 255, 255, 0.6);
 }
 
-/* === Responsive === */
-@media (max-width: 768px) {
-  .table-header,
-  .table-row {
-    grid-template-columns: 1.5fr 1fr 1fr;
-  }
-
-  .table-header span:nth-child(4),
-  .table-row span:nth-child(4) {
-    display: none;
-  }
-}
 
 
 
@@ -262,4 +250,55 @@ font-weight: 600;
 .info-wrapper:hover .info-tooltip {
   opacity: 1;
   top: -45px;
+}
+
+@media (max-width: 768px) {
+  .dashboard {
+    padding: 60px 5%;
+  }
+
+  /* Make table horizontally scrollable */
+  .table-section {
+    padding: 20px;
+    overflow-x: auto; /* allows horizontal scroll */
+  }
+
+  .table-header,
+  .table-row {
+    min-width: 600px; /* adjust to fit all columns */
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr; /* keep all columns visible */
+    padding: 12px 10px;
+  }
+
+  .table-header span,
+  .table-row span {
+    font-size: 14px;
+  }
+
+  .table-row:hover {
+    background-color: #ffffff0d;
+  }
+
+  .stat-card {
+    padding: 20px;
+  }
+
+  .stat-value {
+    font-size: 32px;
+  }
+
+  .stat-btn {
+    font-size: 14px;
+    padding: 8px 16px;
+  }
+
+  .dashboard-title {
+    font-size: 2rem;
+  }
+
+  .dashboard-subtitle {
+    font-size: 1rem;
+    margin-bottom: 20px;
+  }
 }

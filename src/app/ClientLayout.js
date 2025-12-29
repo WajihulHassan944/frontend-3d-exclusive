@@ -58,7 +58,20 @@ useEffect(() => {
     setIsComingSoon(false);
   }
 }, [pathname, isReady]);
-  // --------------------------------------------------------
+// ✅ UPDATED PART ONLY (clear checkout-related localStorage on app load)
+
+useEffect(() => {
+  if (typeof window !== "undefined") {
+    localStorage.removeItem('billingData');
+    localStorage.removeItem('selectedLocalPaymentMethod');
+    localStorage.removeItem('priceBeforeDiscount');
+    localStorage.removeItem('couponData');
+    localStorage.removeItem('discountAmount');
+    localStorage.removeItem('paymentIntentId');
+  }
+}, []);
+
+// --------------------------------------------------------
   // 🔥 ADMIN OVERRIDE — ALWAYS DISABLE COMING SOON
   // --------------------------------------------------------
   useEffect(() => {

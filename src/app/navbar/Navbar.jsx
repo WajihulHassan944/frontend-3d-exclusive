@@ -154,15 +154,25 @@ export default function Navbar({ enableSticky = false }) {
         {isLoggedIn ? (
           <>
             <Link href="/dashboard" onClick={() => setOpen(false)}>Dashboard</Link>
+            <Link href="/upload" onClick={() => setOpen(false)}>Convert</Link>
+            <Link href="/pricing" onClick={() => setOpen(false)}>Pricing</Link>
+            <Link href="/blogs" onClick={() => setOpen(false)}>Blogs</Link>
+            <Link href="/faq" onClick={() => setOpen(false)}>FAQ</Link>
+            <Link href="/sample-files" onClick={() => setOpen(false)}>Sample Files</Link>
+            <Link href="/add-billing" onClick={() => setOpen(false)}>Billing</Link>
             <Link href="/profile" onClick={() => setOpen(false)}>Profile</Link>
             <Link href="/profilesettings" onClick={() => setOpen(false)}>Settings</Link>
-            <button className="btn btn-filled" onClick={() => logout(() => setOpen(false))}>Logout</button>
+            <button className="btn btn-filled" onClick={() => logout(() => setOpen(false))}>
+              Logout
+            </button>
           </>
         ) : (
           <>
             <Link href="/upload" onClick={() => setOpen(false)}>Convert</Link>
             <Link href="/pricing" onClick={() => setOpen(false)}>Pricing</Link>
             <Link href="/contact" onClick={() => setOpen(false)}>Contact</Link>
+            <Link href="/blogs" onClick={() => setOpen(false)}>Blogs</Link>
+            <Link href="/sample-files" onClick={() => setOpen(false)}>Sample Files</Link>
             <Link href="/faq" onClick={() => setOpen(false)}>FAQ</Link>
             <hr />
             <Link href="/login" onClick={() => setOpen(false)}>Login</Link>

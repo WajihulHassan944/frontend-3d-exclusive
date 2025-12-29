@@ -68,3 +68,30 @@
     padding: 12px 28px;
   }
 }
+@media (max-width: 768px) {
+  .cta-container {
+    padding: 0 15px 50px;
+  }
+
+  .cta-box {
+    padding: 30px 15px;
+    border-radius: 20px;
+  }
+
+  .cta-title {
+    font-size: 1.5rem;
+    line-height: 2rem;
+    margin-bottom: 15px;
+  }
+
+  .cta-subtitle {
+    font-size: 1rem;
+    line-height: 1.5rem;
+    margin-bottom: 25px;
+  }
+
+  .cta-button {
+    font-size: 14px;
+    padding: 10px 24px;
+  }
+}

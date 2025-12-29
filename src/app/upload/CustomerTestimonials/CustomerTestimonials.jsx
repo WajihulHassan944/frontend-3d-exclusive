@@ -4,6 +4,7 @@ import './CustomerTestimonials.css';
 import { FaStar } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import { baseUrl } from '@/const';
+
 const Counter = ({ start = 0, target, suffix = '', duration = 2000, decimals = 0 }) => {
   const [count, setCount] = useState(start);
 
@@ -29,28 +30,55 @@ const Counter = ({ start = 0, target, suffix = '', duration = 2000, decimals = 0
     </span>
   );
 };
-
-// Motion variants
 const containerVariants = {
-  hidden: { opacity: 0 },
-  show: {
+  hidden: { opacity: 1 },
+  show: (isMobile) => ({
     opacity: 1,
     transition: {
-      staggerChildren: 0.25, // delay between cards
+      staggerChildren: isMobile ? 0.15 : 0.35, // ⏱️ slower on desktop
     },
-  },
+  }),
 };
 
+// ✅ UPDATED PART ONLY (progressive animation timing on mobile per card)
+
+// 1️⃣ Update itemVariants to accept card index
 const itemVariants = {
-  hidden: { opacity: 0, y: 40 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } },
+  hidden: { opacity: 0, y: 32 },
+  show: ({ isMobile, index }) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      // 📱 mobile: each next card takes longer
+      duration: isMobile ? 0.45 + index * 0.25 : 0.75,
+      // 📱 mobile: small extra delay per card
+      delay: isMobile ? index * 0.15 : 0,
+      ease: "easeOut",
+    },
+  }),
 };
+
 
 const CustomerTestimonials = ({ sectionData }) => {
   const [animate, setAnimate] = useState(false);
   const statsRef = useRef(null);
 const [isClient, setIsClient] = useState(false);
 const [cards, setCards] = useState([]);
+const [isMobile, setIsMobile] = useState(false);
+
+useEffect(() => {
+  const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+  checkMobile();
+  window.addEventListener('resize', checkMobile);
+  return () => window.removeEventListener('resize', checkMobile);
+}, []);
+
+// 2️⃣ force cards visible immediately on mobile
+useEffect(() => {
+  if (isMobile) {
+    setAnimate(true);
+  }
+}, [isMobile]);
 
 useEffect(() => {
   const fetchReviews = async () => {
@@ -135,27 +163,34 @@ const fadeUp = {
         )}
 
         {/* Animated testimonials */}
-     {isClient && (
+ {isClient && (
   <motion.div
     className="testimonial-cards"
     variants={containerVariants}
     initial="hidden"
-    animate={animate ? "show" : "hidden"}
-    viewport={{ once: true, amount: 0.2 }}
+    whileInView="show"
+    custom={isMobile}
+    viewport={{ once: true, amount: 0.25 }}
   >
     {cards.map((t, i) => (
-      <motion.div key={t._id || i} className="testimonial-card" variants={itemVariants}>
-       <div className="stars">
-  {[1, 2, 3, 4, 5].map((star) => (
-    <FaStar
-      key={star}
-      color={star <= t.rating ? "#FFD700" : "#ccc"} 
-      size={16}
-    />
-  ))}
-</div>
+  <motion.div
+    key={t._id || i}
+    className="testimonial-card"
+    variants={itemVariants}
+    custom={{ isMobile, index: i }} // 👈 pass index
+  >
+        <div className="stars">
+          {[1, 2, 3, 4, 5].map((star) => (
+            <FaStar
+              key={star}
+              color={star <= t.rating ? "#FFD700" : "#ccc"}
+              size={16}
+            />
+          ))}
+        </div>
 
         <p className="quote">"{t.reviewText}"</p>
+
         <div className="user">
           <div className="avatar">
             <img
@@ -174,6 +209,7 @@ const fadeUp = {
     ))}
   </motion.div>
 )}
+
 
         {/* Stats Section with Counter Animation */}
         <div className="stats-bar" ref={statsRef}>
