@@ -77,3 +77,50 @@
   text-align: center;
   padding: 64px 0;
 }
+
+@media (max-width: 768px) {
+  .fts-wrapper {
+    padding: 24px 14px;
+  }
+
+  .fts-card {
+    max-width: 100%;
+    padding: 2rem 1.5rem;
+    border-radius: 18px;
+  }
+
+  /* Steps */
+  .fts-steps {
+    gap: 14px;
+    margin-bottom: 26px;
+    flex-wrap: wrap;
+  }
+
+  .fts-step {
+    gap: 8px;
+  }
+
+  .fts-step-circle {
+    width: 26px;
+    height: 26px;
+    font-size: 12px;
+  }
+
+  .fts-step-label {
+    font-size: 12px;
+  }
+
+  .fts-arrow {
+    font-size: 14px;
+  }
+
+  /* Content */
+  .fts-content {
+    margin-top: 4px;
+  }
+
+  .fts-placeholder {
+    padding: 40px 0;
+    font-size: 14px;
+  }
+}

@@ -89,3 +89,58 @@
 .suv-file-input {
   display: none;
 }
+@media (max-width: 768px) {
+  .suv-wrapper {
+    padding: 12px 8px 8px;
+  }
+
+  /* Header Icon */
+  .suv-header-icon {
+    margin-bottom: 14px;
+  }
+
+  /* Title */
+  .suv-title {
+    font-size: 20px;
+    margin-bottom: 8px;
+  }
+
+  /* Subtitle */
+  .suv-subtitle {
+    font-size: 14px;
+    margin-bottom: 22px;
+  }
+
+  /* Dropzone */
+  .suv-dropzone {
+    max-width: 100%;
+    min-height: 260px;
+    padding: 28px 16px;
+  }
+
+  /* Upload Icon */
+  .suv-upload-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 12px;
+    margin-bottom: 26px;
+  }
+
+  /* Dropzone Text */
+  .suv-dropzone h3 {
+    font-size: 18px;
+    margin-bottom: 8px;
+  }
+
+  .suv-dropzone p {
+    font-size: 13px;
+    margin-bottom: 20px;
+  }
+
+  /* Button */
+  .suv-choose-btn {
+    height: 38px;
+    padding: 0 18px;
+    font-size: 13px;
+  }
+}

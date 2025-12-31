@@ -255,3 +255,98 @@ gap: 10px;
   pointer-events: none;
   z-index: 5;
 }
+@media (max-width: 768px) {
+  .select-ten-wrapper {
+    padding: 28px 16px;
+    max-width: 100%;
+  }
+
+  /* Header */
+  .select-ten-header {
+    margin-bottom: 22px;
+  }
+
+  .clock-circle {
+    margin-bottom: 14px;
+  }
+
+  .select-ten-header h2 {
+    font-size: 20px;
+    margin-bottom: 8px;
+  }
+
+  .select-ten-header p {
+    font-size: 14px;
+    margin-bottom: 24px;
+  }
+
+  /* Video Card */
+  .video-preview {
+    height: 260px;
+  }
+
+  .play-circle {
+    width: 48px;
+    height: 48px;
+    font-size: 24px;
+  }
+
+  .video-info {
+    font-size: 12px;
+    bottom: 12px;
+    left: 12px;
+    right: 12px;
+  }
+
+  /* Slider */
+  .slider-wrap {
+    margin-top: 18px;
+  }
+
+  .slider-track {
+    height: 26px;
+  }
+
+  .slider-meta {
+    margin-top: 28px;
+    font-size: 12px;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .slider-hint {
+    font-size: 12px;
+  }
+
+  .slider-handle {
+    width: 12px;
+  }
+
+  .slider-handle > span {
+    height: 12px;
+  }
+
+  .slider-handle > span:first-child {
+    top: -10px;
+  }
+
+  .slider-handle > span:last-child {
+    bottom: -10px;
+  }
+
+  /* Footer */
+  .footer-row {
+    margin-top: 18px;
+  }
+
+  .choose-btn {
+    font-size: 13px;
+  }
+
+  /* Convert Button */
+  .convert-btn {
+    font-size: 1rem;
+    padding: 10px 24px;
+    gap: 8px;
+  }
+}
