@@ -12,7 +12,10 @@ import { FiCheckCircle } from "react-icons/fi";
 import toast from 'react-hot-toast';
 import ExperienceSelector from './ExperienceSelector/ExperienceSelector';
 import ConversionCostBox from './ConversionCostBox/ConversionCostBox';
+import ResumeUploadModal from './ResumeUploadModal/ResumeUploadModal';
 
+const CHUNK_SIZE = 25 * 1024 * 1024;        // 25 MB 
+const MULTIPART_THRESHOLD = 500 * 1024 * 1024; // trigger multipart only above 500 MB
 
 const Home = () => {
   const [videoFile, setVideoFile] = useState(null);
@@ -20,8 +23,12 @@ const Home = () => {
   const [uploading, setUploading] = useState(false);
   const [uploadStatus, setUploadStatus] = useState('');
   const inputRef = useRef(null);
+const progressRef = useRef(null);
+
   const [agreeToTerms, setAgreeToTerms] = useState(false);
 const ipData = useSelector((state) => state.geo.data);
+const [showResumeModal, setShowResumeModal] = useState(false);
+const [resumeFileName, setResumeFileName] = useState('');
 
   const [dragActive, setDragActive] = useState(false);
 const isLoggedIn = useSelector((state) => state.user?.isLoggedIn);
@@ -58,7 +65,23 @@ useEffect(() => {
     }
   }
 }, [videoFile]);
-
+useEffect(() => {
+  const savedUpload = localStorage.getItem('multipartUpload');
+  if (savedUpload) {
+    try {
+      const { key } = JSON.parse(savedUpload);
+      if (key) {
+        // Show modal asking to resume
+        const savedMeta = JSON.parse(localStorage.getItem('tempVideoMeta') || '{}');
+        setResumeFileName(savedMeta.name || 'Unknown File');
+        setShowResumeModal(true);
+      }
+    } catch (err) {
+      console.error('Failed to parse saved upload:', err);
+      localStorage.removeItem('multipartUpload');
+    }
+  }
+}, []);
 const handleFileChange = async (e) => {
   const file = e.target.files?.[0];
   if (!file) return;
@@ -83,22 +106,15 @@ const handleFileChange = async (e) => {
     const durationMinutes = Math.ceil(duration / 60);
 
     // Pricing logic
-let costPerMinute = 1; // default 1080p
-if (height >= 4320) {
-  costPerMinute = 6; // 8K
-} else if (height >= 2160) {
-  costPerMinute = 3; // 4K UHD
-} else if (height >= 1440) {
-  costPerMinute = 2; // 2.7K
-} else {
-  costPerMinute = 1; // 1080p
-}
+    let costPerMinute = 1;
+    if (height >= 4320) costPerMinute = 6;
+    else if (height >= 2160) costPerMinute = 3;
+    else if (height >= 1440) costPerMinute = 2;
 
     const cost = durationMinutes * costPerMinute;
-
-   
     const balance = user?.wallet?.balance || 0;
 
+    // ✅ Set full video metadata (same for normal & resume)
     setVideoMeta({
       fileName: file.name,
       fileSize: formatFileSize(file.size),
@@ -107,6 +123,7 @@ if (height >= 4320) {
       cost,
       balance,
       canProceed: balance >= cost,
+      error: null, // clear any previous error
     });
 
     setShowVideoNote(true);
@@ -116,13 +133,30 @@ if (height >= 4320) {
         block: "center",
       });
     }, 100);
+
+    // Check if a multipartUpload exists (resume)
+    const savedUpload = JSON.parse(localStorage.getItem('multipartUpload') || '{}');
+    if (savedUpload?.uploadId && savedUpload?.key) {
+      // Automatically resume upload using the newly selected file
+      setShowResumeModal(false); // hide modal
+      toast('Resuming upload automatically...');
+      setAgreeToTerms(true);
+setTimeout(() => {
+    progressRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+    });
+  }, 100);
+      // Resume upload with full metadata now set
+      await handleUpload(true, file); // pass the file directly
+      return; // skip re-processing
+    }
   } catch (err) {
     console.error("Metadata extraction error:", err);
     setVideoMeta({ error: "Failed to read video metadata." });
     setShowVideoNote(true);
   }
 };
-
 
   const getVideoMetadata = (file) =>
   new Promise((resolve, reject) => {
@@ -151,155 +185,287 @@ if (height >= 4320) {
   return parseFloat((bytes / Math.pow(1024, i)).toFixed(2)) + " " + sizes[i];
 }
 
-const handleUpload = async () => {
-  if (!videoFile) return;
+const handleUpload = async (resume = false, fileParam = null) => {
+  const savedUpload = JSON.parse(localStorage.getItem('multipartUpload') || '{}');
+  const fileToUse = fileParam || videoFile; // Use passed file or fallback to state
+
+  if (!fileToUse) {
+    console.log("No file to upload!");
+    inputRef.current?.click();
+    return;
+  }
+
+  console.log("Using file:", fileToUse.name);
+
+  // Resume mode detected
+  if (resume && savedUpload?.uploadId && savedUpload?.key) {
+    console.log('🔁 Resuming upload from localStorage');
+    // No need to check fileToUse here because we already have it
+  } else {
+    // Normal upload: abort if no file selected
+    if (!fileToUse) return;
+  }
 
   if (!isLoggedIn) {
     router.push('/signup');
     return;
   }
 
+  console.log("reached2");
   setUploading(true);
   setUploadStatus('');
   setProgress(0);
 
   try {
-    const { duration, width, height } = await getVideoMetadata(videoFile);
+    console.log('📁 Selected file:', fileToUse.name);
+    console.log(
+      '📦 File size:',
+      (fileToUse.size / 1024 / 1024).toFixed(2),
+      'MB'
+    );
+
+    const { duration, height } = await getVideoMetadata(fileToUse);
     const quality = `${height}p`;
     const durationMinutes = Math.ceil(duration / 60);
 
-   // Pricing logic
-let costPerMinute = 1; // default 1080p
-if (height >= 4320) {
-  costPerMinute = 6; // 8K
-} else if (height >= 2160) {
-  costPerMinute = 3; // 4K UHD
-} else if (height >= 1440) {
-  costPerMinute = 2; // 2.7K
-} else {
-  costPerMinute = 1; // 1080p
-}
+    // 🔢 Pricing logic
+    let costPerMinute = 1;
+    if (height >= 4320) costPerMinute = 6;
+    else if (height >= 2160) costPerMinute = 3;
+    else if (height >= 1440) costPerMinute = 2;
 
     const cost = durationMinutes * costPerMinute;
-
     const balance = user?.wallet?.balance || 0;
-    
+
     if (balance < cost) {
       alert(`❌ Not enough credits. You need ${cost} credits for this ${quality} video.`);
       setUploading(false);
       return;
     }
 
-    // ✅ Push GTM event: upload started
+    console.log('💳 Credits required:', cost);
+
+    // 📊 GTM event
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push({
       event: 'video_upload_started',
-      video_name: videoFile.name,
+      video_name: fileToUse.name,
       quality,
       duration_minutes: durationMinutes,
       credits_required: cost,
       user_id: user?._id || null,
     });
 
-    // ✅ 1. Get signed URL
-    const res = await fetch(`${baseUrl}/b2/sign-url`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-      body: JSON.stringify({
-        fileName: videoFile.name,
-        fileType: videoFile.type,
-        cost,
-      }),
-    });
+    let key;
 
-    const { signedUrl, key } = await res.json();
+    /* =====================================================
+       🟢 SMALL FILE → SINGLE PUT
+    ====================================================== */
+    if (fileToUse.size < MULTIPART_THRESHOLD) {
+      console.log('🟢 Using SINGLE PUT upload');
 
-    // ✅ 2. Upload with progress tracking
-    await new Promise((resolve, reject) => {
-      const xhr = new XMLHttpRequest();
-      xhr.open("PUT", signedUrl);
+      const res = await fetch(`${baseUrl}/b2/sign-url`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({
+          fileName: fileToUse.name,
+          fileType: fileToUse.type,
+          cost,
+        }),
+      });
 
-      xhr.upload.onprogress = (event) => {
-        if (event.lengthComputable) {
-          const percent = Math.round((event.loaded / event.total) * 100);
-          setProgress(percent);
+      const { signedUrl, key: objectKey } = await res.json();
+      key = objectKey;
+
+      await new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('PUT', signedUrl);
+
+        xhr.upload.onprogress = (e) => {
+          if (e.lengthComputable) {
+            setProgress(Math.round((e.loaded / e.total) * 100));
+          }
+        };
+
+        xhr.onload = () =>
+          xhr.status >= 200 && xhr.status < 300
+            ? resolve()
+            : reject(new Error('Upload failed'));
+
+        xhr.onerror = () => reject(new Error('Upload error'));
+        xhr.send(fileToUse);
+      });
+    }
+
+    /* =====================================================
+       🔵 LARGE FILE → MULTIPART (RESUME ENABLED)
+    ====================================================== */
+    else {
+      console.log('🔵 Using MULTIPART upload');
+
+      const saved = JSON.parse(localStorage.getItem('multipartUpload') || '{}');
+
+      let uploadId = saved.uploadId;
+      key = saved.key;
+      let uploadedParts = saved.uploadedParts || [];
+
+      // 🔁 Resume OR Init
+      if (uploadId && key) {
+        console.log('🔁 Resuming multipart upload');
+      } else {
+        console.log('🚀 Initializing multipart upload...');
+        const initRes = await fetch(`${baseUrl}/b2/multipart/init`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({
+            fileName: fileToUse.name,
+            fileType: fileToUse.type,
+            cost,
+          }),
+        });
+
+        const initData = await initRes.json();
+        uploadId = initData.uploadId;
+        key = initData.key;
+        uploadedParts = [];
+
+        localStorage.setItem(
+          'multipartUpload',
+          JSON.stringify({ uploadId, key, uploadedParts })
+        );
+      }
+
+      console.log('🆔 UploadId:', uploadId);
+      console.log('🗂 Object key:', key);
+
+      const totalChunks = Math.ceil(fileToUse.size / CHUNK_SIZE);
+      console.log('🧩 Total chunks:', totalChunks);
+
+      const uploadedMap = new Map(
+        uploadedParts.map((p) => [p.PartNumber, p.ETag])
+      );
+
+      let uploadedBytes = uploadedParts.reduce((sum, p) => {
+        const start = (p.PartNumber - 1) * CHUNK_SIZE;
+        const end = Math.min(start + CHUNK_SIZE, fileToUse.size);
+        return sum + (end - start);
+      }, 0);
+
+      for (let partNumber = 1; partNumber <= totalChunks; partNumber++) {
+        if (uploadedMap.has(partNumber)) {
+          console.log(`⏭️ Skipping already uploaded chunk ${partNumber}`);
+          continue;
         }
-      };
 
-      xhr.onload = () => {
-        if (xhr.status >= 200 && xhr.status < 300) {
-          resolve();
-        } else {
-          reject(new Error("Upload failed"));
-        }
-      };
+        const start = (partNumber - 1) * CHUNK_SIZE;
+        const end = Math.min(start + CHUNK_SIZE, fileToUse.size);
+        const chunk = fileToUse.slice(start, end);
 
-      xhr.onerror = () => reject(new Error("Upload error"));
-      xhr.send(videoFile);
-    });
+        console.log(
+          `⬆️ Uploading chunk ${partNumber}/${totalChunks} (${(
+            chunk.size / 1024 / 1024
+          ).toFixed(2)} MB)`
+        );
 
-    // ✅ Push GTM event: upload completed
+        const signRes = await fetch(`${baseUrl}/b2/multipart/sign-part`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ key, uploadId, partNumber }),
+        });
+
+        const { signedUrl } = await signRes.json();
+
+        const etag = await new Promise((resolve, reject) => {
+          const xhr = new XMLHttpRequest();
+          xhr.open('PUT', signedUrl);
+
+          xhr.upload.onprogress = (e) => {
+            if (e.lengthComputable) {
+              setProgress(
+                Math.round(
+                  ((uploadedBytes + e.loaded) / fileToUse.size) * 100
+                )
+              );
+            }
+          };
+
+          xhr.onload = () => {
+            uploadedBytes += chunk.size;
+            resolve(xhr.getResponseHeader('ETag'));
+          };
+
+          xhr.onerror = () => reject(new Error('Chunk upload failed'));
+          xhr.send(chunk);
+        });
+
+        uploadedParts.push({ ETag: etag, PartNumber: partNumber });
+
+        localStorage.setItem(
+          'multipartUpload',
+          JSON.stringify({ uploadId, key, uploadedParts })
+        );
+
+        console.log(`✅ Chunk ${partNumber} uploaded`);
+      }
+
+      console.log('📦 Completing multipart upload...');
+      await fetch(`${baseUrl}/b2/multipart/complete`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ key, uploadId, parts: uploadedParts }),
+      });
+
+      localStorage.removeItem('multipartUpload');
+      console.log('🎉 Multipart upload completed');
+      console.log('🧹 multipartUpload removed from localStorage');
+    }
+
+    // 📊 GTM completed
     window.dataLayer.push({
       event: 'video_upload_completed',
-      video_name: videoFile.name,
+      video_name: fileToUse.name,
       quality,
       duration_seconds: Math.round(duration),
       credits_used: cost,
       user_id: user?._id || null,
     });
 
-    // ✅ 3. Save metadata
+    // 📝 Save metadata
     const saveRes = await fetch(`${baseUrl}/b2/save-metadata`, {
       method: 'POST',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        originalFileName: videoFile.name,
+        originalFileName: fileToUse.name,
         key,
         quality,
         lengthInSeconds: Math.round(duration),
         conversionFormat,
-        fileSize: formatFileSize(videoFile.size),
+        fileSize: formatFileSize(fileToUse.size),
         creditsUsed: cost,
         threeDExperience,
-        clientInfo:ipData
-
+        clientInfo: ipData,
       }),
     });
 
     if (!saveRes.ok) throw new Error('Metadata save failed');
 
-    // ✅ Push GTM event: metadata saved
-    window.dataLayer.push({
-      event: 'video_metadata_saved',
-      file_key: key,
-      quality,
-      conversion_format: conversionFormat,
-      credits_used: cost,
-    });
-
-    localStorage.removeItem('tempVideoMeta');
     await refreshAndDispatchUser(dispatch);
+    localStorage.removeItem('multipartUpload');
+localStorage.removeItem('tempVideoMeta');
     router.push('/dashboard');
     toast.success('Upload successful!');
-
   } catch (err) {
-    console.error(err);
+    console.error('❌ Upload error:', err);
     setUploadStatus(`❌ Upload failed: ${err.message}`);
-
-    // ✅ Push GTM event: upload failed
-    window.dataLayer.push({
-      event: 'video_upload_failed',
-      error_message: err.message,
-      video_name: videoFile?.name || null,
-      user_id: user?._id || null,
-    });
   } finally {
     setUploading(false);
   }
 };
-
 
   return (
     <div className="xclusive-container">
@@ -515,7 +681,7 @@ if (height >= 4320) {
 </div>
 
 {uploading && (
-  <div className="upload-progress-container-new">
+  <div className="upload-progress-container-new" ref={progressRef}>
     <div 
       className="upload-progress-bar-new"
       style={{
@@ -553,6 +719,19 @@ if (height >= 4320) {
   
 </div>
 </center>
+{showResumeModal && (
+  <ResumeUploadModal
+    fileName={resumeFileName}
+    onResume={() => {
+      setShowResumeModal(false);
+      handleUpload(true);
+    }}
+    onClose={() => {
+      setShowResumeModal(false);
+      localStorage.removeItem('multipartUpload');
+    }}
+  />
+)}
 
     
     </div>
